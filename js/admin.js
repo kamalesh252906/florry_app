@@ -64,13 +64,13 @@ async function loadAdminOrders() {
                         <h4 style="margin: 0 0 8px 0; font-size: 0.9em; color: #ff6b6b; text-transform: uppercase; letter-spacing: 1px;">📍 Delivery Details</h4>
                         ${(order.order_status === 'accepted' || order.order_status === 'out_for_delivery' || order.order_status === 'completed') ? `
                             <p style="margin: 4px 0; font-weight: 600;">${order.user?.name || 'Customer'}</p>
-                            <p style="margin: 4px 0; color: #555;">📞 ${order.user?.phone || 'No phone'}</p>
-                            <p style="margin: 4px 0; font-size: 0.9em; color: #666;">🏠 ${order.delivery_address || 'No address'}</p>
+                            <p style="margin: 4px 0; color: #555;"> ${order.user?.phone || 'No phone'}</p>
+                            <p style="margin: 4px 0; font-size: 0.9em; color: #666;"> ${order.delivery_address || 'No address'}</p>
                         ` : `
                             <div style="filter: blur(4px); opacity: 0.6; pointer-events: none;">
                                 <p style="margin: 4px 0; font-weight: 600;">Customer Name</p>
-                                <p style="margin: 4px 0; color: #555;">📞 +91 XXXXX XXXXX</p>
-                                <p style="margin: 4px 0; font-size: 0.9em; color: #666;">🏠 Masked Address, Bloom City</p>
+                                <p style="margin: 4px 0; color: #555;"> +91 XXXXX XXXXX</p>
+                                <p style="margin: 4px 0; font-size: 0.9em; color: #666;">Masked Address, Bloom City</p>
                             </div>
                             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -10%); font-size: 0.75rem; color: #ff6b6b; font-weight: 800; text-align: center; width: 100%;">
                                 ACCEPT ORDER TO VIEW DETAILS
@@ -94,16 +94,16 @@ async function loadAdminOrders() {
                     
                     <div class="admin-actions" style="display: flex; gap: 8px;">
                         ${order.order_status === 'created' || order.order_status === 'pending' || !order.order_status ?
-                `<button class="edit-btn" style="background:#27ae60; color:white; flex: 1;" onclick="shopAcceptOrder(${order.order_id})">✅ Accept Order</button>` : ''
+                `<button class="edit-btn" style="background:#27ae60; color:white; flex: 1;" onclick="shopAcceptOrder(${order.order_id})"> Accept Order</button>` : ''
             }
                         ${order.order_status === 'accepted' ?
-                `<button class="edit-btn" style="background:#3498db; color:white; flex: 1;" onclick="shopOutForDelivery(${order.order_id})">🚚 Mark Out for Delivery</button>` : ''
+                `<button class="edit-btn" style="background:#3498db; color:white; flex: 1;" onclick="shopOutForDelivery(${order.order_id})"> Mark Out for Delivery</button>` : ''
             }
                         ${order.order_status === 'out_for_delivery' ?
-                `<button class="edit-btn" style="background:#f39c12; color:white; flex: 1;" onclick="shopCompleteOrder(${order.order_id})">🎯 Mark Completed</button>` : ''
+                `<button class="edit-btn" style="background:#f39c12; color:white; flex: 1;" onclick="shopCompleteOrder(${order.order_id})"> Mark Completed</button>` : ''
             }
                         ${order.order_status === 'completed' ?
-                `<button class="edit-btn" style="background:#e74c3c; color:white; flex: 1;" onclick="deleteAdminOrder(${order.order_id})">🗑️ Delete Order Record</button>` : ''
+                `<button class="edit-btn" style="background:#e74c3c; color:white; flex: 1;" onclick="deleteAdminOrder(${order.order_id})"> Delete Order Record</button>` : ''
             }
                     </div>
                 </div>

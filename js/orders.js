@@ -9,7 +9,7 @@ async function loadOrders() {
 
     if (!list) return;
 
-    list.innerHTML = '<div class="loading-spinner">📦 Fetching your orders...</div>';
+    list.innerHTML = '<div class="loading-spinner"> Fetching your orders...</div>';
 
     try {
         const myOrders = await api.getOrders();
@@ -56,7 +56,7 @@ async function loadOrders() {
                     
                     <div class="order-delivery-info">
                         <p><strong>📍 Delivery Address:</strong> ${order.delivery_address || 'Address not specified'}</p>
-                        <p><strong>💳 Payment:</strong> ${order.payment_method || 'N/A'}</p>
+                        <p><strong> Payment:</strong> ${order.payment_method || 'N/A'}</p>
                     </div>
                 </div>
                 
@@ -73,7 +73,7 @@ async function loadOrders() {
         console.error('Error loading orders:', error);
         list.innerHTML = `
             <div class="error-msg">
-                <p>⚠️ Oops! Failed to load orders.</p>
+                <p> Oops! Failed to load orders.</p>
                 <button onclick="loadOrders()" class="retry-btn">Retry</button>
             </div>
         `;
@@ -87,9 +87,9 @@ function getOrderStatusText(status) {
         'created': 'Order Placed',
         'accepted': 'Confirmed by Shop',
         'packed': 'Ready for Pickup',
-        'out_for_delivery': 'Out for Delivery 🛵',
-        'completed': 'Delivered ✅',
-        'cancelled': 'Cancelled ❌'
+        'out_for_delivery': 'Out for Delivery ',
+        'completed': 'Delivered ',
+        'cancelled': 'Cancelled '
     };
     return map[s] || status.toUpperCase();
 }

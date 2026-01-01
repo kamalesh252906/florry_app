@@ -163,7 +163,6 @@ class ImageUploader {
 
     resetDropZone() {
         this.dropZone.innerHTML = `
-            <div class="upload-icon">📁</div>
             <p>Drag & drop image here or click to browse</p>
             <small>Max size: 5MB</small>
         `;
