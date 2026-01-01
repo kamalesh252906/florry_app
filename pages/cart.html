@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Florry</title>
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/cart.css">
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+    <div class="header-container">
+
+        <!-- Logo -->
+        <div class="logo" onclick="window.location.href='./landing.html'" style="cursor: pointer; display: flex; align-items: center;">
+            <span style="font-size: 2rem; margin-right: 10px;">🌸</span>
+            <span class="logo-text" style="background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; font-size: 1.8rem; font-family: 'Outfit';">Florry</span>
+        </div>
+
+        <!-- Search -->
+        <div class="search-bar">
+            <input type="text" placeholder="Search for more flowers..." id="search-input">
+            <button class="search-btn">🔍</button>
+        </div>
+
+        <!-- Actions -->
+        <div class="header-actions">
+            <button class="icon-btn active" style="position: relative;">
+                <span style="font-size: 1.5rem;">🛒</span>
+                <span class="cart-badge" id="cart-count">0</span>
+            </button>
+            <button class="icon-btn" onclick="toggleMenu()" style="font-size: 1.5rem;">☰</button>
+        </div>
+
+    </div>
+</header>
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Explore</h3>
+        <button class="close-btn" onclick="toggleMenu()">✕</button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="./landing.html">🏠 Dashboard</a>
+        <a href="./orders.html">📦 My Orders</a>
+        <a href="./support.html">💬 Get Support</a>
+        <a href="./help.html">❓ FAQ</a>
+        <a href="./about.html">ℹ️ Our Story</a>
+        <hr style="margin: 10px 0; opacity: 0.1;">
+        <a href="#" onclick="auth.logout()" style="color: #FF6B6B;">🚪 Logout</a>
+    </nav>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<!-- ================= CART SECTION ================= -->
+<section class="cart-section">
+    <div class="container">
+
+        <h1>Shopping Cart</h1>
+
+        <div class="cart-content">
+
+            <!-- LEFT: CART ITEMS (JS FILLS THIS) -->
+            <div class="cart-items" id="cart-items">
+                <!-- JS will inject cart items or empty cart here -->
+            </div>
+
+            <!-- RIGHT: ORDER SUMMARY -->
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">₹0</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Delivery:</span>
+                    <span>₹50</span>
+                </div>
+
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span id="total">₹50</span>
+                </div>
+
+                <button
+                    class="checkout-btn"
+                    onclick="window.location.href='./payment.html'">
+                    Proceed to Checkout
+                </button>
+
+                <button
+                    class="continue-btn"
+                    onclick="window.location.href='./landing.html'">
+                    Continue Shopping
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+    <div class="footer-container">
+
+        <div class="footer-section">
+            <h3>🌸 Florry</h3>
+            <p>Fresh flowers delivered at lightning speed</p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <a href="./orders.html">Your Orders</a>
+            <a href="./support.html">Support</a>
+            <a href="./help.html">Help Center</a>
+            <a href="./about.html">About Us</a>
+        </div>
+
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <p>📞 1800-FLORRY</p>
+            <p>📧 support@florry.com</p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#">🌐</a>
+                <a href="#">ⓕ</a>
+                <a href="#">𝕏</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2024 Florry. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/menu.js"></script>
+<script src="../js/cart.js"></script>
+
+</body>
+</html>

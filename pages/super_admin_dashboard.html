@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florry | System Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+    <style>
+        :root {
+            --super-dark: #0f172a;
+            --super-accent: #38bdf8;
+            --super-bg: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--super-bg);
+            margin: 0;
+        }
+
+        .super-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .super-sidebar {
+            background: var(--super-dark);
+            color: white;
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .super-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+        }
+
+        .super-nav {
+            flex: 1;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 20px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--super-accent);
+        }
+
+        /* Main Content */
+        .super-main {
+            padding: 60px;
+            overflow-y: auto;
+        }
+
+        .super-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .super-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--super-dark);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .approval-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .approval-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
+        }
+
+        .approval-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .card-top h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .info-group {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .info-label {
+            color: #64748b;
+            font-weight: 600;
+            width: 80px;
+            display: inline-block;
+        }
+
+        .info-value {
+            color: var(--super-dark);
+            font-weight: 600;
+        }
+
+        .aadhaar-link-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .aadhaar-link-box:hover {
+            background: #f1f5f9;
+            border-color: var(--super-accent);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .action-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-action {
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-approve {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: #16a34a;
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-reject {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #dc2626;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 60px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 24px;
+            text-align: center;
+            color: #64748b;
+            border: 2px dashed #cbd5e1;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 1024px) {
+            .super-layout {
+                grid-template-columns: 1fr;
+            }
+            .super-sidebar {
+                padding: 20px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+            .super-logo {
+                margin-bottom: 0;
+                font-size: 1.4rem;
+            }
+            .super-nav {
+                display: flex;
+                gap: 5px;
+            }
+            .nav-link {
+                margin-bottom: 0;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            .sidebar-footer {
+                display: none;
+            }
+            .super-main {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .super-sidebar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .super-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .approval-grid {
+                grid-template-columns: 1fr;
+            }
+            .super-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="super-layout">
+        <!-- Sidebar -->
+        <aside class="super-sidebar">
+            <div class="super-logo">
+                <span>🛡️</span>
+                <span>System</span>
+            </div>
+            
+            <nav class="super-nav">
+                <a href="#" class="nav-link active">📊 System Overview</a>
+                <a href="#" class="nav-link">🏪 Shop Control</a>
+                <!-- <a href="#" class="nav-link">🛵 Rider Ops</a>
+                <a href="#" class="nav-link">🌍 Global Meta</a> -->
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-link" onclick="logout()" style="color: #fca5a5;">🚪 Systems Exit</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="super-main">
+            <header class="super-header">
+                <div>
+                    <h1>Central Command</h1>
+                    <p style="color: #64748b; font-weight: 500;">Monitor and manage the entire Florry ecosystem.</p>
+                </div>
+                <div class="super-user" style="display: flex; align-items: center; gap: 15px; background: white; padding: 10px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; font-size: 0.9rem;">Root Admin</div>
+                        <div style="font-size: 0.75rem; color: #10b981;">Online ● Active</div>
+                    </div>
+                    <div style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">👤</div>
+                </div>
+            </header>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-box" style="background: #f0f9ff; color: #0369a1;">📊</div>
+                    <div>
+                        <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">System Health</div>
+                        <div style="font-size: 1.5rem; font-weight: 800;">100%</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-box" style="background: #f0fdf4; color: #15803d;">🏙️</div>
+                    <div>
+                        <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">Connected Nodes</div>
+                        <div id="stat-shops" style="font-size: 1.5rem; font-weight: 800;">...</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon-box" style="background: #fef2f2; color: #b91c1c;">🔐</div>
+                    <div>
+                        <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">Pending Access</div>
+                        <div id="stat-pending" style="font-size: 1.5rem; font-weight: 800;">...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop Approvals -->
+            <h2 class="section-title">🏪 Shop Approval Queue</h2>
+            <div id="shop-approvals" class="approval-grid">
+                <div class="empty-state">Scanning for requests...</div>
+            </div>
+
+            <!-- Rider Approvals -->
+            <!-- <h2 class="section-title">🛵 Rider Enrollment Queue</h2>
+            <div id="rider-approvals" class="approval-grid">
+                <div class="empty-state">Scanning for requests...</div>
+            </div> -->
+
+            <!-- Support Inquiries -->
+            <h2 class="section-title">💬 Support Inquiries</h2>
+            <div id="support-messages" class="approval-grid">
+                <div class="empty-state">Loading messages...</div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script>
+        // Simple auth check
+        if (!localStorage.getItem('florrySuperAdmin')) {
+            window.location.href = 'admin_login.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('florrySuperAdmin');
+            window.location.href = 'admin_login.html';
+        }
+
+        async function loadData() {
+            try {
+                const [shops, supportMsgs] = await Promise.all([
+                    api.getPendingAdmins(),
+                    api.getSupportMessages()
+                ]);
+
+                renderShops(shops);
+                renderSupportMessages(supportMsgs);
+                
+                // Update small stats
+                document.getElementById('stat-pending').textContent = shops.length;
+                document.getElementById('stat-shops').textContent = shops.length; 
+
+            } catch (e) {
+                console.error(e);
+                alert("Failed to load command data");
+            }
+        }
+
+        function renderShops(shops) {
+            const container = document.getElementById('shop-approvals');
+            if (!shops || shops.length === 0) {
+                container.innerHTML = '<div class="empty-state">All shop nodes verified. No pending requests.</div>';
+                return;
+            }
+
+            container.innerHTML = shops.map(shop => `
+                <div class="approval-card">
+                    <div class="card-top">
+                        <h3>${shop.shop_name || 'Unnamed Shop'}</h3>
+                        <span class="status-badge">${shop.status}</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Principal</span>
+                        <span class="info-value">${shop.name}</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Secure IP</span>
+                        <span class="info-value" style="font-family: monospace;">${shop.email}</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Comm ID</span>
+                        <span class="info-value">${shop.phone || 'N/A'}</span>
+                    </div>
+                    
+                    <div class="aadhaar-link-box" onclick="window.open('${shop.aadhaar_image_url}')">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.2rem;">📄</span>
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem;">Identity Proof</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">${shop.aadhaar_number}</div>
+                            </div>
+                        </div>
+                        <span style="color: var(--super-accent);">👁️</span>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-reject" onclick="handleAction('admin', ${shop.admin_id}, 'reject')">Deny Access</button>
+                        <button class="btn btn-approve" onclick="handleAction('admin', ${shop.admin_id}, 'approve')">Authorize</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRiders(riders) {
+            const container = document.getElementById('rider-approvals');
+            if (!riders || riders.length === 0) {
+                container.innerHTML = '<div class="empty-state">All rider agents verified. No pending requests.</div>';
+                return;
+            }
+
+            container.innerHTML = riders.map(rider => `
+                <div class="approval-card">
+                    <div class="card-top">
+                        <h3>${rider.name}</h3>
+                        <span class="status-badge">${rider.status}</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Secure IP</span>
+                        <span class="info-value">${rider.email}</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Comm ID</span>
+                        <span class="info-value">${rider.phone || 'N/A'}</span>
+                    </div>
+
+                    <div class="aadhaar-link-box" onclick="window.open('${rider.aadhaar_image_url}')">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.2rem;">🪪</span>
+                            <div>
+                                <div style="font-weight: 700; font-size: 0.9rem;">Identity Proof</div>
+                                <div style="font-size: 0.75rem; color: #64748b;">${rider.aadhaar_number}</div>
+                            </div>
+                        </div>
+                        <span style="color: var(--super-accent);">👁️</span>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-reject" onclick="handleAction('rider', ${rider.rider_id}, 'reject')">Deny Enrollment</button>
+                        <button class="btn btn-approve" onclick="handleAction('rider', ${rider.rider_id}, 'approve')">Verify Agent</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSupportMessages(msgs) {
+            const container = document.getElementById('support-messages');
+            if (!msgs || msgs.length === 0) {
+                container.innerHTML = '<div class="empty-state">No active support inquiries. Clean slate!</div>';
+                return;
+            }
+
+            container.innerHTML = msgs.map(msg => `
+                <div class="approval-card" style="border-left: 4px solid ${msg.status === 'open' ? 'var(--super-accent)' : '#10b981'};">
+                    <div class="card-top">
+                        <h3>${msg.subject}</h3>
+                        <span class="status-badge" style="background: ${msg.status === 'open' ? '#e0f2fe' : '#f0fdf4'}; color: ${msg.status === 'open' ? '#0369a1' : '#166534'};">
+                            ${msg.status === 'open' ? 'New Inquiry' : 'Replied'}
+                        </span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">User</span>
+                        <span class="info-value">${msg.name}</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Email</span>
+                        <span class="info-value" style="color: var(--super-accent);">${msg.email}</span>
+                    </div>
+                    <div class="info-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9;">
+                        <span class="info-label" style="display: block; margin-bottom: 5px;">Message</span>
+                        <p style="margin: 0; color: #475569; line-height: 1.5; font-size: 0.9rem;">${msg.message}</p>
+                    </div>
+
+                    ${msg.reply ? `
+                        <div style="margin-top: 15px; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
+                            <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 5px; display: block;">YOUR REPLY:</span>
+                            <p style="margin: 0; font-size: 0.85rem; color: #1e293b;">${msg.reply}</p>
+                        </div>
+                    ` : `
+                        <div id="reply-box-${msg.message_id}" style="margin-top: 20px;">
+                            <textarea id="reply-text-${msg.message_id}" placeholder="Type your response..." style="width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 0.9rem; min-height: 80px; resize: vertical; margin-bottom: 10px;"></textarea>
+                            <button class="btn btn-approve" style="width: 100%; background: var(--super-dark);" onclick="submitReply(${msg.message_id})">Send Secure Response</button>
+                        </div>
+                    `}
+                    
+                    <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
+                        <button class="btn btn-reject" style="padding: 6px 15px; font-size: 0.8rem; background: #fee2e2; color: #b91c1c;" onclick="deleteTicket(${msg.message_id})">🗑️ Delete</button>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">
+                            Received: ${new Date(msg.created_at).toLocaleString()}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function deleteTicket(msgId) {
+            if(!confirm("Are you sure you want to permanently delete this support ticket?")) return;
+            try {
+                await api.deleteSupportMessage(msgId);
+                alert("Ticket deleted successfully.");
+                loadData();
+            } catch (e) {
+                alert("Failed to delete: " + e.message);
+            }
+        }
+
+        async function submitReply(msgId) {
+            const text = document.getElementById(`reply-text-${msgId}`).value;
+            if(!text) return alert("Please type a response.");
+
+            try {
+                const btn = document.querySelector(`#reply-box-${msgId} .btn`);
+                btn.disabled = true;
+                btn.textContent = "Sending...";
+                
+                await api.replyToSupportMessage(msgId, text);
+                alert("Response sent successfully!");
+                loadData(); // Reload UI
+            } catch (e) {
+                alert("Failed: " + e.message);
+            }
+        }
+
+        async function handleAction(type, id, action) {
+            if(!confirm(`Proceed with ${action} for this ${type}?`)) return;
+
+            try {
+                if (type === 'admin') {
+                    if (action === 'approve') await api.approveAdmin(id);
+                    else await api.rejectAdmin(id);
+                } else {
+                    if (action === 'approve') await api.approveRider(id);
+                    else await api.rejectRider(id);
+                }
+                loadData(); // Reload
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        // Init
+        loadData();
+    </script>
+</body>
+</html>

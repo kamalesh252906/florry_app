@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment - Florry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo" onclick="window.location.href='./landing.html'">
+        <span class="logo-icon">🌸</span>
+        <span class="logo-text">Florry</span>
+      </div>
+      <h2 class="header-title">Checkout</h2>
+    </div>
+  </header>
+
+  <!-- Payment Section -->
+  <section class="payment-section">
+    <div class="payment-container-premium">
+      
+      <div class="payment-main">
+        <!-- Delivery Address -->
+        <div class="payment-card-premium">
+          <h3>📍 Shipping Details</h3>
+          <form id="address-form" class="payment-form-grid">
+            <div class="form-group-full">
+                <input type="text" class="payment-input" placeholder="Full Name" id="delivery-name" required />
+            </div>
+            <div class="form-group-full">
+                <input type="tel" class="payment-input" placeholder="Phone Number" id="delivery-phone" maxlength="10" required />
+            </div>
+            <div class="form-group-full">
+                <textarea class="payment-input" placeholder="Complete Address" id="delivery-address" rows="3" required></textarea>
+                <button type="button" onclick="detectLocation()" style="margin-top:10px; background:none; border:none; color:var(--primary); cursor:pointer; font-weight:700; display:flex; align-items:center; gap:5px;">
+                  🛰️ Auto-detect Location
+                </button>
+            </div>
+            <div>
+              <input type="text" class="payment-input" placeholder="City" id="delivery-city" required />
+            </div>
+            <div>
+              <input type="text" class="payment-input" placeholder="Pincode" id="delivery-pincode" maxlength="6" required />
+            </div>
+          </form>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="payment-card-premium">
+          <h3>💳 Choose Payment Method</h3>
+          <div class="payment-options-premium">
+            <label class="option-premium">
+              <input type="radio" name="payment" value="cod" checked />
+              <div class="option-info">
+                <h4>💵 Cash on Delivery (COD)</h4>
+                <p>Pay with cash when your blooms reach you.</p>
+              </div>
+            </label>
+
+            <label class="option-premium">
+              <input type="radio" name="payment" value="later" />
+              <div class="option-info">
+                <h4>⏰ Pay Later</h4>
+                <p>We'll send a secure payment link via SMS/Email.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Summary -->
+      <aside class="payment-sidebar">
+        <div class="summary-card-premium">
+          <h3>📦 Order Summary</h3>
+          <div class="summary-items" id="order-summary">
+            <!-- Dynamic Content -->
+          </div>
+          
+          <div class="summary-totals">
+            <div class="total-row-premium">
+              <span>Subtotal</span>
+              <span id="payment-subtotal">₹0</span>
+            </div>
+            <div class="total-row-premium">
+              <span>Delivery Fee</span>
+              <span>₹50</span>
+            </div>
+            <div class="total-row-premium grand">
+              <span>Grand Total</span>
+              <span id="payment-total">₹50</span>
+            </div>
+          </div>
+
+          <button class="place-order-btn-premium" onclick="placeOrder()">
+            Place Your Order 🌸
+          </button>
+          
+          <p style="text-align:center; color:var(--gray); font-size:0.8rem; margin-top:20px;">
+            By placing this order, you agree to our Terms of Service.
+          </p>
+        </div>
+        
+        <button class="icon-btn" onclick="window.location.href='./cart.html'" style="margin-top:20px; width:100%; border:1px solid var(--border); background:white; color:var(--dark); border-radius:15px; padding:15px; cursor:pointer;">
+          ← Return to Cart
+        </button>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>🌸 Florry</h3>
+        <p>Fresh flowers delivered at lightning speed</p>
+      </div>
+
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <a href="./orders.html">Your Orders</a>
+        <a href="./support.html">Support</a>
+        <a href="./help.html">Help Center</a>
+        <a href="./about.html">About Us</a>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <p>📞 1800-FLORRY</p>
+        <p>📧 support@florry.com</p>
+      </div>
+
+      <div class="footer-section">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="#">🌐</a>
+          <a href="#">ⓕ</a>
+          <a href="#">𝕏</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2024 Florry. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="../js/config.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/payment.js"></script>
+</body>
+</html>

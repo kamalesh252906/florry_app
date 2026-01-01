@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Florry - Fresh Flower Delivery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo" onclick="window.location.href='./landing.html'" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 2.2rem; transform: rotate(-5deg); transition: transform 0.3s;" onmouseover="this.style.transform='rotate(5deg)'" onmouseout="this.style.transform='rotate(-5deg)'">🌸</span>
+                <span class="logo-text" style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Florry</span>
+            </div>
+            
+            <!-- Search -->
+            <div class="search-bar">
+                <div class="search-wrapper">
+                    <div class="search-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <input type="text" placeholder="Search for local boutiques or flowers..." id="search-input">
+                </div>
+                <button class="search-btn">Search</button>
+            </div>
+            
+            <div class="header-actions">
+                <button class="icon-btn" onclick="window.location.href='./cart.html'" title="Your Basket">
+                    <span style="font-size: 1.6rem;">🛒</span>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+                <button class="icon-btn" onclick="toggleMenu()" title="Menu">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Explore Florry</h3>
+            <button class="close-btn" onclick="toggleMenu()">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="./landing.html">🏠 Home</a>
+            <a href="./orders.html">📦 My Orders</a>
+            <a href="./support.html">💬 Support</a>
+            <a href="./help.html">❓ FAQ</a>
+            <hr style="margin: 10px 20px; opacity: 0.1;">
+            <a href="#" onclick="auth.logout()" style="color: #FF6B6B;">🚪 Logout</a>
+        </nav>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Hero Section -->
+    <section class="hero-premium">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">✨ Nature's Finest Artisans</div>
+            <h1>Breathtaking Blooms, <br><span>Swiftly Delivered</span></h1>
+            <p>Discover hand-crafted floral arrangements from your neighborhood's most celebrated boutiques. Freshness guaranteed, joy delivered.</p>
+            <div class="hero-stats">
+                <div class="hero-stat-item">
+                    <strong>50k+</strong>
+                    <span>Orders Fulfilled</span>
+                </div>
+                <div class="hero-stat-item">
+                    <strong>100+</strong>
+                    <span>Local Shops</span>
+                </div>
+                <div class="hero-stat-item">
+                    <strong>4.9★</strong>
+                    <span>Customer Love</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80" alt="Beautiful Flowers">
+        </div>
+    </section>
+
+    
+    
+    <!-- Shop Selection -->
+    <section class="shops" id="shops-section">
+        <div class="container fade-in">
+            <div class="section-title">
+                <h2>Featured Boutiques</h2>
+                <p>Support local partners and find the perfect match for your space</p>
+            </div>
+            <div class="products-grid" id="shops-grid"></div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filters-premium" id="filters-section" style="display:none">
+        <div class="container">
+            <button class="back-btn" onclick="backToShops()">← Change Boutique</button>
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterFlowers('all')">All Blooms</button>
+                <button class="filter-btn" onclick="filterFlowers('flowers')">Pure Flowers</button>
+                <button class="filter-btn" onclick="filterFlowers('decorations')">Decorations</button>
+                <button class="filter-btn" onclick="filterFlowers('garlands')">Garlands</button>
+                <button class="filter-btn" onclick="filterFlowers('tied_flowers')">Tied Art</button>
+                <button class="filter-btn" onclick="filterFlowers('ready_made')">Ready-made</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Grid -->
+    <section class="products" id="main-products-section" style="display:none; padding-top: 40px;">
+        <div class="container fade-in">
+            <div class="section-title">
+                <h2 id="current-shop-name">The Collection</h2>
+                <p>Browse signature creations available for instant delivery</p>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>🌸 Florry</h3>
+                <p>Fresh flowers delivered at lightning speed</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="./landing.html">Home</a>
+                <a href="./orders.html">Your Orders</a>
+                <a href="./support.html">Support</a>
+                <a href="./help.html">Help Center</a>
+                <a href="./about.html">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📞 1800-FLORRY</p>
+                <p>📧 support@florry.com</p>    
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#">🌐</a>
+                    <a href="#">ⓕ</a>
+                    <a href="#">𝕏</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Florry. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Scripts: Load in order! -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+</html>

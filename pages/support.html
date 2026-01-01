@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Florry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo" onclick="window.location.href='./landing.html'">
+                <span class="logo-icon">🌸</span>
+                <span class="logo-text">Florry</span>
+            </div>
+            <div class="header-actions">
+                 <button class="icon-btn" onclick="window.location.href='./cart.html'">🛒</button>
+                 <button class="icon-btn" onclick="toggleMenu()">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Explore</h3>
+            <button class="close-btn" onclick="toggleMenu()">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="./landing.html">🏠 Dashboard</a>
+            <a href="./orders.html">📦 My Orders</a>
+            <a href="./support.html" class="active">💬 Get Support</a>
+            <a href="./help.html">❓ FAQ</a>
+            <a href="./about.html">ℹ️ Our Story</a>
+            <hr style="margin: 10px 0; opacity: 0.1;">
+            <a href="#" onclick="auth.logout()" style="color: #FF6B6B;">🚪 Logout</a>
+        </nav>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <section class="hero-premium" style="height: 350px;">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">24/7 Assistance</div>
+            <h1>We're here to <span>help you</span></h1>
+            <p>Our dedicated support team is ready to assist with any bloom-related inquiries.</p>
+        </div>
+        <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1534536281715-e28d76689b4d?auto=format&fit=crop&q=80" alt="Support">
+        </div>
+    </section>
+
+    <div class="support-container">
+        <div class="support-grid">
+            <div class="contact-methods">
+                <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 30px;">Get in Touch</h2>
+                
+                <div class="method-card">
+                    <div class="method-icon">📧</div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 700;">Email Us</h4>
+                        <p style="color: var(--gray); font-size: 0.95rem;">support@florry.com</p>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-icon">📞</div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 700;">Call Us</h4>
+                        <p style="color: var(--gray); font-size: 0.95rem;">1-800-FLORRY-HELP</p>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-icon">📍</div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 700;">Visit Headquarters</h4>
+                        <p style="color: var(--gray); font-size: 0.95rem;">Floral Way, Bloom City, 4001</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-premium">
+                <h3 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 30px;">Send a Message</h3>
+                <form id="support-form">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" id="sup-name" required placeholder="Full Name">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="sup-email" required placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <select id="sup-subject">
+                                <option>Order Inquiry</option>
+                                <option>Delivery Feedback</option>
+                                <option>Payment Issue</option>
+                                <option>Technical Support</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        <textarea id="sup-message" required placeholder="Describe how we can help you today..." style="min-height: 150px;"></textarea>
+                    </div>
+                    <button type="submit" class="place-order-btn-premium" style="margin-top: 10px;">Send Secure Message</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Ticket History -->
+        <div id="ticket-history-section" style="margin-top: 80px; display: none;">
+            <div class="section-title" style="text-align: left; margin-bottom: 40px;">
+                <h2>Your Support Tickets</h2>
+                <p>Track your ongoing conversations with our team</p>
+            </div>
+            <div id="tickets-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px;">
+                <!-- Tickets go here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>🌸 Florry</h3>
+                <p>Nature's finest blooms, delivered to your door.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <a href="./landing.html">Dashboard</a>
+                <a href="./help.html">FAQ</a>
+                <a href="./about.html">Contact Us</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Florry. Handcrafted for elegance.</p>
+        </div>
+    </footer>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Sidebar logic
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        const supUser = JSON.parse(localStorage.getItem('florryUser'));
+        
+        if(supUser) {
+            document.getElementById('sup-name').value = supUser.name || '';
+            document.getElementById('sup-email').value = supUser.email || '';
+            loadTickets();
+        }
+
+        async function loadTickets() {
+            if(!supUser) return;
+            try {
+                const tickets = await api.getSupportMessages(supUser.user_id);
+                const container = document.getElementById('tickets-container');
+                const section = document.getElementById('ticket-history-section');
+                
+                if(tickets && tickets.length > 0) {
+                    section.style.display = 'block';
+                    container.innerHTML = tickets.map(t => `
+                        <div class="ticket-card">
+                            <span class="status-tag ${t.status === 'open' ? 'open' : 'replied'}">
+                                ${t.status}
+                            </span>
+                            <h3 style="margin-bottom: 12px; font-weight: 800;">${t.subject}</h3>
+                            <p style="color: var(--gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px;">${t.message}</p>
+                            
+                            ${t.reply ? `
+                                <div class="admin-reply">
+                                    <p style="margin: 0; font-size: 0.95rem; line-height: 1.6;">${t.reply}</p>
+                                </div>
+                            ` : `
+                                <p style="font-size: 0.85rem; color: #94a3b8; font-style: italic; display: flex; align-items: center; gap: 8px;">
+                                    <span style="display:inline-block; width: 6px; height: 6px; background: #94a3b8; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
+                                    Assigning representative...
+                                </p>
+                            `}
+                            
+                            <div style="margin-top: 20px; font-size: 0.75rem; color: #cbd5e1; text-align: right;">
+                                Issued: ${new Date(t.created_at).toLocaleDateString()}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.getElementById('support-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Enrypting & Sending...';
+                
+                const data = {
+                    user_id: supUser ? supUser.user_id : null,
+                    name: document.getElementById('sup-name').value,
+                    email: document.getElementById('sup-email').value,
+                    subject: document.getElementById('sup-subject').value,
+                    message: document.getElementById('sup-message').value
+                };
+                
+                await api.sendSupportMessage(data);
+                alert('Success! Your inquiry has been secured. We will notify you once a representative replies.');
+                e.target.reset();
+                if(supUser) loadTickets();
+            } catch (err) {
+                alert('Secure Sending Failed: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        });
+    </script>
+
+    <style>
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+    </style>
+</body>
+</html>

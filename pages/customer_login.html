@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login - Florry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/auth-style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Brand Section -->
+        <div class="auth-left" style="background: linear-gradient(rgba(30, 81, 40, 0.8), rgba(30, 81, 40, 0.9)), url('https://images.unsplash.com/photo-1591038332311-66518db96af3?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
+            <div class="back-link">
+                <a href="../index.html">← Back to Home</a>
+            </div>
+            <div class="auth-brand">
+                <span class="brand-icon">✨</span>
+                <h1>Welcome <span>Back</span></h1>
+                <p>Login to explore nature's finest creations and manage your fresh flower orders.</p>
+            </div>
+            <div class="auth-footer-info" style="font-size: 0.8rem; opacity: 0.6;">
+                Secure & Encrypted Sessions
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="auth-right">
+            <div class="auth-form-box">
+                <h2>Customer Access</h2>
+                <p class="subtitle">Enter your credentials to continue your journey</p>
+
+                <form onsubmit="handleCustomerLogin(event)">
+                    <div class="input-group">
+                        <label>Email or Mobile Number <span class="required">*</span></label>
+                        <input type="text" id="login-user" placeholder="e.g. alex@example.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Security Password <span class="required">*</span></label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="forgot-password" style="text-align: right; margin-top: -10px; margin-bottom: 25px;">
+                        <a href="./forgot_password.html?type=customer" style="font-size: 0.9rem; color: var(--gray); font-weight: 600;">Recover Password?</a>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="login-btn">Authenticate & Shop</button>
+                </form>
+
+                <div class="switch-auth">
+                    <p>New to Florry? <a href="./customer_signup.html">Create an Account</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+</html>

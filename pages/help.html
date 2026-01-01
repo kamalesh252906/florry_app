@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Florry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/style.css">
+    <style>
+        .faq-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f1f3f5;
+        }
+        .faq-item h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo" onclick="window.location.href='./landing.html'">
+                <span class="logo-icon">🌸</span>
+                <span class="logo-text">Florry</span>
+            </div>
+            <div class="header-actions">
+                 <button class="icon-btn" onclick="window.location.href='./cart.html'">🛒</button>
+                 <button class="icon-btn" onclick="toggleMenu()">☰</button>
+            </div>
+        </div>
+    </header>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" onclick="toggleMenu()">✕</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="./landing.html">🏠 Home</a>
+            <a href="./orders.html">📦 Your Orders</a>
+            <a href="./support.html">💬 Support</a>
+            <a href="./help.html" class="active">❓ Help</a>
+            <a href="./about.html">ℹ️ About Us</a>
+        </nav>
+    </div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <section class="hero" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); min-height: 200px; display: flex; align-items: center;">
+        <div class="container">
+            <h1>How can we help?</h1>
+            <p>Find answers to common questions about Florry</p>
+        </div>
+    </section>
+
+    <div class="container" style="padding: 60px 20px; max-width: 800px;">
+        <div class="faq-list">
+            <div class="faq-item">
+                <h3><span>🚚</span> How fast is delivery?</h3>
+                <p>We pride ourselves on lightning-fast delivery. Most orders arrive within 15-30 minutes, depending on your distance from the florist.</p>
+            </div>
+            <div class="faq-item">
+                <h3><span>💳</span> What payment methods are accepted?</h3>
+                <p>We accept all major credit/debit cards, UPI (Google Pay, PhonePe), and Cash on Delivery (COD).</p>
+            </div>
+            <div class="faq-item">
+                <h3><span>🌹</span> Are the flowers fresh?</h3>
+                <p>Yes! We partner only with top-rated local florists who source their blooms daily. Your satisfaction is 100% guaranteed.</p>
+            </div>
+            <div class="faq-item">
+                <h3><span>📦</span> Can I track my order?</h3>
+                <p>Absolutely. Once a rider is assigned, you'll see live tracking updates in your "Orders" section.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>🌸 Florry</h3>
+                <p>Fresh flowers delivered at lightning speed</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="./orders.html">Your Orders</a>
+                <a href="./support.html">Support</a>
+                <a href="./help.html">Help Center</a>
+                <a href="./about.html">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📞 1800-FLORRY</p>
+                <p>📧 support@florry.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Florry. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/menu.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+</html>

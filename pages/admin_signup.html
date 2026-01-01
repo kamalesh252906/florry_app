@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Signup - Florry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/auth-style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Brand Section -->
+        <div class="auth-left" style="background: linear-gradient(rgba(30, 81, 40, 0.85), rgba(30, 81, 40, 0.95)), url('https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
+            <div class="back-link">
+                <a href="../index.html">← Back to Home</a>
+            </div>
+            <div class="auth-brand">
+                <span class="brand-icon">🏪</span>
+                <h1>Partner with <span>Florry</span></h1>
+                <p>Grow your floral business with our global reach and lightning-fast delivery network.</p>
+            </div>
+            <div class="auth-footer-info" style="font-size: 0.8rem; opacity: 0.6;">
+                &copy; 2024 Florry Partner Network. All rights reserved.
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="auth-right">
+            <div class="auth-form-box">
+                <h2>Create Store Account</h2>
+                <p class="subtitle">Join our community of elite floral artists</p>
+
+                <form onsubmit="handleAdminSignup(event)">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Owner Name <span class="required">*</span></label>
+                            <input type="text" id="signup-name" placeholder="Enter full name" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Boutique Name <span class="required">*</span></label>
+                            <input type="text" id="signup-shop" placeholder="e.g. Bloom Haven" required>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Business Email <span class="required">*</span></label>
+                            <input type="email" id="signup-email" placeholder="owner@shop.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Contact Number <span class="required">*</span></label>
+                            <input type="tel" id="phone" placeholder="+91 XXXX XXX XXX" required>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Store Front Display <span class="required">*</span></label>
+                        <div class="drop-zone" id="shop-image-dropzone" style="height: 120px; border: 2px dashed var(--border); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer; transition: all 0.3s;">
+                            <div class="upload-icon" style="font-size: 2.5rem; margin-bottom: 5px;">🖼️</div>
+                            <p style="font-size: 0.85rem; color: var(--gray); font-weight: 600;">Click or drag shop photo</p>
+                        </div>
+                        <input type="file" id="shop-image-input" accept="image/*" style="display: none;">
+                        <input type="hidden" id="shop-image-url">
+                    </div>
+
+                    <div class="input-row" style="grid-template-columns: 1.4fr 1fr;">
+                        <div class="input-group">
+                            <label>National ID / Aadhaar <span class="required">*</span></label>
+                            <input type="text" id="aadhaar-number" placeholder="Enter ID number" required>
+                        </div>
+                        <div class="input-group">
+                            <label>ID Document <span class="required">*</span></label>
+                            <div class="drop-zone" id="aadhaar-image-dropzone" style="height: 120px; border: 2px dashed var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer;">
+                                <div class="upload-icon" style="font-size: 1.8rem;">📄</div>
+                            </div>
+                            <input type="file" id="aadhaar-image-input" accept="image/*" style="display: none;">
+                            <input type="hidden" id="aadhaar-image-url">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group" style="background: rgba(30, 81, 40, 0.03); padding: 25px; border-radius: 24px; border: 1px solid rgba(226, 232, 240, 0.8);">
+                         <label style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                             <span style="font-size: 1.2rem;">📍</span> Digital Store Location
+                         </label>
+                         <div class="input-row" style="margin-bottom: 15px;">
+                             <input type="text" id="latitude" placeholder="Latitude" readonly style="background: white;">
+                             <input type="text" id="longitude" placeholder="Longitude" readonly style="background: white;">
+                         </div>
+                         <button type="button" onclick="getLocation()" style="width: 100%; padding: 15px; background: white; border: 2px solid var(--primary); color: var(--primary); border-radius: 14px; cursor: pointer; font-weight: 800; transition: all 0.3s; font-size: 0.9rem;">
+                             Capture GPS Coordinates
+                         </button>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 25px;">
+                        <label>Security Password <span class="required">*</span></label>
+                        <input type="password" id="signup-password" placeholder="Min 6 characters" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submit-btn">Continue Partnership Registration</button>
+                </form>
+
+                <div class="switch-auth">
+                    <p>Already a partner? <a href="./admin_login.html">Sign in here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/image-uploader.js"></script>
+    <script>
+        let shopImageUploader, aadhaarImageUploader;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize image uploaders
+            shopImageUploader = new ImageUploader('shop-image-dropzone', null, 'shop-image-input');
+            aadhaarImageUploader = new ImageUploader('aadhaar-image-dropzone', null, 'aadhaar-image-input');
+
+            // Listen for upload completion
+            document.getElementById('shop-image-dropzone').addEventListener('imageUploaded', (e) => {
+                document.getElementById('shop-image-url').value = e.detail.url;
+                const dz = document.getElementById('shop-image-dropzone');
+                dz.style.borderColor = 'var(--primary)';
+                dz.style.background = '#f0fdf4';
+                dz.innerHTML = `<div style="color: var(--primary); font-weight: 800;">✓ Photo Ready</div>`;
+            });
+
+            document.getElementById('aadhaar-image-dropzone').addEventListener('imageUploaded', (e) => {
+                document.getElementById('aadhaar-image-url').value = e.detail.url;
+                const dz = document.getElementById('aadhaar-image-dropzone');
+                dz.style.borderColor = 'var(--primary)';
+                dz.style.background = '#f0fdf4';
+                dz.innerHTML = `<div style="color: var(--primary); font-weight: 800;">✓ Document Secured</div>`;
+            });
+        });
+
+        function getLocation() {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '🛰️ Syncing Coordinates...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        document.getElementById('latitude').value = pos.coords.latitude.toFixed(6);
+                        document.getElementById('longitude').value = pos.coords.longitude.toFixed(6);
+                        btn.textContent = '✓ GPS Synced';
+                        btn.style.background = 'var(--primary)';
+                        btn.style.color = 'white';
+                    },
+                    (err) => {
+                        alert("Could not fetch location: " + err.message);
+                        btn.textContent = originalText;
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+                btn.textContent = originalText;
+            }
+        }
+
+        async function handleAdminSignup(event) {
+            event.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.textContent;
+            
+            try {
+                const shopImage = document.getElementById('shop-image-url').value;
+                const aadhaarImage = document.getElementById('aadhaar-image-url').value;
+                const lat = document.getElementById('latitude').value;
+                const lng = document.getElementById('longitude').value;
+
+                if (!lat || !lng) throw new Error("Please capture your shop GPS coordinates.");
+                if (!shopImage) throw new Error("Please upload a store front photo.");
+                if (!aadhaarImage) throw new Error("Please upload your identity document.");
+
+                btn.textContent = 'Processing Partnership...';
+                btn.disabled = true;
+
+                const payload = {
+                    name: document.getElementById('signup-name').value,
+                    email: document.getElementById('signup-email').value,
+                    phone: document.getElementById('phone').value,
+                    password: document.getElementById('signup-password').value,
+                    shop_name: document.getElementById('signup-shop').value,
+                    shop_image_url: shopImage,
+                    aadhaar_number: document.getElementById('aadhaar-number').value,
+                    aadhaar_image_url: aadhaarImage,
+                    latitude: parseFloat(lat),
+                    longitude: parseFloat(lng)
+                };
+
+                await api.createAdmin(payload);
+                
+                alert('Partnership request submitted! Your account is now pending review by the Florry Super Admin team.');
+                window.location.href = './admin_login.html';
+            } catch (error) {
+                alert('Signup failed: ' + error.message);
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
