@@ -111,6 +111,7 @@ class FlowerCreate(BaseModel):
     image_url: Optional[str] = None
     category: Optional[str] = None
     stock_quantity: Optional[int] = 0
+    weight_grams: Optional[int] = 0
 
 class FlowerUpdate(BaseModel):
     name: Optional[str]
@@ -119,6 +120,7 @@ class FlowerUpdate(BaseModel):
     image_url: Optional[str]
     category: Optional[str]
     stock_quantity: Optional[int]
+    weight_grams: Optional[int]
 
 class FlowerOut(BaseModel):
     flower_id: int
@@ -129,6 +131,7 @@ class FlowerOut(BaseModel):
     image_url: Optional[str]
     category: Optional[str]
     stock_quantity: int
+    weight_grams: int
     created_at: datetime
 
     class Config:

@@ -51,6 +51,7 @@ class Flower(Base):
     image_url = Column(Text)  # Changed to Text for base64 images
     category = Column(String(50))
     stock_quantity = Column(Integer, default=0)
+    weight_grams = Column(Integer, default=0)
     created_at = Column(TIMESTAMP(timezone=False), server_default=func.now())
 
     admin = relationship("Admin", back_populates="flowers")

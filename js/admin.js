@@ -183,7 +183,7 @@ async function loadAdminProducts() {
                 <div class="admin-card-body">
                     <h3>${flower.name}</h3>
                     <p class="price">₹${flower.price}</p>
-                    <p class="category" style="color: #666; font-size: 0.9em; text-transform: capitalize;">${flower.category}</p>
+                    <p class="category" style="color: #666; font-size: 0.9em; text-transform: capitalize;">${flower.category} • ${flower.weight_grams}g</p>
                     <div class="admin-actions">
                         <button class="edit-btn" onclick='openModal(${JSON.stringify(flower).replace(/'/g, "&#39;")})'>Edit</button>
                         <button class="delete-btn" onclick="deleteFlower(${flower.flower_id})">Delete</button>
@@ -211,6 +211,7 @@ function openModal(flower = null) {
         document.getElementById('flower-name').value = flower.name;
         document.getElementById('flower-category').value = flower.category; // Ensure value matches option values
         document.getElementById('flower-price').value = flower.price;
+        document.getElementById('flower-grams').value = flower.weight_grams || 0;
         document.getElementById('flower-image-url').value = flower.image_url;
         if (flower.image_url) {
             flowerImageUploader.showPreview(flower.image_url);
@@ -253,6 +254,7 @@ async function handleSaveFlower(event) {
         name: document.getElementById('flower-name').value,
         category: document.getElementById('flower-category').value,
         price: parseFloat(document.getElementById('flower-price').value),
+        weight_grams: parseInt(document.getElementById('flower-grams').value) || 0,
         image_url: imageUrl,
         description: document.getElementById('flower-description').value,
         admin_id: admin.admin_id, // Use logged-in admin's ID

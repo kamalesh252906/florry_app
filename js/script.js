@@ -150,7 +150,10 @@ async function loadProducts(category = 'all') {
                      class="product-image"
                      onerror="this.src='https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'">
                 <div class="product-info">
-                    <h3 class="product-name">${flower.name}</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <h3 class="product-name">${flower.name}</h3>
+                        <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #64748b; font-weight: 600;">${flower.weight_grams}g</span>
+                    </div>
                     <p class="product-description">${flower.description || 'A beautiful, hand-picked selection of fresh seasonal blooms.'}</p>
                     <div class="product-footer">
                         <span class="product-price">₹${flower.price}</span>
@@ -268,7 +271,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                  alt="${flower.name}" 
                                  class="product-image">
                             <div class="product-info">
-                                <h3 class="product-name">${flower.name}</h3>
+                                <div style="display: flex; justify-content: space-between; align-items: start;">
+                                    <h3 class="product-name">${flower.name}</h3>
+                                    <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #64748b; font-weight: 600;">${flower.weight_grams}g</span>
+                                </div>
                                 <p class="product-description">${flower.description || ''}</p>
                                 <div class="product-footer">
                                     <span class="product-price">₹${flower.price}</span>

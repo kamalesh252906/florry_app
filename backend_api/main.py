@@ -19,6 +19,14 @@ with engine.connect() as conn:
     except Exception as e:
         print(f"Migration error: {e}")
 
+# Migration for flowers table
+with engine.connect() as conn:
+    try:
+        conn.execute(text("ALTER TABLE flowers ADD COLUMN IF NOT EXISTS weight_grams INTEGER DEFAULT 0"))
+        conn.commit()
+    except Exception as e:
+        print(f"Migration error (flowers): {e}")
+
 app = FastAPI(title="Florry Flower Shop API")
 
 # CORS Configuration
