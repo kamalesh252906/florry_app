@@ -307,19 +307,16 @@
         <!-- Sidebar -->
         <aside class="super-sidebar">
             <div class="super-logo">
-                <span>🛡️</span>
-                <span>System</span>
+                <span>Kamalesh</span>
             </div>
             
             <nav class="super-nav">
-                <a href="#" class="nav-link active">📊 System Overview</a>
-                <a href="#" class="nav-link">🏪 Shop Control</a>
-                <!-- <a href="#" class="nav-link">🛵 Rider Ops</a>
-                <a href="#" class="nav-link">🌍 Global Meta</a> -->
+                <a href="#" class="nav-link active">System Overview</a>
+                <a href="#" class="nav-link">Shop Control</a>
             </nav>
 
             <div class="sidebar-footer">
-                <a href="#" class="nav-link" onclick="logout()" style="color: #fca5a5;">🚪 Systems Exit</a>
+                <a href="#" class="nav-link" onclick="logout()" style="color: #fca5a5;">Systems Exit</a>
             </div>
         </aside>
 
@@ -332,7 +329,7 @@
                 </div>
                 <div class="super-user" style="display: flex; align-items: center; gap: 15px; background: white; padding: 10px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
                     <div style="text-align: right;">
-                        <div style="font-weight: 800; font-size: 0.9rem;">Root Admin</div>
+                        <div style="font-weight: 800; font-size: 0.9rem;">Kamalesh Elumalai</div>
                         <div style="font-size: 0.75rem; color: #10b981;">Online ● Active</div>
                     </div>
                     <div style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">👤</div>
@@ -365,7 +362,7 @@
             </div>
 
             <!-- Shop Approvals -->
-            <h2 class="section-title">🏪 Shop Approval Queue</h2>
+            <h2 class="section-title">Shop Approval Queue</h2>
             <div id="shop-approvals" class="approval-grid">
                 <div class="empty-state">Scanning for requests...</div>
             </div>
@@ -377,7 +374,7 @@
             </div> -->
 
             <!-- Support Inquiries -->
-            <h2 class="section-title">💬 Support Inquiries</h2>
+            <h2 class="section-title">Support Inquiries</h2>
             <div id="support-messages" class="approval-grid">
                 <div class="empty-state">Loading messages...</div>
             </div>
@@ -445,13 +442,13 @@
                     
                     <div class="aadhaar-link-box" onclick="window.open('${shop.aadhaar_image_url}')">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 1.2rem;">📄</span>
+
                             <div>
                                 <div style="font-weight: 700; font-size: 0.9rem;">Identity Proof</div>
                                 <div style="font-size: 0.75rem; color: #64748b;">${shop.aadhaar_number}</div>
                             </div>
                         </div>
-                        <span style="color: var(--super-accent);">👁️</span>
+              
                     </div>
 
                     <div class="btn-group">
@@ -486,13 +483,13 @@
 
                     <div class="aadhaar-link-box" onclick="window.open('${rider.aadhaar_image_url}')">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 1.2rem;">🪪</span>
+                            
                             <div>
                                 <div style="font-weight: 700; font-size: 0.9rem;">Identity Proof</div>
                                 <div style="font-size: 0.75rem; color: #64748b;">${rider.aadhaar_number}</div>
                             </div>
                         </div>
-                        <span style="color: var(--super-accent);">👁️</span>
+                        
                     </div>
 
                     <div class="btn-group">
