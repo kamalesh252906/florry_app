@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from sqlalchemy import text
@@ -49,23 +49,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(users.router)
-app.include_router(user_login.router)
-app.include_router(admins.router)
-app.include_router(admin_login.router)
-app.include_router(flowers.router)
-app.include_router(orders.router)
-app.include_router(order_items.router)
-app.include_router(reports.router)
-app.include_router(cart.router)
+# === MASTER ROUTER WITH /API PREFIX ===
+# This ensures consistency between local dev and Vercel routing
+api_router = APIRouter(prefix="/api")
 
-app.include_router(support.router)
+api_router.include_router(users.router)
+api_router.include_router(user_login.router)
+api_router.include_router(admins.router)
+api_router.include_router(admin_login.router)
+api_router.include_router(flowers.router)
+api_router.include_router(orders.router)
+api_router.include_router(order_items.router)
+api_router.include_router(reports.router)
+api_router.include_router(cart.router)
+api_router.include_router(support.router)
+api_router.include_router(superadmin.router)
 
-app.include_router(superadmin.router)
+app.include_router(api_router)
 
 @app.get("/")
 def root():
-    return {"message": "Florry API is running"}
+    return {"message": "Florry API is running", "docs": "/docs"}
 
 @app.get("/health")
 def health():

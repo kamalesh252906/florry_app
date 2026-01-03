@@ -6,8 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
 
 try:
     from main import app
-    # Standard Vercel routing
-    app.root_path = "/api"
+    # Prefix is now handled by api_router in main.py
 except Exception as e:
     from fastapi import FastAPI
     app = FastAPI()
@@ -18,6 +17,8 @@ except Exception as e:
             "status": "error",
             "message": "The Florry Backend failed to load.",
             "detail": str(e),
-            "path_attempted": f"/api/{path}"
+            "trace": "Check server logs/DATABASE_URL",
+            "path_attempted": f"/{path}"
         }
+
 
