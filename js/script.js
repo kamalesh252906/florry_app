@@ -250,50 +250,121 @@ function toggleMenu() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Search Functionality
     const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', async function (e) {
-            const searchTerm = e.target.value.toLowerCase();
+    const searchBtn = document.querySelector('.search-btn');
+
+    async function handleSearch() {
+        if (!searchInput) return;
+        const term = searchInput.value.toLowerCase().trim();
+
+        if (!term) {
+            // Reset to default view
+            if (currentShopId) {
+                loadProducts('all');
+            } else {
+                loadShops();
+            }
+            return;
+        }
+
+        if (currentShopId) {
+            // Context: Inside a Shop -> Search Flowers
             const grid = document.getElementById('products-grid');
+            if (grid) {
+                grid.innerHTML = '<p class="loading" style="grid-column: 1/-1; text-align: center;">Searching flowers...</p>';
+                try {
+                    const flowers = await api.getFlowers(currentShopId);
+                    const filtered = flowers.filter(flower =>
+                        flower.name.toLowerCase().includes(term) ||
+                        (flower.description && flower.description.toLowerCase().includes(term))
+                    );
 
-            try {
-                const flowers = await api.getFlowers();
-                const filtered = flowers.filter(flower =>
-                    flower.name.toLowerCase().includes(searchTerm) ||
-                    (flower.description && flower.description.toLowerCase().includes(searchTerm)) ||
-                    (flower.category && flower.category.toLowerCase().includes(searchTerm))
-                );
-
-                if (filtered.length > 0) {
-                    grid.innerHTML = filtered.map(flower => `
-                        <div class="product-card">
-                            <img src="${flower.image_url || 'https://via.placeholder.com/400x250?text=' + flower.name}" 
-                                 alt="${flower.name}" 
-                                 class="product-image">
-                            <div class="product-info">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <h3 class="product-name">${flower.name}</h3>
-                                    <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #64748b; font-weight: 600;">${flower.weight_grams}g</span>
-                                </div>
-                                <p class="product-description">${flower.description || ''}</p>
-                                <div class="product-footer">
-                                    <span class="product-price">₹${flower.price}</span>
-                                    <button class="add-to-cart-btn" onclick="addToCart(${flower.flower_id}, '${flower.name}', ${flower.price})">
-                                        Add to Cart
-                                    </button>
+                    if (filtered.length > 0) {
+                        grid.innerHTML = filtered.map(flower => `
+                            <div class="product-card fade-in">
+                                <img src="${flower.image_url || 'https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'}" 
+                                     alt="${flower.name}" 
+                                     class="product-image"
+                                     onerror="this.src='https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'">
+                                <div class="product-info">
+                                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                                        <h3 class="product-name">${flower.name}</h3>
+                                        <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #64748b; font-weight: 600;">${flower.weight_grams}g</span>
+                                    </div>
+                                    <p class="product-description">${flower.description || 'A beautiful, hand-picked selection of fresh seasonal blooms.'}</p>
+                                    <div class="product-footer">
+                                        <span class="product-price">₹${flower.price}</span>
+                                        <button class="add-to-cart-btn" onclick="addToCart(${flower.flower_id}, '${flower.name}', ${flower.price})">
+                                            Add to Cart
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `).join('');
-                } else {
-                    grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No flowers found.</p>';
+                        `).join('');
+                    } else {
+                        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No matching flowers found in this boutique.</p>';
+                    }
+                } catch (error) {
+                    console.error('Search error:', error);
+                    grid.innerHTML = '<p style="color:red; text-align:center;">Error searching flowers.</p>';
                 }
-            } catch (error) {
-                console.error('Search error:', error);
+            }
+        } else {
+            // Context: Main Page -> Search Boutiques (Shops)
+            const shopsSec = document.getElementById('shops-section');
+            const productsSec = document.getElementById('main-products-section');
+            const grid = document.getElementById('shops-grid');
+
+            // Ensure Shop Section is Visible
+            if (shopsSec) shopsSec.style.display = 'block';
+            if (productsSec) productsSec.style.display = 'none';
+
+            if (grid) {
+                grid.innerHTML = '<p class="loading" style="grid-column: 1/-1; text-align: center;">Searching boutiques...</p>';
+                try {
+                    const shops = await api.getAdmins();
+                    const filtered = shops.filter(shop =>
+                        (shop.shop_name && shop.shop_name.toLowerCase().includes(term)) ||
+                        (shop.name && shop.name.toLowerCase().includes(term))
+                    );
+
+                    if (filtered.length > 0) {
+                        grid.innerHTML = filtered.map(shop => `
+                           <div class="product-card shop-card fade-in" onclick="selectShop(${shop.admin_id}, '${shop.shop_name}')">
+                                ${shop.shop_image_url
+                                ? `<img src="${shop.shop_image_url}" class="product-image" alt="${shop.shop_name}">`
+                                : `<div class="shop-icon" style="height:260px; display:flex; align-items:center; justify-content:center; background:#f8faf9; font-size:4rem;">🏪</div>`
+                            }
+                                <div class="product-info">
+                                     <h3>${shop.shop_name || 'Florry Partner'}</h3>
+                                     <p>${shop.name || 'Artisan Florist'}</p>
+                                     <button class="visit-btn">Visit Boutique</button>
+                                </div>
+                           </div>
+                        `).join('');
+                    } else {
+                        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No boutiques found matching "' + term + '".</p>';
+                    }
+                } catch (error) {
+                    console.error('Search error:', error);
+                    grid.innerHTML = '<p style="color:red; text-align:center;">Error searching shops.</p>';
+                }
+            }
+        }
+    }
+
+    if (searchBtn) {
+        searchBtn.addEventListener('click', handleSearch);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleSearch();
             }
         });
     }
-
 
     // Initial Load Logic - ONLY if on a page that supports shops (like landing.html)
     if (document.getElementById('shops-grid')) {
