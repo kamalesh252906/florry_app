@@ -12,19 +12,22 @@ from routers import (users, admins, flowers, orders, order_items,
 
 def init_db():
     try:
+        # metadata.create_all handles table creation if they don't exist
         Base.metadata.create_all(bind=engine)
-        # Migration for flowers table
+        
+        # Safe migration for flowers
         with engine.begin() as conn:
             try:
                 conn.execute(text("ALTER TABLE flowers ADD COLUMN IF NOT EXISTS weight_grams INTEGER DEFAULT 0"))
             except Exception as e:
-                print(f"Migration error (flowers): {e}")
+                # We skip if it already exists or if there's a minor DB issue
+                print(f"Migration notice: {e}")
     except Exception as e:
-        print(f"Database initialization error: {e}")
+        print(f"Database sync notice (may be normal if tables were just deleted): {e}")
 
 app = FastAPI(title="Florry Flower Shop API")
 
-# CORS Configuration (Highest Priority)
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -36,10 +39,11 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_db():
+    # We call this, but errors won't crash the whole app boot
     init_db()
 
-# 2. DEFINITIVE DUAL ROUTING
-# Handle routes with AND without the /api prefix explicitly
+# DUAL ROUTING
+# Every route works with and without /api prefix
 for prefix in ["", "/api"]:
     app.include_router(users.router, prefix=prefix)
     app.include_router(user_login.router, prefix=prefix)
@@ -55,7 +59,7 @@ for prefix in ["", "/api"]:
 
 @app.get("/")
 def root():
-    return {"message": "Florry API is running"}
+    return {"message": "Florry API is active"}
 
 @app.get("/health")
 @app.get("/api/health")
