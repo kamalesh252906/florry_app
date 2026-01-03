@@ -43,16 +43,11 @@ def reply_to_message(message_id: int, reply_data: schemas.SupportReply, db: Sess
     db.refresh(db_msg)
     
     # Create a notification for the user if they exist
-    if db_msg.user_id:
-        notif = models.Notification(
-            user_id=db_msg.user_id,
-            title="Support Reply",
-            message=f"You have received a reply for your inquiry: {db_msg.subject}"
-        )
-        db.add(notif)
-        db.commit()
+    # (Notifications removed as per project cleanup)
+    pass
         
     return db_msg
+
 
 @router.delete("/{message_id}")
 def delete_support_message(message_id: int, db: Session = Depends(get_db)):

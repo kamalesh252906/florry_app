@@ -1,21 +1,27 @@
 import os
 import sys
 
-# Get the directory of this file (api/)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# Get the parent directory (project root)
-parent_dir = os.path.dirname(current_dir)
+# Standard way to add paths for Vercel
+# The project root is one level up from the 'api' folder
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BACKEND_DIR = os.path.join(ROOT_DIR, "backend_api")
 
-# Add both to sys.path
-sys.path.insert(0, parent_dir)
-sys.path.insert(0, os.path.join(parent_dir, "backend_api"))
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 try:
     from main import app
-    # DO NOT set root_path here; we handle it via dual-routing in main.py
 except Exception as e:
+    import traceback
     from fastapi import FastAPI
     app = FastAPI()
-    @app.api_route("/{path:path}", methods=["GET", "POST", "OPTIONS"])
-    async def crash(path: str):
-        return {"error": "BOOT_FAILURE", "detail": str(e)}
+    
+    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+    async def catch_all(path: str):
+        return {
+            "error": "Backend failed to load",
+            "message": str(e),
+            "traceback": traceback.format_exc()
+        }

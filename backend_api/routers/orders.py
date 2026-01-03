@@ -90,13 +90,6 @@ def out_for_delivery(order_id: int, db: Session = Depends(get_db), current_admin
     ).first()
     if not o: raise HTTPException(404, "Order not found")
     o.order_status = "out_for_delivery"
-    
-    notif = models.Notification(
-        user_id=o.user_id,
-        title="Out for Delivery",
-        message=f"Your order #{o.order_id} is out for delivery with the shop owner."
-    )
-    db.add(notif)
     db.commit(); db.refresh(o)
     return o
 
