@@ -24,13 +24,14 @@ if DB_URL:
     elif DB_URL.startswith("postgresql://"):
         DB_URL = DB_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
     
-    # Transaction Pooler (port 6543) requires prepared_statements=false
-    if ":6543" in DB_URL and "prepared_statements=false" not in DB_URL:
-        separator = "&" if "?" in DB_URL else "?"
-        DB_URL += f"{separator}prepared_statements=false"
+    # Remove prepared_statements if it exists, as psycopg2 doesn't support it in DSN
+    if "prepared_statements=" in DB_URL:
+        import re
+        DB_URL = re.sub(r'[&?]?prepared_statements=[^&]+', '', DB_URL)
 else:
-    # Fallback with transaction pooling settings
-    DB_URL = "postgresql+psycopg2://postgres.zbbmszrtcqdworgeaajp:Kamalesh%402503@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require&prepared_statements=false"
+    # Fallback without invalid prepared_statements option
+    DB_URL = "postgresql+psycopg2://postgres.zbbmszrtcqdworgeaajp:Kamalesh%402503@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require"
+
 
 engine = create_engine(
     DB_URL, 
