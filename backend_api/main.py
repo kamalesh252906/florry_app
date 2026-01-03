@@ -45,9 +45,11 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
+
 
 # === Vercel Path Correction Middleware ===
 # This ensures that /api/user/login is correctly handled as /user/login
@@ -79,8 +81,13 @@ app.include_router(api_router)
 
 
 
+@app.post("/user/login")
+async def direct_login(login: schemas.UserLogin, db: Session = Depends(get_db)):
+    return user_login.login_user(login, db)
+
 @app.get("/")
 def root():
+
     return {"message": "Florry API is running", "docs": "/docs"}
 
 @app.get("/health")
