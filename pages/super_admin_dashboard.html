@@ -338,16 +338,29 @@
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
+                    <div class="stat-icon-box" style="background: #e0f2fe; color: #0ea5e9;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <div>
                         <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">System Health</div>
                         <div style="font-size: 1.5rem; font-weight: 800;">100%</div>
                     </div>
                 </div>
+
                 <div class="stat-card">
+                    <div class="stat-icon-box" style="background: #f0fdf4; color: #22c55e;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    </div>
+                    <div>
                         <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">Connected Nodes</div>
                         <div id="stat-shops" style="font-size: 1.5rem; font-weight: 800;">...</div>
                     </div>
                 </div>
+
                 <div class="stat-card">
+                    <div class="stat-icon-box" style="background: #fef2f2; color: #ef4444;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
                     <div>
                         <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">Pending Access</div>
                         <div id="stat-pending" style="font-size: 1.5rem; font-weight: 800;">...</div>
@@ -356,22 +369,30 @@
             </div>
 
             <!-- Shop Approvals -->
-            <h2 class="section-title">Shop Approval Queue</h2>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
+                <h2 class="section-title" style="margin: 0;">Shop Approval Queue</h2>
+                <div style="font-size: 0.85rem; color: #64748b; font-weight: 600; padding: 5px 12px; background: white; border-radius: 20px;">
+                    Authorized Personnel Only
+                </div>
+            </div>
+            
             <div id="shop-approvals" class="approval-grid">
                 <div class="empty-state">Scanning for requests...</div>
             </div>
 
-            <!-- Rider Approvals -->
-            <!-- <h2 class="section-title">🛵 Rider Enrollment Queue</h2>
-            <div id="rider-approvals" class="approval-grid">
-                <div class="empty-state">Scanning for requests...</div>
-            </div> -->
-
             <!-- Support Inquiries -->
-            <h2 class="section-title">Support Inquiries</h2>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin: 50px 0 25px 0;">
+                <h2 class="section-title" style="margin: 0;">Support Inquiries</h2>
+                <button onclick="loadData()" style="background: none; border: none; font-weight: 800; color: var(--super-accent); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    Refresh Broadcast
+                </button>
+            </div>
+            
             <div id="support-messages" class="approval-grid">
                 <div class="empty-state">Loading messages...</div>
             </div>
+
         </main>
     </div>
 
@@ -418,77 +439,41 @@
             container.innerHTML = shops.map(shop => `
                 <div class="approval-card">
                     <div class="card-top">
-                        <h3>${shop.shop_name || 'Unnamed Shop'}</h3>
-                        <span class="status-badge">${shop.status}</span>
+                        <h3 style="color: var(--super-dark);">${shop.shop_name || 'Unnamed Shop'}</h3>
+                        <span class="status-badge">${shop.status.toUpperCase()}</span>
                     </div>
-                    <div class="info-group">
-                        <span class="info-label">Principal</span>
-                        <span class="info-value">${shop.name}</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Secure IP</span>
-                        <span class="info-value" style="font-family: monospace;">${shop.email}</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Comm ID</span>
-                        <span class="info-value">${shop.phone || 'N/A'}</span>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 700;">PRINCIPAL</span>
+                            <span style="font-size: 0.9rem; font-weight: 700; color: var(--super-dark);">${shop.name}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
+                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 700;">SECURE IP</span>
+                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--super-accent); font-family: monospace;">${shop.email}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 700;">COMM ID</span>
+                            <span style="font-size: 0.9rem; font-weight: 700; color: var(--super-dark);">${shop.phone || 'N/A'}</span>
+                        </div>
                     </div>
                     
                     <div class="aadhaar-link-box" onclick="window.open('${shop.aadhaar_image_url}')">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-
-                            <div>
-                                <div style="font-weight: 700; font-size: 0.9rem;">Identity Proof</div>
-                                <div style="font-size: 0.75rem; color: #64748b;">${shop.aadhaar_number}</div>
+                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                            <div style="background: white; padding: 8px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M15 8h2"></path><path d="M15 12h2"></path><path d="M7 16h10"></path></svg>
                             </div>
-                        </div>
-              
-                    </div>
-
-                    <div class="btn-group">
-                        <button class="btn btn-reject" onclick="handleAction('admin', ${shop.admin_id}, 'reject')">Deny Access</button>
-                        <button class="btn btn-approve" onclick="handleAction('admin', ${shop.admin_id}, 'approve')">Authorize</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderRiders(riders) {
-            const container = document.getElementById('rider-approvals');
-            if (!riders || riders.length === 0) {
-                container.innerHTML = '<div class="empty-state">All rider agents verified. No pending requests.</div>';
-                return;
-            }
-
-            container.innerHTML = riders.map(rider => `
-                <div class="approval-card">
-                    <div class="card-top">
-                        <h3>${rider.name}</h3>
-                        <span class="status-badge">${rider.status}</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Secure IP</span>
-                        <span class="info-value">${rider.email}</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Comm ID</span>
-                        <span class="info-value">${rider.phone || 'N/A'}</span>
-                    </div>
-
-                    <div class="aadhaar-link-box" onclick="window.open('${rider.aadhaar_image_url}')">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            
-                            <div>
-                                <div style="font-weight: 700; font-size: 0.9rem;">Identity Proof</div>
-                                <div style="font-size: 0.75rem; color: #64748b;">${rider.aadhaar_number}</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 800; font-size: 0.85rem; color: var(--super-dark);">Identity Credentials</div>
+                                <div style="font-size: 0.75rem; color: #64748b; letter-spacing: 1px;">XXXX-XXXX-${shop.aadhaar_number?.slice(-4) || 'XXXX'}</div>
                             </div>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
                         </div>
-                        
                     </div>
 
-                    <div class="btn-group">
-                        <button class="btn btn-reject" onclick="handleAction('rider', ${rider.rider_id}, 'reject')">Deny Enrollment</button>
-                        <button class="btn btn-approve" onclick="handleAction('rider', ${rider.rider_id}, 'approve')">Verify Agent</button>
+                    <div class="action-btns">
+                        <button class="btn-action btn-reject" onclick="handleAction('admin', ${shop.admin_id}, 'reject')">Deny</button>
+                        <button class="btn-action btn-approve" onclick="handleAction('admin', ${shop.admin_id}, 'approve')">Authorize</button>
                     </div>
                 </div>
             `).join('');
@@ -502,47 +487,51 @@
             }
 
             container.innerHTML = msgs.map(msg => `
-                <div class="approval-card" style="border-left: 4px solid ${msg.status === 'open' ? 'var(--super-accent)' : '#10b981'};">
+                <div class="approval-card" style="border-left: 5px solid ${msg.status === 'open' ? 'var(--super-accent)' : '#10b981'};">
                     <div class="card-top">
-                        <h3>${msg.subject}</h3>
+                        <h3 style="font-size: 1.1rem; letter-spacing: -0.5px;">${msg.subject}</h3>
                         <span class="status-badge" style="background: ${msg.status === 'open' ? '#e0f2fe' : '#f0fdf4'}; color: ${msg.status === 'open' ? '#0369a1' : '#166534'};">
-                            ${msg.status === 'open' ? 'New Inquiry' : 'Replied'}
+                            ${msg.status === 'open' ? 'PENDING' : 'RESOLVED'}
                         </span>
                     </div>
-                    <div class="info-group">
-                        <span class="info-label">User</span>
-                        <span class="info-value">${msg.name}</span>
+                    
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: #f8fafc; padding: 10px 15px; border-radius: 12px;">
+                        <div style="width: 35px; height: 35px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--super-dark); box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                            ${msg.name.charAt(0)}
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.9rem; color: var(--super-dark);">${msg.name}</div>
+                            <div style="font-size: 0.75rem; color: var(--super-accent); font-weight: 600;">${msg.email}</div>
+                        </div>
                     </div>
-                    <div class="info-group">
-                        <span class="info-label">Email</span>
-                        <span class="info-value" style="color: var(--super-accent);">${msg.email}</span>
-                    </div>
-                    <div class="info-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #f1f5f9;">
-                        <span class="info-label" style="display: block; margin-bottom: 5px;">Message</span>
-                        <p style="margin: 0; color: #475569; line-height: 1.5; font-size: 0.9rem;">${msg.message}</p>
+
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 0.7rem; font-weight: 800; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Transmission Content</div>
+                        <p style="margin: 0; color: #334155; line-height: 1.6; font-size: 0.95rem; font-weight: 500;">${msg.message}</p>
                     </div>
 
                     ${msg.reply ? `
-                        <div style="margin-top: 15px; padding: 12px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0;">
-                            <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 5px; display: block;">YOUR REPLY:</span>
-                            <p style="margin: 0; font-size: 0.85rem; color: #1e293b;">${msg.reply}</p>
+                        <div style="margin-top: 15px; padding: 15px; background: #f0fdf4; border-radius: 14px; border: 1px solid #dcfce7; position: relative;">
+                            <div style="font-size: 0.65rem; font-weight: 900; color: #166534; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">Administrator Directive</div>
+                            <p style="margin: 0; font-size: 0.9rem; color: #064e3b; font-weight: 600; line-height: 1.5;">${msg.reply}</p>
                         </div>
                     ` : `
                         <div id="reply-box-${msg.message_id}" style="margin-top: 20px;">
-                            <textarea id="reply-text-${msg.message_id}" placeholder="Type your response..." style="width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 0.9rem; min-height: 80px; resize: vertical; margin-bottom: 10px;"></textarea>
-                            <button class="btn btn-approve" style="width: 100%; background: var(--super-dark);" onclick="submitReply(${msg.message_id})">Send Secure Response</button>
+                            <textarea id="reply-text-${msg.message_id}" placeholder="Enter administrator response..." style="width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 14px; font-family: inherit; font-size: 0.9rem; min-height: 100px; resize: none; margin-bottom: 12px; transition: all 0.2s;" onfocus="this.style.borderColor='var(--super-accent)'" onblur="this.style.borderColor='#f1f5f9'"></textarea>
+                            <button class="btn btn-approve" style="width: 100%; background: var(--super-dark); padding: 14px; border-radius: 12px;" onclick="submitReply(${msg.message_id})">Transmit Response</button>
                         </div>
                     `}
                     
-                    <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
-                        <button class="btn btn-reject" style="padding: 6px 15px; font-size: 0.8rem; background: #fee2e2; color: #b91c1c;" onclick="deleteTicket(${msg.message_id})">🗑️ Delete</button>
-                        <div style="font-size: 0.75rem; color: #94a3b8;">
-                            Received: ${new Date(msg.created_at).toLocaleString()}
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px;">
+                        <button style="border: none; background: #fee2e2; color: #dc2626; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'" onclick="deleteTicket(${msg.message_id})">PURGE LOG</button>
+                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; font-family: monospace;">
+                            ${new Date(msg.created_at).toLocaleDateString()} | ${new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                         </div>
                     </div>
                 </div>
             `).join('');
         }
+
 
         async function deleteTicket(msgId) {
             if(!confirm("Are you sure you want to permanently delete this support ticket?")) return;
