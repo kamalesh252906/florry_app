@@ -6,19 +6,15 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
 
 try:
     from main import app
-    # Fix for Vercel routing
+    # Standard Vercel + FastAPI routing
     app.root_path = "/api"
 except Exception as e:
     from fastapi import FastAPI
     app = FastAPI()
-    @app.get("/{path:path}")
-    @app.post("/{path:path}")
-    @app.put("/{path:path}")
-    @app.delete("/{path:path}")
-    def error_handler(path: str):
+    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
+    async def error_handler(path: str):
         return {
-            "error": "Backend failed to initialized",
+            "error": "Backend initialization failed",
             "detail": str(e),
-            "path": path
+            "hint": "Check if DATABASE_URL or other env vars are correct"
         }
-

@@ -24,17 +24,19 @@ if DB_URL:
     elif DB_URL.startswith("postgresql://"):
         DB_URL = DB_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
 else:
-    # Use the Supabase URL as fallback for now if env var is missing
-    DB_URL = "postgresql+psycopg2://postgres:Kamalesh%402503@db.zbbmszrtcqdworgeaajp.supabase.co:5432/postgres?sslmode=require"
+    # New Supabase Pooler URL (AWS ap-south-1)
+    # Escaping '@' in password as '%40'
+    DB_URL = "postgresql+psycopg2://postgres.zbbmszrtcqdworgeaajp:Kamalesh%402503@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require&prepared_statements=false"
 
 engine = create_engine(
     DB_URL, 
     poolclass=NullPool,
     connect_args={
-        "connect_timeout": 10,
+        "connect_timeout": 30,
         "sslmode": "require"
     }
 )
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
