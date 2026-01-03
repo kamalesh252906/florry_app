@@ -1,27 +1,33 @@
 import os
 import sys
+import traceback
 
-# Standard way to add paths for Vercel
-# The project root is one level up from the 'api' folder
+# Setup paths for Vercel
+# ROOT_DIR is the folder containing 'api' and 'backend_api'
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BACKEND_DIR = os.path.join(ROOT_DIR, "backend_api")
 
 if BACKEND_DIR not in sys.path:
     sys.path.insert(0, BACKEND_DIR)
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
 
 try:
     from main import app
+    # root_path helps FastAPI know it's behind a proxy (/api)
+    app.root_path = "/api"
+    
+    @app.get("/health-check-direct")
+    def health_check_direct():
+        return {"status": "ok", "info": "Directly from api/index.py"}
+        
 except Exception as e:
-    import traceback
     from fastapi import FastAPI
     app = FastAPI()
     
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
-    async def catch_all(path: str):
+    async def error_handling(path: str):
         return {
             "error": "Backend failed to load",
-            "message": str(e),
-            "traceback": traceback.format_exc()
+            "details": str(e),
+            "traceback": traceback.format_exc(),
+            "path": path
         }
