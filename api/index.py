@@ -6,19 +6,29 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
 
 try:
     from main import app
-    # Prefix is now handled by api_router in main.py
+    # Set root path so FastAPI handles /api prefix automatically
+    app.root_path = "/api"
 except Exception as e:
-    from fastapi import FastAPI
+    from fastapi import FastAPI, Response
     app = FastAPI()
     
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     async def diag_handler(path: str):
         return {
-            "status": "error",
-            "message": "The Florry Backend failed to load.",
+            "status": "critical_failure",
+            "message": "Backend failed to mount correctly",
             "detail": str(e),
-            "trace": "Check server logs/DATABASE_URL",
-            "path_attempted": f"/{path}"
+            "environment": "Vercel Production",
+            "path_hit": f"/api/{path}"
         }
+    
+    # Force a non-405/404 status to distinguish from routing errors
+    @app.middleware("http")
+    async def status_override(request, call_next):
+        response = await call_next(request)
+        if response.status_code in [200, 404, 405]:
+            response.status_code = 418 # I'm a teapot (easy to spot in logs)
+        return response
+
 
 

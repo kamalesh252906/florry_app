@@ -49,9 +49,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === MASTER ROUTER WITH /API PREFIX ===
-# This ensures consistency between local dev and Vercel routing
-api_router = APIRouter(prefix="/api")
+# === Unified Router ===
+# No /api prefix here; it is handled by root_path in api/index.py
+api_router = APIRouter()
 
 api_router.include_router(users.router)
 api_router.include_router(user_login.router)
@@ -66,6 +66,7 @@ api_router.include_router(support.router)
 api_router.include_router(superadmin.router)
 
 app.include_router(api_router)
+
 
 @app.get("/")
 def root():
