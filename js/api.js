@@ -24,13 +24,14 @@ class ApiService {
         }
 
         const config = {
+            ...options,
             headers: {
                 'Content-Type': 'application/json',
                 ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
                 ...options.headers
-            },
-            ...options
+            }
         };
+
 
         console.log(`[API] ${config.method || 'GET'} ${url}`);
 

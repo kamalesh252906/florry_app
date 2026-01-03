@@ -6,9 +6,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
 
 try:
     from main import app
-    # Set root path so FastAPI handles /api prefix automatically
-    app.root_path = "/api"
+    # Prefix is handled explicitly within main.py routers
 except Exception as e:
+
     from fastapi import FastAPI, Response
     app = FastAPI()
     
