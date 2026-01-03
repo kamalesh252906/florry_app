@@ -36,7 +36,7 @@ def init_db():
 
 app = FastAPI(title="Florry Flower Shop API")
 
-# 1. CORS Configuration
+# CORS Configuration (Highest Priority)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -46,33 +46,45 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+# === Vercel Path-Stripping Middleware (Absolute Fallback) ===
+# This ensures that even if Vercel doesn't strip /api, we do it manually.
+@app.middleware("http")
+async def strip_api_prefix(request, call_next):
+    path = request.scope.get("path", "")
+    if path.startswith("/api/"):
+        request.scope["path"] = path.replace("/api", "", 1)
+    elif path == "/api":
+        request.scope["path"] = "/"
+    return await call_next(request)
+
 @app.on_event("startup")
 def startup_db():
     init_db()
 
-# 2. DEFINITIVE ROUTING (No Prefixes)
-# These will be accessed as /user/login, /flowers/, etc.
-# Vercel handles the /api prefix via its rewrite engine.
-app.include_router(users.router)
-app.include_router(user_login.router)
-app.include_router(admins.router)
-app.include_router(admin_login.router)
-app.include_router(flowers.router)
-app.include_router(orders.router)
-app.include_router(order_items.router)
-app.include_router(reports.router)
-app.include_router(cart.router)
-app.include_router(support.router)
-app.include_router(superadmin.router)
+# === DEFINITIVE ROUTING (Redundant Safety) ===
+# We register routers under both root and /api to ensure 100% method compatibility
+for pfx in ["", "/api"]:
+    app.include_router(users.router, prefix=pfx)
+    app.include_router(user_login.router, prefix=pfx)
+    app.include_router(admins.router, prefix=pfx)
+    app.include_router(admin_login.router, prefix=pfx)
+    app.include_router(flowers.router, prefix=pfx)
+    app.include_router(orders.router, prefix=pfx)
+    app.include_router(order_items.router, prefix=pfx)
+    app.include_router(reports.router, prefix=pfx)
+    app.include_router(cart.router, prefix=pfx)
+    app.include_router(support.router, prefix=pfx)
+    app.include_router(superadmin.router, prefix=pfx)
 
-@app.get("/test")
-def test_route():
-    return {"message": "Success! The API is reachable."}
+@app.get("/api/test-direct")
+@app.get("/test-direct")
+def test_direct():
+    return {"status": "ok", "message": "Routing is working"}
 
 @app.get("/")
 def root():
-
     return {"message": "Florry API is running", "docs": "/api/docs"}
+
 
 @app.get("/health")
 def health():
