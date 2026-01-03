@@ -14,9 +14,23 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 # DB_URL = f"postgresql+psycopg2://{username}:{password}@{hostname}:{port}/{db_name}"
 
 DB_URL = os.getenv("DATABASE_URL")
-if not DB_URL:
-    DB_URL = "postgresql+psycopg2://postgres:Kamalesh%402503@localhost:5432/florry_database"    
 
-engine = create_engine(DB_URL, pool_pre_ping=True,pool_size=10, max_overflow=20)
+if DB_URL:
+    # SQLAlchemy requires postgresql:// instead of postgres://
+    if DB_URL.startswith("postgres://"):
+        DB_URL = DB_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+    elif DB_URL.startswith("postgresql://"):
+        DB_URL = DB_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
+else:
+    # Use the Supabase URL as fallback for now if env var is missing
+    DB_URL = "postgresql+psycopg2://postgres:Kamalesh%402503@db.zbbmszrtcqdworgeaajp.supabase.co:5432/postgres?sslmode=require"
+
+engine = create_engine(
+    DB_URL, 
+    pool_pre_ping=True, 
+    pool_size=5, 
+    max_overflow=10,
+    pool_recycle=300
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

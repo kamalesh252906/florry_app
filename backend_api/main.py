@@ -7,25 +7,33 @@ from routers import (users, admins, flowers, orders, order_items,
                      reports, cart, 
                      user_login, admin_login, superadmin, support)
 
-Base.metadata.create_all(bind=engine)
-
-# Migration for support_messages table
-with engine.connect() as conn:
+def init_db():
     try:
-        conn.execute(text("ALTER TABLE support_messages ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(user_id)"))
-        conn.execute(text("ALTER TABLE support_messages ADD COLUMN IF NOT EXISTS reply TEXT"))
-        conn.execute(text("ALTER TABLE support_messages ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'open'"))
-        conn.commit()
-    except Exception as e:
-        print(f"Migration error: {e}")
+        Base.metadata.create_all(bind=engine)
+        
+        # Migration for support_messages table
+        with engine.connect() as conn:
+            try:
+                conn.execute(text("ALTER TABLE support_messages ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(user_id)"))
+                conn.execute(text("ALTER TABLE support_messages ADD COLUMN IF NOT EXISTS reply TEXT"))
+                conn.execute(text("ALTER TABLE support_messages ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'open'"))
+                conn.commit()
+            except Exception as e:
+                print(f"Migration error (support_messages): {e}")
 
-# Migration for flowers table
-with engine.connect() as conn:
-    try:
-        conn.execute(text("ALTER TABLE flowers ADD COLUMN IF NOT EXISTS weight_grams INTEGER DEFAULT 0"))
-        conn.commit()
+        # Migration for flowers table
+        with engine.connect() as conn:
+            try:
+                conn.execute(text("ALTER TABLE flowers ADD COLUMN IF NOT EXISTS weight_grams INTEGER DEFAULT 0"))
+                conn.commit()
+            except Exception as e:
+                print(f"Migration error (flowers): {e}")
     except Exception as e:
-        print(f"Migration error (flowers): {e}")
+        print(f"Database initialization error: {e}")
+
+# Run initialization
+init_db()
+
 
 app = FastAPI(title="Florry Flower Shop API")
 
