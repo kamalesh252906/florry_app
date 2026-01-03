@@ -194,24 +194,7 @@ class CartOut(BaseModel):
     class Config:
         from_attributes = True
 
-class RatingCreate(BaseModel):
-    user_id: int
-    admin_id: Optional[int] = None
-    flower_id: int
-    rating: int
-    review: Optional[str] = None
 
-class RatingOut(BaseModel):
-    rating_id: int
-    user_id: int
-    admin_id: Optional[int]
-    flower_id: int
-    rating: int
-    review: Optional[str]
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 

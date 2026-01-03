@@ -15,7 +15,7 @@ class User(Base):
 
     orders = relationship("Order", back_populates="user", cascade="all, delete-orphan")
     cart_items = relationship("Cart", back_populates="user", cascade="all, delete-orphan")
-    ratings = relationship("Rating", back_populates="user", cascade="all, delete-orphan")
+
 
 
 
@@ -38,7 +38,7 @@ class Admin(Base):
     flowers = relationship("Flower", back_populates="admin", cascade="all, delete-orphan")
     orders = relationship("Order", back_populates="admin")
     reports = relationship("Report", back_populates="admin", cascade="all, delete-orphan")
-    ratings = relationship("Rating", back_populates="admin")
+
 
 
 class Flower(Base):
@@ -57,7 +57,7 @@ class Flower(Base):
     admin = relationship("Admin", back_populates="flowers")
     order_items = relationship("OrderItem", back_populates="flower", cascade="all, delete-orphan")
     cart_items = relationship("Cart", back_populates="flower", cascade="all, delete-orphan")
-    ratings = relationship("Rating", back_populates="flower", cascade="all, delete-orphan")
+
 
 
 class Order(Base):
@@ -114,19 +114,7 @@ class Cart(Base):
     flower = relationship("Flower", back_populates="cart_items")
 
 
-class Rating(Base):
-    __tablename__ = "ratings"
-    rating_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
-    admin_id = Column(Integer, ForeignKey("admin.admin_id"), nullable=True)
-    flower_id = Column(Integer, ForeignKey("flowers.flower_id"), nullable=False)
-    rating = Column(Integer, nullable=False)
-    review = Column(Text)
-    created_at = Column(TIMESTAMP(timezone=False), server_default=func.now())
 
-    user = relationship("User", back_populates="ratings")
-    admin = relationship("Admin", back_populates="ratings")
-    flower = relationship("Flower", back_populates="ratings")
 
 
 
