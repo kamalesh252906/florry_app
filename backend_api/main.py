@@ -36,7 +36,7 @@ def init_db():
 
 app = FastAPI(title="Florry Flower Shop API")
 
-# 1. CLEAN CORS (MUST BE FIRST)
+# 1. CORS (Highest Priority)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -50,9 +50,9 @@ app.add_middleware(
 def startup_db():
     init_db()
 
-# 2. DEFINITIVE ROUTING
-# Explicitly handle both /api prefixed and root paths
-for pfx in ["", "/api"]:
+# 2. REDUNDANT ROUTING
+# Including routers with all possible prefix combinations to handle Vercel proxying
+for pfx in ["", "/api", "/api/"]:
     app.include_router(users.router, prefix=pfx)
     app.include_router(user_login.router, prefix=pfx)
     app.include_router(admins.router, prefix=pfx)
@@ -65,11 +65,15 @@ for pfx in ["", "/api"]:
     app.include_router(support.router, prefix=pfx)
     app.include_router(superadmin.router, prefix=pfx)
 
-# 3. DIRECT HANDLERS (Backup)
-@app.post("/api/user/login")
+# 3. DIRECT BACKUP ROUTES (To eliminate 405 errors permanently)
 @app.post("/user/login")
-def backup_login(login: schemas.UserLogin, db: Session = Depends(get_db)):
-    return user_login.login_user(login, db)
+@app.post("/user/login/")
+@app.post("/api/user/login")
+@app.post("/api/user/login/")
+def login_handler(login: schemas.UserLogin, db: Session = Depends(get_db)):
+    # Import locally to avoid circular dependencies if any
+    from routers.user_login import login_user
+    return login_user(login, db)
 
 @app.get("/")
 @app.get("/api")
@@ -77,6 +81,6 @@ def root():
     return {"message": "Florry API is running", "docs": "/docs"}
 
 @app.get("/health")
-@app.get("/api/health")
 def health():
     return {"status": "healthy"}
+
