@@ -62,8 +62,10 @@ for prefix in ["", "/api"]:
     app.include_router(order_items.router, prefix=prefix)
     app.include_router(reports.router, prefix=prefix)
     app.include_router(cart.router, prefix=prefix)
-    app.include_router(support.router, prefix=pfx if 'pfx' in locals() else prefix)
+    app.include_router(support.router, prefix=prefix)
     app.include_router(superadmin.router, prefix=prefix)
+
+
 
 @app.api_route("/user/login", methods=["GET", "POST"])
 @app.api_route("/api/user/login", methods=["GET", "POST"])
