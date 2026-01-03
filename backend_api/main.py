@@ -50,28 +50,33 @@ app.add_middleware(
 def startup_db():
     init_db()
 
-# === DEFINITIVE ROUTING ===
-# Vercel handles the /api prefix via root_path in index.py
-app.include_router(users.router)
-app.include_router(user_login.router)
-app.include_router(admins.router)
-app.include_router(admin_login.router)
-app.include_router(flowers.router)
-app.include_router(orders.router)
-app.include_router(order_items.router)
-app.include_router(reports.router)
-app.include_router(cart.router)
-app.include_router(support.router)
-app.include_router(superadmin.router)
+# 2. DEFINITIVE DUAL ROUTING
+# Handle routes with AND without the /api prefix explicitly
+for prefix in ["", "/api"]:
+    app.include_router(users.router, prefix=prefix)
+    app.include_router(user_login.router, prefix=prefix)
+    app.include_router(admins.router, prefix=prefix)
+    app.include_router(admin_login.router, prefix=prefix)
+    app.include_router(flowers.router, prefix=prefix)
+    app.include_router(orders.router, prefix=prefix)
+    app.include_router(order_items.router, prefix=prefix)
+    app.include_router(reports.router, prefix=prefix)
+    app.include_router(cart.router, prefix=prefix)
+    app.include_router(support.router, prefix=pfx if 'pfx' in locals() else prefix)
+    app.include_router(superadmin.router, prefix=prefix)
 
-@app.get("/")
-def root():
-    return {"message": "Florry API is running"}
-
-
+@app.api_route("/user/login", methods=["GET", "POST"])
+@app.api_route("/api/user/login", methods=["GET", "POST"])
+def unified_login(login: schemas.UserLogin = None, db: Session = Depends(get_db)):
+    if login is None:
+        return {"status": "Login endpoint is available. Please use POST."}
+    from routers.user_login import login_user
+    return login_user(login, db)
 
 @app.get("/health")
+@app.get("/api/health")
 def health():
     return {"status": "healthy"}
+
 
 
