@@ -32,10 +32,13 @@ def init_db():
         print(f"Database initialization error: {e}")
 
 # Run initialization
-init_db()
 
 
 app = FastAPI(title="Florry Flower Shop API")
+
+@app.on_event("startup")
+def startup_db():
+    init_db()
 
 # CORS Configuration
 app.add_middleware(

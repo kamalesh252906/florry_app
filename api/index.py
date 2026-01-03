@@ -6,15 +6,18 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
 
 try:
     from main import app
-    # Standard Vercel + FastAPI routing
+    # Standard Vercel routing
     app.root_path = "/api"
 except Exception as e:
     from fastapi import FastAPI
     app = FastAPI()
-    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
-    async def error_handler(path: str):
+    
+    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+    async def diag_handler(path: str):
         return {
-            "error": "Backend initialization failed",
+            "status": "error",
+            "message": "The Florry Backend failed to load.",
             "detail": str(e),
-            "hint": "Check if DATABASE_URL or other env vars are correct"
+            "path_attempted": f"/api/{path}"
         }
+

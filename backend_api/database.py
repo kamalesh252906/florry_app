@@ -18,24 +18,29 @@ from sqlalchemy.pool import NullPool
 DB_URL = os.getenv("DATABASE_URL")
 
 if DB_URL:
-    # SQLAlchemy requires postgresql:// instead of postgres://
+    # Standardize to postgresql+psycopg2
     if DB_URL.startswith("postgres://"):
         DB_URL = DB_URL.replace("postgres://", "postgresql+psycopg2://", 1)
     elif DB_URL.startswith("postgresql://"):
         DB_URL = DB_URL.replace("postgresql://", "postgresql+psycopg2://", 1)
+    
+    # Transaction Pooler (port 6543) requires prepared_statements=false
+    if ":6543" in DB_URL and "prepared_statements=false" not in DB_URL:
+        separator = "&" if "?" in DB_URL else "?"
+        DB_URL += f"{separator}prepared_statements=false"
 else:
-    # New Supabase Pooler URL (AWS ap-south-1)
-    # Escaping '@' in password as '%40'
+    # Fallback with transaction pooling settings
     DB_URL = "postgresql+psycopg2://postgres.zbbmszrtcqdworgeaajp:Kamalesh%402503@aws-1-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require&prepared_statements=false"
 
 engine = create_engine(
     DB_URL, 
     poolclass=NullPool,
     connect_args={
-        "connect_timeout": 30,
+        "connect_timeout": 20,
         "sslmode": "require"
     }
 )
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
