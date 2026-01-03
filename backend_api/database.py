@@ -13,6 +13,8 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 # DB_URL = f"postgresql+psycopg2://{username}:{password}@{hostname}:{port}/{db_name}"
 
+from sqlalchemy.pool import NullPool
+
 DB_URL = os.getenv("DATABASE_URL")
 
 if DB_URL:
@@ -27,10 +29,12 @@ else:
 
 engine = create_engine(
     DB_URL, 
-    pool_pre_ping=True, 
-    pool_size=5, 
-    max_overflow=10,
-    pool_recycle=300
+    poolclass=NullPool,
+    connect_args={
+        "connect_timeout": 10,
+        "sslmode": "require"
+    }
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
