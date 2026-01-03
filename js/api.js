@@ -236,24 +236,12 @@ class ApiService {
         return this.request(API_CONFIG.ENDPOINTS.SUPERADMIN_PENDING_ADMINS);
     }
 
-    async getPendingRiders() {
-        return this.request(API_CONFIG.ENDPOINTS.SUPERADMIN_PENDING_RIDERS);
-    }
-
     async approveAdmin(adminId) {
         return this.request(`${API_CONFIG.ENDPOINTS.SUPERADMIN_APPROVE_ADMIN}/${adminId}/approve`, { method: 'PUT' });
     }
 
     async rejectAdmin(adminId) {
         return this.request(`${API_CONFIG.ENDPOINTS.SUPERADMIN_APPROVE_ADMIN}/${adminId}/reject`, { method: 'PUT' });
-    }
-
-    async approveRider(riderId) {
-        return this.request(`${API_CONFIG.ENDPOINTS.SUPERADMIN_APPROVE_RIDER}/${riderId}/approve`, { method: 'PUT' });
-    }
-
-    async rejectRider(riderId) {
-        return this.request(`${API_CONFIG.ENDPOINTS.SUPERADMIN_APPROVE_RIDER}/${riderId}/reject`, { method: 'PUT' });
     }
 
     // Password Reset APIs

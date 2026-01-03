@@ -43,23 +43,3 @@ def reject_admin(admin_id: int, db: Session = Depends(get_db)):
     admin.status = "rejected"
     db.commit()
     return {"message": "Admin rejected"}
-
-@router.get("/riders/pending", response_model=list[schemas.RiderOut])
-def list_pending_riders(db: Session = Depends(get_db)):
-    return db.query(models.Rider).filter(models.Rider.status == "pending").all()
-
-@router.put("/riders/{rider_id}/approve")
-def approve_rider(rider_id: int, db: Session = Depends(get_db)):
-    rider = db.query(models.Rider).filter(models.Rider.rider_id == rider_id).first()
-    if not rider: raise HTTPException(404, "Rider not found")
-    rider.status = "approved"
-    db.commit()
-    return {"message": "Rider approved"}
-
-@router.put("/riders/{rider_id}/reject")
-def reject_rider(rider_id: int, db: Session = Depends(get_db)):
-    rider = db.query(models.Rider).filter(models.Rider.rider_id == rider_id).first()
-    if not rider: raise HTTPException(404, "Rider not found")
-    rider.status = "rejected"
-    db.commit()
-    return {"message": "Rider rejected"}

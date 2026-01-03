@@ -76,32 +76,7 @@ class AdminOut(BaseModel):
 
 # ... existing Flower schemas ...
 
-class RiderCreate(BaseModel):
-    name: str
-    email: EmailStr
-    phone: Optional[str] = None
-    password: str
-    aadhaar_number: Optional[str] = None
-    aadhaar_image_url: Optional[str] = None
 
-class RiderLogin(BaseModel):
-    email: str
-    password: str
-
-class RiderOut(BaseModel):
-    rider_id: int
-    name: str
-    email: EmailStr
-    phone: Optional[str]
-    status: str
-    is_available: bool
-    earnings: Optional[Decimal]
-    aadhaar_number: Optional[str]
-    aadhaar_image_url: Optional[str]
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 class FlowerCreate(BaseModel):
     admin_id: int
@@ -238,19 +213,7 @@ class RatingOut(BaseModel):
     class Config:
         from_attributes = True
 
-class NotificationCreate(BaseModel):
-    user_id: int
-    title: Optional[str] = None
-    message: Optional[str] = None
-    is_read: Optional[bool] = False
 
-class NotificationOut(BaseModel):
-    notification_id: int
-    user_id: int
-    title: Optional[str]
-    message: Optional[str]
-    class Config:
-        from_attributes = True
 
 
 

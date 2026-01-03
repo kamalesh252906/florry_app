@@ -16,7 +16,7 @@ class User(Base):
     orders = relationship("Order", back_populates="user", cascade="all, delete-orphan")
     cart_items = relationship("Cart", back_populates="user", cascade="all, delete-orphan")
     ratings = relationship("Rating", back_populates="user", cascade="all, delete-orphan")
-    notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
+
 
 
 class Admin(Base):
@@ -71,12 +71,10 @@ class Order(Base):
     delivery_address = Column(Text)
     delivery_time = Column(TIMESTAMP(timezone=False))
     ordered_at = Column(TIMESTAMP(timezone=False), server_default=func.now())
-    rider_id = Column(Integer, ForeignKey("riders.rider_id"), nullable=True)
 
     user = relationship("User", back_populates="orders")
     admin = relationship("Admin", back_populates="orders")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
-    rider = relationship("Rider", back_populates="orders")
 
 
 class OrderItem(Base):
@@ -131,33 +129,7 @@ class Rating(Base):
     flower = relationship("Flower", back_populates="ratings")
 
 
-class Notification(Base):
-    __tablename__ = "notifications"
-    notification_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
-    title = Column(String(100))
-    message = Column(Text)
-    is_read = Column(Boolean, default=False)
-    sent_at = Column(TIMESTAMP(timezone=False), server_default=func.now())
 
-    user = relationship("User", back_populates="notifications")
-
-
-class Rider(Base):
-    __tablename__ = "riders"
-    rider_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    email = Column(String(150), unique=True, nullable=False)
-    phone = Column(String(15))
-    password = Column(String(255))
-    status = Column(String(50), default="pending") # pending, approved, rejected
-    is_available = Column(Boolean, default=True)
-    earnings = Column(Numeric(12, 2), default=0.00)
-    aadhaar_number = Column(String(20))
-    aadhaar_image_url = Column(Text)  # Changed to Text for base64 images
-    created_at = Column(TIMESTAMP(timezone=False), server_default=func.now())
-
-    orders = relationship("Order", back_populates="rider")
 
 
 class SupportMessage(Base):

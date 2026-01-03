@@ -4,7 +4,7 @@ from database import Base, engine
 from sqlalchemy import text
 import models 
 from routers import (users, admins, flowers, orders, order_items, 
-                     reports, cart, ratings, notifications, 
+                     reports, cart, ratings, 
                      user_login, admin_login, superadmin, support)
 
 Base.metadata.create_all(bind=engine)
@@ -48,7 +48,6 @@ app.include_router(order_items.router)
 app.include_router(reports.router)
 app.include_router(cart.router)
 app.include_router(ratings.router)
-app.include_router(notifications.router)
 app.include_router(support.router)
 
 app.include_router(superadmin.router)
