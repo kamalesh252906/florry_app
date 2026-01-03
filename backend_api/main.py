@@ -36,7 +36,7 @@ def init_db():
 
 app = FastAPI(title="Florry Flower Shop API")
 
-# 1. CORS (Highest Priority)
+# 1. CORS Configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -50,37 +50,32 @@ app.add_middleware(
 def startup_db():
     init_db()
 
-# 2. REDUNDANT ROUTING
-# Including routers with all possible prefix combinations to handle Vercel proxying
-for pfx in ["", "/api", "/api/"]:
-    app.include_router(users.router, prefix=pfx)
-    app.include_router(user_login.router, prefix=pfx)
-    app.include_router(admins.router, prefix=pfx)
-    app.include_router(admin_login.router, prefix=pfx)
-    app.include_router(flowers.router, prefix=pfx)
-    app.include_router(orders.router, prefix=pfx)
-    app.include_router(order_items.router, prefix=pfx)
-    app.include_router(reports.router, prefix=pfx)
-    app.include_router(cart.router, prefix=pfx)
-    app.include_router(support.router, prefix=pfx)
-    app.include_router(superadmin.router, prefix=pfx)
+# 2. DEFINITIVE ROUTING (No Prefixes)
+# These will be accessed as /user/login, /flowers/, etc.
+# Vercel handles the /api prefix via its rewrite engine.
+app.include_router(users.router)
+app.include_router(user_login.router)
+app.include_router(admins.router)
+app.include_router(admin_login.router)
+app.include_router(flowers.router)
+app.include_router(orders.router)
+app.include_router(order_items.router)
+app.include_router(reports.router)
+app.include_router(cart.router)
+app.include_router(support.router)
+app.include_router(superadmin.router)
 
-# 3. DIRECT BACKUP ROUTES (To eliminate 405 errors permanently)
-@app.post("/user/login")
-@app.post("/user/login/")
-@app.post("/api/user/login")
-@app.post("/api/user/login/")
-def login_handler(login: schemas.UserLogin, db: Session = Depends(get_db)):
-    # Import locally to avoid circular dependencies if any
-    from routers.user_login import login_user
-    return login_user(login, db)
+@app.get("/test")
+def test_route():
+    return {"message": "Success! The API is reachable."}
 
 @app.get("/")
-@app.get("/api")
 def root():
-    return {"message": "Florry API is running", "docs": "/docs"}
+
+    return {"message": "Florry API is running", "docs": "/api/docs"}
 
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
 

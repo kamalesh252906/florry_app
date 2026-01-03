@@ -7,20 +7,28 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
 try:
     from main import app
     # Prefix is handled explicitly within main.py routers
+    @app.get("/debug-internal")
+    def debug_internal():
+        return {
+            "sys_path": sys.path,
+            "cwd": os.getcwd(),
+            "files": os.listdir(os.getcwd()) if os.path.exists(os.getcwd()) else "n/a",
+            "backend_exists": os.path.exists(os.path.join(os.path.dirname(__file__), "..", "backend_api"))
+        }
 except Exception as e:
-
     from fastapi import FastAPI, Response
     app = FastAPI()
-    
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     async def diag_handler(path: str):
         return {
             "status": "critical_failure",
             "message": "Backend failed to mount correctly",
             "detail": str(e),
-            "environment": "Vercel Production",
-            "path_hit": f"/api/{path}"
+            "trace": "Vercel Build Context",
+            "path_hit": f"/api/{path}",
+            "cwd": os.getcwd()
         }
+
     
     # Force a non-405/404 status to distinguish from routing errors
     @app.middleware("http")
