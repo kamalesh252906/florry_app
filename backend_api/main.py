@@ -1,10 +1,12 @@
-from fastapi import FastAPI, APIRouter, Depends
+from fastapi import FastAPI, APIRouter, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from database import Base, engine
 from deps import get_db
 from sqlalchemy import text
 import models, schemas
+import traceback
 from typing import Optional
 from routers import (users, admins, flowers, orders, order_items, 
                      reports, cart, 
@@ -20,12 +22,26 @@ def init_db():
             try:
                 conn.execute(text("ALTER TABLE flowers ADD COLUMN IF NOT EXISTS weight_grams INTEGER DEFAULT 0"))
             except Exception as e:
-                # We skip if it already exists or if there's a minor DB issue
                 print(f"Migration notice: {e}")
     except Exception as e:
-        print(f"Database sync notice (may be normal if tables were just deleted): {e}")
+        print(f"Database sync notice: {e}")
 
 app = FastAPI(title="Florry Flower Shop API")
+
+# ERROR HANDLER MIDDLEWARE (Shows exact error if app crashes during request)
+@app.middleware("http")
+async def catch_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "RUNTIME_ERROR",
+                "message": str(e),
+                "traceback": traceback.format_exc()
+            }
+        )
 
 # CORS Configuration
 app.add_middleware(
@@ -39,11 +55,9 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_db():
-    # We call this, but errors won't crash the whole app boot
     init_db()
 
 # DUAL ROUTING
-# Every route works with and without /api prefix
 for prefix in ["", "/api"]:
     app.include_router(users.router, prefix=prefix)
     app.include_router(user_login.router, prefix=prefix)
