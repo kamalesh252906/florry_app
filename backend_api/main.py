@@ -49,8 +49,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# === Vercel Path Correction Middleware ===
+# This ensures that /api/user/login is correctly handled as /user/login
+@app.middleware("http")
+async def fix_api_prefix(request, call_next):
+    path = request.scope.get("path", "")
+    if path.startswith("/api"):
+        # Strip '/api' from the beginning of the path
+        new_path = path[4:] if path.startswith("/api/") else path.replace("/api", "", 1)
+        request.scope["path"] = new_path or "/"
+    return await call_next(request)
+
 # === Unified Router ===
-# No /api prefix here; it is handled by root_path in api/index.py
 api_router = APIRouter()
 
 api_router.include_router(users.router)
@@ -66,6 +76,7 @@ api_router.include_router(support.router)
 api_router.include_router(superadmin.router)
 
 app.include_router(api_router)
+
 
 
 @app.get("/")
