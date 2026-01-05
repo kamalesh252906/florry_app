@@ -11,16 +11,10 @@ const API_CONFIG = {
         ORDERS: '/orders/',
         ORDER_ITEMS: '/order-items/',
         CART: '/cart/',
-        RATINGS: '/ratings/',
-        NOTIFICATIONS: '/notifications/',
         REPORTS: '/reports/',
-        RIDER_LOGIN: '/riders/login',
-        RIDER_SIGNUP: '/riders/',
         SUPERADMIN_LOGIN: '/superadmin/login',
         SUPERADMIN_PENDING_ADMINS: '/superadmin/admins/pending',
-        SUPERADMIN_PENDING_RIDERS: '/superadmin/riders/pending',
-        SUPERADMIN_APPROVE_ADMIN: '/superadmin/admins',  // /{id}/approve
-        SUPERADMIN_APPROVE_RIDER: '/superadmin/riders',   // /{id}/approve
+        SUPERADMIN_APPROVE_ADMIN: '/superadmin/admins', 
         USER_FORGOT_PASSWORD: '/user/forgot-password',
         USER_RESET_PASSWORD: '/user/reset-password',
         ADMIN_FORGOT_PASSWORD: '/login/forgot-password',
