@@ -12,10 +12,7 @@ router = APIRouter(prefix="/cart", tags=["cart"])
 @router.post("/")
 def add_to_cart(item: schemas.CartCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     # Ensure items are added for the current user
-    existing_item = db.query(models.Cart).filter(
-        models.Cart.user_id == current_user.user_id,
-        models.Cart.flower_id == item.flower_id
-    ).first()
+    existing_item = db.query(models.Cart).filter(models.Cart.user_id == current_user.user_id,models.Cart.flower_id == item.flower_id).first()
     
     if existing_item:
         existing_item.quantity += item.quantity

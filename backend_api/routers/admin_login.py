@@ -17,16 +17,7 @@ def admin_login(login: schemas.AdminLogin, db: Session = Depends(get_db)):
             "access_token": access_token
         }
 
-    admin = (
-        db.query(models.Admin)
-        .filter(
-            or_(
-                models.Admin.email == login.email,
-                models.Admin.phone == login.email
-            )
-        )
-        .first()
-    )
+    admin = (db.query(models.Admin).filter(or_(models.Admin.email == login.email,models.Admin.phone == login.email)).first())
 
     if not admin:
         raise HTTPException(status_code=401, detail="Invalid email or phone")
@@ -35,7 +26,6 @@ def admin_login(login: schemas.AdminLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=403, detail="Account pending approval by Super Admin")
 
     if not auth_utils.verify_password(login.password, admin.password):
-        # Fallback for old plain-text passwords (optional)
         if admin.password != login.password:
             raise HTTPException(status_code=401, detail="Invalid password")
     

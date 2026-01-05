@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, text
 import os
 from dotenv import load_dotenv
 
-# Load from .env if it exists
+
 load_dotenv()
 
 # Use the URL provided by the user earlier or from env

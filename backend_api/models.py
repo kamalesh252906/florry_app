@@ -27,10 +27,10 @@ class Admin(Base):
     phone = Column(String(15))
     password = Column(String(255))
     shop_name = Column(String(100))
-    shop_image_url = Column(Text)  # Changed to Text for base64 images
+    shop_image_url = Column(Text)  
     aadhaar_number = Column(String(20))
-    aadhaar_image_url = Column(Text)  # Changed to Text for base64 images
-    status = Column(String(20), default="pending") # pending, approved, rejected
+    aadhaar_image_url = Column(Text) 
+    status = Column(String(20), default="pending")
     latitude = Column(Numeric(9,6))
     longitude = Column(Numeric(9,6))
     created_at = Column(TIMESTAMP(timezone=False), server_default=func.now())
@@ -48,7 +48,7 @@ class Flower(Base):
     name = Column(String(100), nullable=False)
     description = Column(Text)
     price = Column(Numeric(10,2))
-    image_url = Column(Text)  # Changed to Text for base64 images
+    image_url = Column(Text) 
     category = Column(String(50))
     stock_quantity = Column(Integer, default=0)
     weight_grams = Column(Integer, default=0)
