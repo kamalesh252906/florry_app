@@ -84,22 +84,18 @@ def shop_accept_order(order_id: int, db: Session = Depends(get_db), current_admi
 
 @router.put("/{order_id}/out_for_delivery", response_model=schemas.OrderOut)
 def out_for_delivery(order_id: int, db: Session = Depends(get_db), current_admin: models.Admin = Depends(get_current_admin)):
-    o = db.query(models.Order).filter(
-        models.Order.order_id == order_id,
-        models.Order.admin_id == current_admin.admin_id
-    ).first()
-    if not o: raise HTTPException(404, "Order not found")
+    o = db.query(models.Order).filter(models.Order.order_id == order_id,models.Order.admin_id == current_admin.admin_id).first()
+    if not o: 
+        raise HTTPException(404, "Order not found")
     o.order_status = "out_for_delivery"
     db.commit(); db.refresh(o)
     return o
 
 @router.put("/{order_id}/complete", response_model=schemas.OrderOut)
 def complete_order(order_id: int, db: Session = Depends(get_db), current_admin: models.Admin = Depends(get_current_admin)):
-    o = db.query(models.Order).filter(
-        models.Order.order_id == order_id,
-        models.Order.admin_id == current_admin.admin_id
-    ).first()
-    if not o: raise HTTPException(404, "Order not found")
+    o = db.query(models.Order).filter(models.Order.order_id == order_id,models.Order.admin_id == current_admin.admin_id).first()
+    if not o: 
+        raise HTTPException(404, "Order not found")
     
     o.order_status = "completed"
     db.commit(); db.refresh(o)
@@ -111,7 +107,8 @@ def delete_order(order_id: int, db: Session = Depends(get_db), current_admin: mo
         models.Order.order_id == order_id,
         models.Order.admin_id == current_admin.admin_id
     ).first()
-    if not o: raise HTTPException(404, "Order not found")
+    if not o: 
+        raise HTTPException(404, "Order not found")
     
     db.delete(o)
     db.commit()

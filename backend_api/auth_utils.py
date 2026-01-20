@@ -10,7 +10,7 @@ load_dotenv()
 # Secret key to sign JWT tokens
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-1234567890-very-secret")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 
 
 def verify_password(plain_password: str, hashed_password: str):
     if not hashed_password or not hashed_password.startswith('$2b$'):

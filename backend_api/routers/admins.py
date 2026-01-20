@@ -34,8 +34,7 @@ def list_admins(lat: float = None, lng: float = None, radius: float = 20.0, db: 
             if admin.latitude is None or admin.longitude is None:
                 continue
             
-            # Haversine formula
-            R = 6371 # Earth radius in km
+            R = 6371 
             d_lat = math.radians(float(admin.latitude) - lat)
             d_lng = math.radians(float(admin.longitude) - lng)
             a = (math.sin(d_lat/2) * math.sin(d_lat/2) +

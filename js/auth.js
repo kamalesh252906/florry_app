@@ -89,9 +89,8 @@ class AuthManager {
 
 const auth = new AuthManager();
 
-// ============================================
+
 // CUSTOMER LOGIN
-// ============================================
 
 async function handleCustomerLogin(event) {
     event.preventDefault();
@@ -122,9 +121,9 @@ async function handleCustomerLogin(event) {
     }
 }
 
-// ============================================
+
 // CUSTOMER SIGNUP
-// ============================================
+
 
 async function handleCustomerSignup(event) {
     event.preventDefault();
