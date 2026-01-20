@@ -13,7 +13,7 @@ def login_user(login: schemas.UserLogin, db: Session = Depends(get_db)):
         .filter(
             or_(
                 models.User.email == login.email,
-                models.User.phone == login.phone
+                models.User.phone == login.email
             )
         )
         .first()
