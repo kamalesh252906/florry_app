@@ -37,16 +37,24 @@ async function handleUnifiedLogin(event) {
             window.location.href = './landing.html';
 
         } else if (role === 'admin') {
-            response = await api.loginAdmin(email, password);
-            auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
-            alert('✓ Shop Partner Login Successful');
-            window.location.href = './admin_dashboard.html';
-
-        } else if (role === 'super_admin') {
-            response = await api.superAdminLogin(email, password);
-            auth.saveUser({ ...response.super_admin, access_token: response.access_token }, 'super_admin');
-            alert('✓ Super Admin Access Granted');
-            window.location.href = './super_admin_dashboard.html';
+            try {
+                // Try Admin Login first
+                response = await api.loginAdmin(email, password);
+                auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
+                alert('✓ Shop Partner Login Successful');
+                window.location.href = './admin_dashboard.html';
+            } catch (adminError) {
+                // If Admin login fails, try Super Admin login
+                try {
+                    response = await api.superAdminLogin(email, password);
+                    auth.saveUser({ ...response.super_admin, access_token: response.access_token }, 'super_admin');
+                    alert('✓ Super Admin Access Granted');
+                    window.location.href = './super_admin_dashboard.html';
+                } catch (superError) {
+                    // If both fail, throw the original error (or a generic one)
+                    throw new Error(adminError.message || "Invalid credentials");
+                }
+            }
         }
 
     } catch (error) {

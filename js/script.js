@@ -302,12 +302,7 @@ async function updateCartCount() {
     }
 }
 
-export function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    if (sidebar) sidebar.classList.toggle('active');
-    if (overlay) overlay.classList.toggle('active');
-}
+
 
 // Expose key functions to window for onclick handlers in HTML
 window.loadShops = loadShops;
@@ -316,7 +311,6 @@ window.backToShops = backToShops;
 window.loadProducts = loadProducts;
 window.filterFlowers = filterFlowers;
 window.addToCart = addToCart;
-window.toggleMenu = toggleMenu;
 window.auth = auth; // Expose auth for logout
 
 /* ---------------------------------------------------------

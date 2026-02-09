@@ -401,12 +401,12 @@
     <script type="module">
         // Simple auth check
         if (!localStorage.getItem('florrySuperAdmin')) {
-            window.location.href = 'admin_login.html';
+            window.location.href = 'login.html';
         }
 
         function logout() {
             localStorage.removeItem('florrySuperAdmin');
-            window.location.href = 'admin_login.html';
+            window.location.href = 'login.html';
         }
 
         async function loadData() {
