@@ -1,9 +1,14 @@
-// Image Upload Utility with Drag & Drop
-// Uses ImgBB API for free image hosting
-
-const IMAGE_UPLOAD_API_KEY = '7d3c3c8d8e8f8f8f8f8f8f8f8f8f8f8f'; // Free ImgBB API key (you can replace with your own)
-
-class ImageUploader {
+/**
+ * ImageUploader Class
+ * Handles drag-and-drop image uploads, client-side compression, and preview.
+ * This helper makes it easy to add image upload functionality to any form.
+ */
+export default class ImageUploader {
+    /**
+     * @param {string} dropZoneId - ID of the container element for drag & drop
+     * @param {string} previewId - ID of the element to show preview (optional)
+     * @param {string} inputId - ID of the hidden file input element
+     */
     constructor(dropZoneId, previewId, inputId) {
         this.dropZone = document.getElementById(dropZoneId);
         this.preview = document.getElementById(previewId);
@@ -13,31 +18,35 @@ class ImageUploader {
         this.init();
     }
 
+    // Initialize event listeners
     init() {
         if (!this.dropZone) return;
 
-        // Prevent default drag behaviors
+        // Prevent default drag behaviors to allow dropping
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             this.dropZone.addEventListener(eventName, this.preventDefaults, false);
             document.body.addEventListener(eventName, this.preventDefaults, false);
         });
 
-        // Highlight drop zone when item is dragged over it
+        // Visual feedback when dragging over
         ['dragenter', 'dragover'].forEach(eventName => {
             this.dropZone.addEventListener(eventName, () => this.highlight(), false);
         });
 
+        // Remove visual feedback when dragging out or dropping
         ['dragleave', 'drop'].forEach(eventName => {
             this.dropZone.addEventListener(eventName, () => this.unhighlight(), false);
         });
 
-        // Handle dropped files
+        // Handle the actual file drop
         this.dropZone.addEventListener('drop', (e) => this.handleDrop(e), false);
 
-        // Handle click to browse
-        this.dropZone.addEventListener('click', () => this.input.click());
+        // Handle click to open file browser
+        this.dropZone.addEventListener('click', () => {
+            if (this.input) this.input.click();
+        });
 
-        // Handle file input change
+        // Handle file selection from standard input
         if (this.input) {
             this.input.addEventListener('change', (e) => this.handleFiles(e.target.files));
         }
@@ -67,13 +76,13 @@ class ImageUploader {
 
         const file = files[0];
 
-        // Validate file type
+        // 1. Validate file type (must be image)
         if (!file.type.startsWith('image/')) {
-            alert('Please upload an image file');
+            alert('Please upload a valid image file (JPG, PNG)');
             return;
         }
 
-        // Validate file size (max 5MB)
+        // 2. Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             alert('Image size should be less than 5MB');
             return;
@@ -83,7 +92,7 @@ class ImageUploader {
     }
 
     async uploadImage(file) {
-        // Show loading state
+        // Show loading spinner
         this.dropZone.innerHTML = `
             <div style="text-align: center;">
                 <div class="spinner"></div>
@@ -92,37 +101,46 @@ class ImageUploader {
         `;
 
         try {
-            // Compress and convert image to base64
+            // Compress and convert image to base64 string
+            // This allows us to display it immediately without a server
             const compressedBase64 = await this.compressImage(file);
 
             this.imageUrl = compressedBase64;
             this.showPreview(this.imageUrl);
 
-            // Trigger custom event with the URL
+            // Dispatch event so other scripts know an image is ready
             const event = new CustomEvent('imageUploaded', { detail: { url: this.imageUrl } });
             this.dropZone.dispatchEvent(event);
 
         } catch (error) {
-            console.error('Upload error:', error);
+            console.error('Processing error:', error);
             alert('Failed to process image. Please try again.');
             this.resetDropZone();
         }
     }
 
+    /**
+     * Compresses image using Canvas API
+     * Returns a Promise that resolves with the base64 string
+     */
     compressImage(file, maxWidth = 800, quality = 0.7) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
 
+            // Read the file as a Data URL
+            reader.readAsDataURL(file);
+
             reader.onload = (e) => {
                 const img = new Image();
+                img.src = e.target.result;
 
                 img.onload = () => {
-                    // Create canvas
+                    // Create a virtual canvas to draw the image
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
 
-                    // Calculate new dimensions
+                    // Resize if too large, maintaining aspect ratio
                     if (width > maxWidth) {
                         height = (height * maxWidth) / width;
                         width = maxWidth;
@@ -131,97 +149,52 @@ class ImageUploader {
                     canvas.width = width;
                     canvas.height = height;
 
-                    // Draw and compress
+                    // Draw image onto canvas
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Convert to base64 with compression
+                    // Convert canvas back to image (compressed/resized)
+                    // Returns: "data:image/jpeg;base64,....."
                     const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
                     resolve(compressedBase64);
                 };
 
                 img.onerror = () => reject(new Error('Failed to load image'));
-                img.src = e.target.result;
             };
 
             reader.onerror = () => reject(new Error('Failed to read file'));
-            reader.readAsDataURL(file);
         });
     }
 
     showPreview(url) {
+        // Show the image and a "Change" button
         this.dropZone.innerHTML = `
-            <img src="${url}" alt="Uploaded" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+            <img src="${url}" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
             <div style="margin-top: 10px;">
-                <button type="button" onclick="this.closest('.drop-zone').querySelector('input[type=file]').click()"
-                        style="padding: 5px 10px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <button type="button" class="change-img-btn" style="padding: 6px 12px; font-size: 0.9em; cursor: pointer;">
                     Change Image
                 </button>
             </div>
         `;
+
+        // Re-attach click listener to the new button
+        const changeBtn = this.dropZone.querySelector('.change-img-btn');
+        if (changeBtn) {
+            changeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Don't trigger dropZone click
+                if (this.input) this.input.click();
+            });
+        }
     }
 
     resetDropZone() {
         this.dropZone.innerHTML = `
             <p>Drag & drop image here or click to browse</p>
-            <small>Max size: 5MB</small>
+            <small style="color: #888;">Max size: 5MB</small>
         `;
     }
 
     getImageUrl() {
         return this.imageUrl;
     }
-}
-
-// CSS for drop zone (add to your stylesheet or inject)
-const dropZoneStyles = `
-<style>
-.drop-zone {
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    padding: 30px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s;
-    background: #f9f9f9;
-}
-
-.drop-zone.highlight {
-    border-color: #2ecc71;
-    background: #e8f8f5;
-}
-
-.drop-zone:hover {
-    border-color: #3498db;
-    background: #ebf5fb;
-}
-
-.upload-icon {
-    font-size: 48px;
-    margin-bottom: 10px;
-}
-
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 10px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
-`;
-
-// Inject styles if not already present
-if (!document.getElementById('image-uploader-styles')) {
-    const styleElement = document.createElement('div');
-    styleElement.id = 'image-uploader-styles';
-    styleElement.innerHTML = dropZoneStyles;
-    document.head.appendChild(styleElement);
 }

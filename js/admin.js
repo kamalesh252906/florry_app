@@ -1,9 +1,12 @@
+import { api } from './api.js';
+import ImageUploader from './image-uploader.js';
+
 let flowerImageUploader, shopImageUploader;
 
 document.addEventListener('DOMContentLoaded', () => {
     const admin = JSON.parse(localStorage.getItem('florryAdmin'));
     if (!admin || !admin.admin_id) {
-        window.location.href = './admin_login.html';
+        window.location.href = './login.html'; // Changed to unified login
         return;
     }
 
@@ -17,19 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize Flower Image Uploader
-    flowerImageUploader = new ImageUploader('flower-image-dropzone', null, 'flower-image-input');
-    document.getElementById('flower-image-dropzone').addEventListener('imageUploaded', (e) => {
-        document.getElementById('flower-image-url').value = e.detail.url;
-    });
+    if (document.getElementById('flower-image-dropzone')) {
+        flowerImageUploader = new ImageUploader('flower-image-dropzone', null, 'flower-image-input');
+        document.getElementById('flower-image-dropzone').addEventListener('imageUploaded', (e) => {
+            document.getElementById('flower-image-url').value = e.detail.url;
+        });
+    }
 
     // Initialize Shop Settings Image Uploader
-    shopImageUploader = new ImageUploader('shop-image-dropzone', null, 'shop-image-input-file');
-    document.getElementById('shop-image-dropzone').addEventListener('imageUploaded', (e) => {
-        document.getElementById('shop-settings-image-url').value = e.detail.url;
-    });
+    if (document.getElementById('shop-image-dropzone')) {
+        shopImageUploader = new ImageUploader('shop-image-dropzone', null, 'shop-image-input-file');
+        document.getElementById('shop-image-dropzone').addEventListener('imageUploaded', (e) => {
+            document.getElementById('shop-settings-image-url').value = e.detail.url;
+        });
+    }
 });
 
-async function loadAdminOrders() {
+export async function loadAdminOrders() {
     const grid = document.getElementById('admin-orders-grid');
     if (!grid) return;
     grid.innerHTML = '<p>Loading orders...</p>';
@@ -116,7 +123,7 @@ async function loadAdminOrders() {
     }
 }
 
-async function shopAcceptOrder(orderId) {
+export async function shopAcceptOrder(orderId) {
     if (!confirm("Accept this order?")) return;
     try {
         await api.shopAcceptOrder(orderId);
@@ -126,7 +133,7 @@ async function shopAcceptOrder(orderId) {
     }
 }
 
-async function shopOutForDelivery(orderId) {
+export async function shopOutForDelivery(orderId) {
     if (!confirm("Is this order ready for delivery?")) return;
     try {
         await api.outForDelivery(orderId);
@@ -136,7 +143,7 @@ async function shopOutForDelivery(orderId) {
     }
 }
 
-async function shopCompleteOrder(orderId) {
+export async function shopCompleteOrder(orderId) {
     if (!confirm("Has this order been delivered successfully?")) return;
     try {
         await api.completeOrder(orderId);
@@ -146,7 +153,7 @@ async function shopCompleteOrder(orderId) {
     }
 }
 
-async function deleteAdminOrder(orderId) {
+export async function deleteAdminOrder(orderId) {
     if (!confirm("Are you sure you want to delete this order record? This action cannot be undone.")) return;
     try {
         await api.deleteOrder(orderId);
@@ -157,7 +164,7 @@ async function deleteAdminOrder(orderId) {
 }
 
 
-async function loadAdminProducts() {
+export async function loadAdminProducts() {
     const grid = document.getElementById('admin-grid');
     grid.innerHTML = '<p>Loading...</p>';
 
@@ -197,7 +204,7 @@ async function loadAdminProducts() {
     }
 }
 
-function openModal(flower = null) {
+export function openModal(flower = null) {
     const modal = document.getElementById('flower-modal');
     const title = document.getElementById('modal-title');
     const form = document.getElementById('flower-form');
@@ -213,9 +220,9 @@ function openModal(flower = null) {
         document.getElementById('flower-price').value = flower.price;
         document.getElementById('flower-grams').value = flower.weight_grams || 0;
         document.getElementById('flower-image-url').value = flower.image_url;
-        if (flower.image_url) {
+        if (flower.image_url && flowerImageUploader) {
             flowerImageUploader.showPreview(flower.image_url);
-        } else {
+        } else if (flowerImageUploader) {
             flowerImageUploader.resetDropZone();
         }
         document.getElementById('flower-description').value = flower.description || '';
@@ -223,17 +230,17 @@ function openModal(flower = null) {
         title.textContent = 'Add New Flower';
         document.getElementById('flower-id').value = '';
         document.getElementById('flower-image-url').value = '';
-        flowerImageUploader.resetDropZone();
+        if (flowerImageUploader) flowerImageUploader.resetDropZone();
     }
 
     modal.classList.add('active');
 }
 
-function closeModal() {
+export function closeModal() {
     document.getElementById('flower-modal').classList.remove('active');
 }
 
-async function handleSaveFlower(event) {
+export async function handleSaveFlower(event) {
     event.preventDefault();
 
     const admin = JSON.parse(localStorage.getItem('florryAdmin'));
@@ -285,7 +292,7 @@ async function handleSaveFlower(event) {
     }
 }
 
-async function deleteFlower(id) {
+export async function deleteFlower(id) {
     if (!confirm('Are you sure you want to delete this flower?')) return;
 
     try {
@@ -297,7 +304,7 @@ async function deleteFlower(id) {
     }
 }
 
-async function openShopModal() {
+export async function openShopModal() {
     const modal = document.getElementById('shop-modal');
     const admin = JSON.parse(localStorage.getItem('florryAdmin'));
     if (!admin) {
@@ -309,9 +316,9 @@ async function openShopModal() {
         const freshAdmin = await api.getAdmin(admin.admin_id);
         document.getElementById('shop-name-input').value = freshAdmin.shop_name || '';
         document.getElementById('shop-settings-image-url').value = freshAdmin.shop_image_url || '';
-        if (freshAdmin.shop_image_url) {
+        if (freshAdmin.shop_image_url && shopImageUploader) {
             shopImageUploader.showPreview(freshAdmin.shop_image_url);
-        } else {
+        } else if (shopImageUploader) {
             shopImageUploader.resetDropZone();
         }
     } catch (e) {
@@ -322,11 +329,11 @@ async function openShopModal() {
     modal.classList.add('active');
 }
 
-function closeShopModal() {
+export function closeShopModal() {
     document.getElementById('shop-modal').classList.remove('active');
 }
 
-async function handleSaveShopSettings(event) {
+export async function handleSaveShopSettings(event) {
     event.preventDefault();
     const btn = event.target.querySelector('.save-btn');
     const originalText = btn.textContent;
@@ -355,5 +362,19 @@ async function handleSaveShopSettings(event) {
         btn.disabled = false;
     }
 }
+
+// Global Exports
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.handleSaveFlower = handleSaveFlower;
+window.deleteFlower = deleteFlower;
+window.openShopModal = openShopModal;
+window.closeShopModal = closeShopModal;
+window.handleSaveShopSettings = handleSaveShopSettings;
+window.shopAcceptOrder = shopAcceptOrder;
+window.shopOutForDelivery = shopOutForDelivery;
+window.shopCompleteOrder = shopCompleteOrder;
+window.deleteAdminOrder = deleteAdminOrder;
+window.loadAdminOrders = loadAdminOrders;
 
 

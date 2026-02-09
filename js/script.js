@@ -1,59 +1,86 @@
-// Main application logic
-let currentShopId = localStorage.getItem('florryShopId'); // Persist shop selection
+// =========================================================
+// FLORY MAIN SCRIPT
+// This file handles the home page, shop listing, and products
+// =========================================================
 
-async function loadShops() {
-    const grid = document.getElementById('shops-grid');
-    if (!grid) return;
+import { api } from './api.js';
+import { auth } from './auth.js';
 
-    // Ensure correct view state
-    const shopsSec = document.getElementById('shops-section');
-    const filtersSec = document.getElementById('filters-section');
-    const productsSec = document.getElementById('main-products-section');
+// Keep track of which shop receives the order
+let currentShopId = localStorage.getItem('florryShopId');
 
-    if (shopsSec) shopsSec.style.display = 'block';
-    if (filtersSec) filtersSec.style.display = 'none';
-    if (productsSec) productsSec.style.display = 'none';
+/* ---------------------------------------------------------
+   HELPER FUNCTIONS FOR BUTTON LOADING EFFECTS
+--------------------------------------------------------- */
+function showBtnLoading(btn) {
+    if (!btn) return;
+    btn.dataset.originalText = btn.innerHTML; // Save old text
+    btn.classList.add('btn-loading'); // Add spinner style
+}
 
-    grid.innerHTML = '<p class="loading">Locating you to find nearby shops...</p>';
+function hideBtnLoading(btn) {
+    if (!btn) return;
+    btn.classList.remove('btn-loading'); // Remove spinner
+    // Determine if we should restore text or show success
+    // For now, just restore text to be safe
+    // btn.innerHTML = btn.dataset.originalText;
+}
 
-    // Get Location
+
+/* ---------------------------------------------------------
+   SHOP LOGIC (Boutiques)
+--------------------------------------------------------- */
+
+// 1. Find and show shops near the user
+export async function loadShops() {
+    const shopGrid = document.getElementById('shops-grid');
+    if (!shopGrid) return;
+
+    // Reset view to show shops list
+    document.getElementById('shops-section').style.display = 'block';
+    if (document.getElementById('filters-section')) document.getElementById('filters-section').style.display = 'none';
+    if (document.getElementById('main-products-section')) document.getElementById('main-products-section').style.display = 'none';
+
+    shopGrid.innerHTML = '<p class="loading">Locating you to find nearby shops...</p>';
+
+    // Try to get user's location
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             await fetchShops(lat, lng);
         }, async (error) => {
-            console.warn("Location access denied or failed", error);
-            grid.innerHTML = '<p class="loading">Location denied. Showing all shops...</p>';
-            await fetchShops(); // Fallback to all
+            console.warn("Location check failed", error);
+            shopGrid.innerHTML = '<p class="loading">Could not find location. Showing all shops...</p>';
+            await fetchShops(); // Show all shops if location fails
         });
     } else {
         await fetchShops();
     }
 }
 
+// 2. Get the list of shops from the server
 async function fetchShops(lat = null, lng = null) {
-    const grid = document.getElementById('shops-grid');
+    const shopGrid = document.getElementById('shops-grid');
     try {
         const params = {};
+        // If we have location, ask server to filter by radius
         if (lat && lng) {
             params.lat = lat;
             params.lng = lng;
-            params.radius = 20; // 20km radius default
+            params.radius = 20; // Search within 20km
         }
 
         const shops = await api.getAdmins(params);
 
-        // Filter only those with shop_name or assume all admins are shops
-        const validShops = shops;
-
-        if (validShops.length === 0) {
-            grid.innerHTML = '<p>No shops found nearby.</p>';
+        if (shops.length === 0) {
+            shopGrid.innerHTML = '<p>No shops found nearby.</p>';
             return;
         }
 
-        grid.innerHTML = validShops.map(shop => `
-           <div class="product-card shop-card fade-in" onclick="selectShop(${shop.admin_id}, '${shop.shop_name}')">
+        // Create HTML for each shop card
+        shopGrid.innerHTML = shops.map(shop => `
+           <div class="product-card shop-card fade-in" onclick="selectShop(this, ${shop.admin_id}, '${shop.shop_name}')">
                 ${shop.shop_image_url
                 ? `<img src="${shop.shop_image_url}" class="product-image" alt="${shop.shop_name}">`
                 : `<div class="shop-icon" style="height:260px; display:flex; align-items:center; justify-content:center; background:#f8faf9; font-size:4rem;">🏪</div>`
@@ -69,14 +96,16 @@ async function fetchShops(lat = null, lng = null) {
                 </div>
            </div>
         `).join('');
+
     } catch (e) {
         console.error(e);
-        grid.innerHTML = '<p>Error loading shops.</p>';
+        shopGrid.innerHTML = '<p>Error loading shops.</p>';
     }
 }
 
+// Helper: Calculate distance between two coordinates
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the earth in km
+    const R = 6371; // Earth radius in km
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a =
@@ -85,43 +114,49 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
         Math.sin(dLon / 2) * Math.sin(dLon / 2)
         ;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; // Distance in km
-    return d;
+    return R * c; // Distance in km
 }
 
 function deg2rad(deg) {
-    return deg * (Math.PI / 180)
+    return deg * (Math.PI / 180);
 }
 
-function selectShop(id, name) {
+// 3. Select a shop and show its products
+export function selectShop(cardElement, id, name) {
+    // Note: cardElement is the clicked div
+    // We don't really need a spinner here because it's instant client-side switch
+    // unless we await loadProducts. 
+    // But since it's a div click, we can't easily put a spinner on the whole card.
+
     currentShopId = id;
     localStorage.setItem('florryShopId', id);
     if (name) localStorage.setItem('florryShopName', name);
 
-    // Update UI
+    // Update Header
     const shopHeading = document.querySelector('#main-products-section h2');
     if (shopHeading) shopHeading.textContent = (name || 'Shop') + "'s Collection";
 
-    const shopsSec = document.getElementById('shops-section');
-    const filtersSec = document.getElementById('filters-section');
-    const productsSec = document.getElementById('main-products-section');
+    // Switch Views
+    document.getElementById('shops-section').style.display = 'none';
+    if (document.getElementById('filters-section')) document.getElementById('filters-section').style.display = 'block';
+    if (document.getElementById('main-products-section')) document.getElementById('main-products-section').style.display = 'block';
 
-    if (shopsSec) shopsSec.style.display = 'none';
-    if (filtersSec) filtersSec.style.display = 'block';
-    if (productsSec) productsSec.style.display = 'block';
-
+    // Load flowers for this shop
     loadProducts('all');
 }
 
-function backToShops() {
+export function backToShops() {
     currentShopId = null;
     localStorage.removeItem('florryShopId');
     loadShops();
 }
 
-async function loadProducts(category = 'all') {
+/* ---------------------------------------------------------
+   PRODUCT LOGIC (Flowers)
+--------------------------------------------------------- */
+
+export async function loadProducts(category = 'all') {
     if (!currentShopId) {
-        // If no shop selected, try to load shops
         loadShops();
         return;
     }
@@ -132,8 +167,10 @@ async function loadProducts(category = 'all') {
     try {
         grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">Loading flowers...</p>';
 
+        // Fetch flowers from API
         const flowers = await api.getFlowers(currentShopId);
 
+        // Filter by category
         const filteredFlowers = category === 'all'
             ? flowers
             : flowers.filter(f => f.category === category);
@@ -143,114 +180,150 @@ async function loadProducts(category = 'all') {
             return;
         }
 
+        // Generate HTML
         grid.innerHTML = filteredFlowers.map(flower => `
             <div class="product-card fade-in">
                 <img src="${flower.image_url || 'https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'}" 
                      alt="${flower.name}" 
                      class="product-image"
                      onerror="this.src='https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'">
+                
                 <div class="product-info">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
                         <h3 class="product-name">${flower.name}</h3>
                         <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #64748b; font-weight: 600;">${flower.weight_grams}g</span>
                     </div>
                     <p class="product-description">${flower.description || 'A beautiful, hand-picked selection of fresh seasonal blooms.'}</p>
+                    
                     <div class="product-footer">
                         <span class="product-price">₹${flower.price}</span>
-                        <button class="add-to-cart-btn" onclick="addToCart(${flower.flower_id}, '${flower.name}', ${flower.price})">
+                        <!-- PASS 'this' TO FUNCTION -->
+                        <button class="add-to-cart-btn" onclick="addToCart(this, ${flower.flower_id}, '${flower.name}', ${flower.price})">
                             Add to Cart
                         </button>
                     </div>
                 </div>
             </div>
         `).join('');
+
     } catch (error) {
         console.error('Error loading flowers:', error);
         grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px; color: red;">Failed to load flowers. Please try again.</p>';
     }
 }
 
-function filterFlowers(category) {
+export function filterFlowers(category) {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
+    if (event) event.target.classList.add('active');
     loadProducts(category);
 }
 
-async function addToCart(flowerId, flowerName, price) {
-    if (auth.isLoggedIn()) {
-        const userId = auth.getUserId();
-        if (userId) {
-            try {
+/* ---------------------------------------------------------
+   CART LOGIC
+--------------------------------------------------------- */
+
+export async function addToCart(btnElement, flowerId, flowerName, price) {
+    // Show spinner on button
+    showBtnLoading(btnElement);
+
+    try {
+        if (auth.isLoggedIn()) {
+            const userId = auth.getUserId();
+            if (userId) {
+                // Add to server cart
                 await api.addToCart({
                     user_id: userId,
                     flower_id: flowerId,
                     quantity: 1
                 });
                 alert(`${flowerName} added to cart!`);
-            } catch (error) {
-                console.error('Error adding to cart:', error);
-                alert('Failed to add to cart. Please try again.');
+            } else {
+                auth.logout();
             }
         } else {
-            // Should not happen with new strict isLoggedIn check, but safe fallback
-            console.error("Logged in but no user ID found. Redirecting to login.");
-            auth.logout();
-        }
-    } else {
-        let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
-        const existingItem = cart.find(item => item.flower_id === flowerId);
+            // Add to local storage cart
+            let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            const existingItem = cart.find(item => item.flower_id === flowerId);
 
-        if (existingItem) {
-            existingItem.quantity += 1;
-        } else {
-            cart.push({
-                flower_id: flowerId,
-                name: flowerName,
-                price: price,
-                quantity: 1
-            });
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    flower_id: flowerId,
+                    name: flowerName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            localStorage.setItem('florryCart', JSON.stringify(cart));
+            alert(`${flowerName} added to cart!`);
         }
 
-        localStorage.setItem('florryCart', JSON.stringify(cart));
-        alert(`${flowerName} added to cart!`);
+        // Update badge
+        await updateCartCount();
+
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        alert('Failed to add to cart. Please try again.');
+    } finally {
+        // Stop spinner
+        hideBtnLoading(btnElement);
     }
-
-    updateCartCount();
 }
 
+// Update the red badge count
 async function updateCartCount() {
-    const cartCount = document.getElementById('cart-count');
-    if (!cartCount) return;
+    const badgeElement = document.getElementById('cart-count');
+    if (!badgeElement) return;
 
-    if (auth.isLoggedIn()) {
-        try {
-            const cartItems = await api.getCart();
-            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
-        } catch (error) {
-            console.error('Error updating cart count:', error);
-            // Fallback to local storage or 0 on error
+    let totalCount = 0;
+
+    try {
+        if (auth.isLoggedIn()) {
+            const items = await api.getCart();
+            totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
+        } else {
             const cart = JSON.parse(localStorage.getItem('florryCart')) || [];
-            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         }
-    } else {
-        const cart = JSON.parse(localStorage.getItem('florryCart')) || [];
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCount.textContent = totalItems;
+
+        // Logic for red badge visibility
+        if (totalCount > 0) {
+            badgeElement.textContent = totalCount;
+            badgeElement.classList.remove('hidden');
+        } else {
+            badgeElement.classList.add('hidden');
+        }
+    } catch (e) {
+        console.warn("Could not update cart count");
     }
 }
 
-function toggleMenu() {
+export function toggleMenu() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
+    if (sidebar) sidebar.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
 }
 
+// Expose key functions to window for onclick handlers in HTML
+window.loadShops = loadShops;
+window.selectShop = selectShop;
+window.backToShops = backToShops;
+window.loadProducts = loadProducts;
+window.filterFlowers = filterFlowers;
+window.addToCart = addToCart;
+window.toggleMenu = toggleMenu;
+window.auth = auth; // Expose auth for logout
+
+/* ---------------------------------------------------------
+   INITIALIZATION & SEARCH
+--------------------------------------------------------- */
+
 document.addEventListener('DOMContentLoaded', function () {
-    // Search Functionality
     const searchInput = document.getElementById('search-input');
     const searchBtn = document.querySelector('.search-btn');
 
@@ -258,22 +331,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!searchInput) return;
         const term = searchInput.value.toLowerCase().trim();
 
-        if (!term) {
-            // Reset to default view
-            if (currentShopId) {
-                loadProducts('all');
-            } else {
-                loadShops();
-            }
-            return;
-        }
+        // Show loading on search button
+        showBtnLoading(searchBtn);
 
-        if (currentShopId) {
-            // Context: Inside a Shop -> Search Flowers
-            const grid = document.getElementById('products-grid');
-            if (grid) {
-                grid.innerHTML = '<p class="loading" style="grid-column: 1/-1; text-align: center;">Searching flowers...</p>';
-                try {
+        try {
+            if (!term) {
+                if (currentShopId) loadProducts('all');
+                else loadShops();
+                return;
+            }
+
+            if (currentShopId) {
+                // Search Flowers inside a shop
+                const grid = document.getElementById('products-grid');
+                if (grid) {
+                    grid.innerHTML = '<p class="loading" style="grid-column: 1/-1; text-align: center;">Searching flowers...</p>';
                     const flowers = await api.getFlowers(currentShopId);
                     const filtered = flowers.filter(flower =>
                         flower.name.toLowerCase().includes(term) ||
@@ -282,20 +354,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (filtered.length > 0) {
                         grid.innerHTML = filtered.map(flower => `
+                            <!-- Same card structure as loadProducts -->
                             <div class="product-card fade-in">
-                                <img src="${flower.image_url || 'https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'}" 
-                                     alt="${flower.name}" 
-                                     class="product-image"
-                                     onerror="this.src='https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'">
+                                <img src="${flower.image_url || 'https://via.placeholder.com/150'}" alt="${flower.name}" class="product-image">
                                 <div class="product-info">
-                                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                                        <h3 class="product-name">${flower.name}</h3>
-                                        <span style="font-size: 0.8rem; background: #f1f5f9; padding: 2px 8px; border-radius: 10px; color: #64748b; font-weight: 600;">${flower.weight_grams}g</span>
-                                    </div>
-                                    <p class="product-description">${flower.description || 'A beautiful, hand-picked selection of fresh seasonal blooms.'}</p>
+                                    <h3 class="product-name">${flower.name}</h3>
                                     <div class="product-footer">
                                         <span class="product-price">₹${flower.price}</span>
-                                        <button class="add-to-cart-btn" onclick="addToCart(${flower.flower_id}, '${flower.name}', ${flower.price})">
+                                        <button class="add-to-cart-btn" onclick="addToCart(this, ${flower.flower_id}, '${flower.name}', ${flower.price})">
                                             Add to Cart
                                         </button>
                                     </div>
@@ -303,26 +369,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                         `).join('');
                     } else {
-                        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No matching flowers found in this boutique.</p>';
+                        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No matching flowers found.</p>';
                     }
-                } catch (error) {
-                    console.error('Search error:', error);
-                    grid.innerHTML = '<p style="color:red; text-align:center;">Error searching flowers.</p>';
                 }
-            }
-        } else {
-            // Context: Main Page -> Search Boutiques (Shops)
-            const shopsSec = document.getElementById('shops-section');
-            const productsSec = document.getElementById('main-products-section');
-            const grid = document.getElementById('shops-grid');
-
-            // Ensure Shop Section is Visible
-            if (shopsSec) shopsSec.style.display = 'block';
-            if (productsSec) productsSec.style.display = 'none';
-
-            if (grid) {
-                grid.innerHTML = '<p class="loading" style="grid-column: 1/-1; text-align: center;">Searching boutiques...</p>';
-                try {
+            } else {
+                // Search Shops
+                const grid = document.getElementById('shops-grid');
+                if (grid) {
+                    grid.innerHTML = '<p class="loading" style="grid-column: 1/-1; text-align: center;">Searching boutiques...</p>';
                     const shops = await api.getAdmins();
                     const filtered = shops.filter(shop =>
                         (shop.shop_name && shop.shop_name.toLowerCase().includes(term)) ||
@@ -331,26 +385,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (filtered.length > 0) {
                         grid.innerHTML = filtered.map(shop => `
-                           <div class="product-card shop-card fade-in" onclick="selectShop(${shop.admin_id}, '${shop.shop_name}')">
-                                ${shop.shop_image_url
-                                ? `<img src="${shop.shop_image_url}" class="product-image" alt="${shop.shop_name}">`
-                                : `<div class="shop-icon" style="height:260px; display:flex; align-items:center; justify-content:center; background:#f8faf9; font-size:4rem;">🏪</div>`
-                            }
+                           <div class="product-card shop-card fade-in" onclick="selectShop(this, ${shop.admin_id}, '${shop.shop_name}')">
                                 <div class="product-info">
-                                     <h3>${shop.shop_name || 'Florry Partner'}</h3>
-                                     <p>${shop.name || 'Artisan Florist'}</p>
+                                     <h3>${shop.shop_name}</h3>
                                      <button class="visit-btn">Visit Boutique</button>
                                 </div>
                            </div>
                         `).join('');
                     } else {
-                        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No boutiques found matching "' + term + '".</p>';
+                        grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px;">No boutiques found.</p>';
                     }
-                } catch (error) {
-                    console.error('Search error:', error);
-                    grid.innerHTML = '<p style="color:red; text-align:center;">Error searching shops.</p>';
                 }
             }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            hideBtnLoading(searchBtn);
         }
     }
 
@@ -360,18 +410,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (searchInput) {
         searchInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
+            if (e.key === 'Enter') handleSearch();
         });
     }
 
-    // Initial Load Logic - ONLY if on a page that supports shops (like landing.html)
+    // Load initial state
     if (document.getElementById('shops-grid')) {
         if (localStorage.getItem('florryShopId')) {
             const id = localStorage.getItem('florryShopId');
             const name = localStorage.getItem('florryShopName');
-            selectShop(id, name);
+            selectShop(null, id, name);
         } else {
             loadShops();
         }

@@ -1,5 +1,7 @@
+import { API_CONFIG, buildUrl } from './config.js';
+
 // API Service Layer
-class ApiService {
+export class ApiService {
     constructor() {
         this.baseUrl = API_CONFIG.BASE_URL;
     }
@@ -302,4 +304,5 @@ class ApiService {
     }
 }
 
-const api = new ApiService();
+export const api = new ApiService();
+window.api = api;

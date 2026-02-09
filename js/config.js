@@ -1,5 +1,5 @@
 // API Configuration
-const API_CONFIG = {
+export const API_CONFIG = {
     BASE_URL: '/api',
     ENDPOINTS: {
         USERS: '/users/',
@@ -14,7 +14,7 @@ const API_CONFIG = {
         REPORTS: '/reports/',
         SUPERADMIN_LOGIN: '/superadmin/login',
         SUPERADMIN_PENDING_ADMINS: '/superadmin/admins/pending',
-        SUPERADMIN_APPROVE_ADMIN: '/superadmin/admins', 
+        SUPERADMIN_APPROVE_ADMIN: '/superadmin/admins',
         USER_FORGOT_PASSWORD: '/user/forgot-password',
         USER_RESET_PASSWORD: '/user/reset-password',
         ADMIN_FORGOT_PASSWORD: '/login/forgot-password',
@@ -23,6 +23,6 @@ const API_CONFIG = {
     }
 };
 
-function buildUrl(endpoint) {
+export function buildUrl(endpoint) {
     return `${API_CONFIG.BASE_URL}${endpoint}`;
 }

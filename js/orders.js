@@ -1,9 +1,12 @@
+import { api } from './api.js';
+import { auth } from './auth.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     if (!auth.requireAuth()) return;
     loadOrders();
 });
 
-async function loadOrders() {
+export async function loadOrders() {
     const list = document.getElementById('orders-list');
     const noOrders = document.getElementById('no-orders');
 
@@ -93,3 +96,5 @@ function getOrderStatusText(status) {
     };
     return map[s] || status.toUpperCase();
 }
+
+window.loadOrders = loadOrders;

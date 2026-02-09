@@ -22,10 +22,7 @@ def login_user(login: schemas.UserLogin, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or phone")
 
-    # Verify password (checks both hash and plain for backward compatibility if needed, 
-    # but strictly verify_password is better)
     if not auth_utils.verify_password(login.password, user.password):
-        # Fallback for old plain-text passwords (optional, remove for better security)
         if user.password != login.password:
             raise HTTPException(status_code=401, detail="Invalid password")
         
@@ -52,7 +49,6 @@ def forgot_password(req: schemas.PasswordResetRequest, db: Session = Depends(get
     user = db.query(models.User).filter(models.User.email == req.email).first()
     if not user:
         raise HTTPException(status_code=404, detail="User with this email not found")
-    # In a real app, send reset link here. For now, just confirm email exists.
     return {"message": "Email verified. You can now reset your password."}
 
 @router.post("/reset-password")

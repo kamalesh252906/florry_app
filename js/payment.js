@@ -1,3 +1,6 @@
+import { api } from './api.js';
+import { auth } from './auth.js';
+
 async function loadOrderSummary() {
     const orderSummary = document.getElementById('order-summary');
     if (!orderSummary) return;
@@ -47,7 +50,7 @@ async function loadOrderSummary() {
     }
 }
 
-function detectLocation() {
+export function detectLocation() {
     if (!navigator.geolocation) {
         alert('Geolocation is not supported by your browser.');
         return;
@@ -95,7 +98,7 @@ function detectLocation() {
     });
 }
 
-async function placeOrder() {
+export async function placeOrder() {
     if (!auth.requireAuth()) return;
 
     const name = document.getElementById('delivery-name').value.trim();
@@ -151,6 +154,9 @@ async function placeOrder() {
         alert('Failed to place order: ' + error.message);
     }
 }
+
+window.detectLocation = detectLocation;
+window.placeOrder = placeOrder;
 
 document.addEventListener('DOMContentLoaded', function () {
     loadOrderSummary();

@@ -1,26 +1,40 @@
-class AuthManager {
+// =========================================================
+// AUTHENTICATION MANAGER
+// Handles Login, Signup, and User Sessions
+// =========================================================
+
+import { api } from './api.js';
+
+export class AuthManager {
     constructor() {
+        // Load user from storage when the page opens
         this.currentUser = this.loadUser();
     }
 
+    // Read user data from Local Storage
     loadUser() {
-        const userStr = localStorage.getItem('florryUser');
+        // We check for all types of users
+        const userStr = localStorage.getItem('florryUser') ||
+            localStorage.getItem('florryAdmin') ||
+            localStorage.getItem('florrySuperAdmin');
+
         if (!userStr) return null;
 
         try {
-            const user = JSON.parse(userStr);
-            if (!user || user.user_id === undefined) {
-                console.warn("Invalid user data found in storage", user);
-                return null;
-            }
-            return user;
+            return JSON.parse(userStr);
         } catch (e) {
             return null;
         }
     }
 
-    saveUser(userData) {
-        localStorage.setItem('florryUser', JSON.stringify(userData));
+    // Save user data after login
+    // key depends on role: 'florryUser', 'florryAdmin', 'florrySuperAdmin'
+    saveUser(userData, role = 'user') {
+        let key = 'florryUser';
+        if (role === 'admin') key = 'florryAdmin';
+        if (role === 'super_admin') key = 'florrySuperAdmin';
+
+        localStorage.setItem(key, JSON.stringify(userData));
         this.currentUser = userData;
     }
 
@@ -28,35 +42,31 @@ class AuthManager {
         return this.currentUser;
     }
 
+    // Check if anyone is logged in
     isLoggedIn() {
-        return this.currentUser !== null && this.currentUser.user_id !== undefined;
+        // Check if current user object exists and has an ID
+        return this.currentUser !== null && (this.currentUser.user_id || this.currentUser.admin_id || this.currentUser.id);
     }
 
+    // Get the ID of the current user
     getUserId() {
-        if (!this.currentUser || this.currentUser.user_id === undefined) {
-            console.warn("User ID missing");
-            return null;
-        }
-        return parseInt(this.currentUser.user_id);
+        if (!this.currentUser) return null;
+        return this.currentUser.user_id || this.currentUser.admin_id || this.currentUser.id;
     }
 
+    // Logout function - Clears everything
     logout() {
         localStorage.removeItem('florryUser');
+        localStorage.removeItem('florryAdmin');
+        localStorage.removeItem('florrySuperAdmin');
         localStorage.removeItem('florryCart');
         this.currentUser = null;
+
+        // Redirect to Home
         window.location.href = '../index.html';
     }
 
-    async login(email, password) {
-        const response = await api.loginUser(email, password);
-
-        // ✅ FIX: save ONLY user object
-        this.saveUser(response.user);
-
-        await this.mergeCart();
-        return response;
-    }
-
+    // Sync local cart with server cart after login
     async mergeCart() {
         const localCart = JSON.parse(localStorage.getItem('florryCart')) || [];
         if (localCart.length === 0) return;
@@ -64,22 +74,28 @@ class AuthManager {
         const userId = this.getUserId();
         if (!userId) return;
 
+        // Add each local item to the server
         for (const item of localCart) {
-            await api.addToCart({
-                user_id: userId,
-                flower_id: item.flower_id,
-                quantity: item.quantity
-            });
+            try {
+                await api.addToCart({
+                    user_id: userId,
+                    flower_id: item.flower_id,
+                    quantity: item.quantity
+                });
+            } catch (e) { console.warn("Merge error", e); }
         }
 
+        // Clear local cart
         localStorage.removeItem('florryCart');
     }
 
+    // Protect pages that require login
     requireAuth() {
         if (!this.isLoggedIn()) {
             const inPages = window.location.pathname.includes('/pages/');
+            // Redirect to login page
             window.location.replace(
-                inPages ? './customer_login.html' : './pages/customer_login.html'
+                inPages ? './login.html' : './pages/login.html'
             );
             return false;
         }
@@ -87,77 +103,5 @@ class AuthManager {
     }
 }
 
-const auth = new AuthManager();
-
-
-// CUSTOMER LOGIN
-
-async function handleCustomerLogin(event) {
-    event.preventDefault();
-
-    const email = document.getElementById('login-user').value.trim();
-    const password = document.getElementById('login-password').value;
-    const btn = event.target.querySelector('button');
-    const originalText = btn.textContent;
-
-    try {
-        btn.textContent = 'Authenticating...';
-        btn.disabled = true;
-
-        const response = await api.customerLogin(email, password);
-
-        // Save user data + token
-        auth.saveUser({
-            ...response.user,
-            access_token: response.access_token
-        });
-
-        alert('✓ Welcome back to Florry!');
-        window.location.href = './landing.html';
-    } catch (error) {
-        alert('Authentication failed: ' + error.message);
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
-}
-
-
-// CUSTOMER SIGNUP
-
-
-async function handleCustomerSignup(event) {
-    event.preventDefault();
-
-    const firstName = document.getElementById('signup-first-name').value.trim();
-    const lastName = document.getElementById('signup-last-name').value.trim();
-    const email = document.getElementById('signup-email').value.trim();
-    const phone = document.getElementById('signup-phone').value.trim();
-    const password = document.getElementById('signup-password').value;
-    const confirmPassword = document.getElementById('signup-confirm-password').value;
-    const btn = event.target.querySelector('button');
-    const originalText = btn.textContent;
-
-    if (password !== confirmPassword) {
-        alert('Passwords do not match');
-        return;
-    }
-
-    try {
-        btn.textContent = 'Creating Account...';
-        btn.disabled = true;
-
-        await api.customerSignup({
-            name: `${firstName} ${lastName}`.trim(),
-            email,
-            phone,
-            password
-        });
-
-        alert('✓ Account created successfully! Please login.');
-        window.location.href = './customer_login.html';
-    } catch (error) {
-        alert('Signup failed: ' + error.message);
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
-}
+export const auth = new AuthManager();
+window.auth = auth;

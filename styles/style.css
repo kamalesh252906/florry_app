@@ -344,16 +344,51 @@ body {
 
 .cart-badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    color: rgb(26, 24, 24);
-    width: 22px;
-    height: 22px;
-    font-size: 0.7em;
+    top: -8px;
+    right: -8px;
+    background-color: #ef4444; /* Red color */
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 0.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
+    box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cart-badge.hidden {
+    transform: scale(0);
+    opacity: 0;
+}
+
+/* Button Loading State */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-top: -10px;
+    margin-left: -10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: btn-spin 0.8s linear infinite;
+}
+
+@keyframes btn-spin {
+    to { transform: rotate(360deg); }
 }
 
 /* Sidebar */

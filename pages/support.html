@@ -151,16 +151,11 @@
         </div>
     </footer>
 
-    <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
-    <script>
-        // Sidebar logic
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-
+    <script type="module" src="../js/config.js"></script>
+    <script type="module" src="../js/api.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script src="../js/menu.js"></script>
+    <script type="module">
         const supUser = JSON.parse(localStorage.getItem('florryUser'));
         
         if(supUser) {
@@ -172,6 +167,7 @@
         async function loadTickets() {
             if(!supUser) return;
             try {
+                // api is globally available from api.js
                 const tickets = await api.getSupportMessages(supUser.user_id);
                 const container = document.getElementById('tickets-container');
                 const section = document.getElementById('ticket-history-section');
@@ -208,34 +204,38 @@
             }
         }
 
-        document.getElementById('support-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.textContent;
-            
-            try {
-                btn.disabled = true;
-                btn.textContent = 'Enrypting & Sending...';
+        // Attach event listener only if form exists
+        const form = document.getElementById('support-form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                const originalText = btn.textContent;
                 
-                const data = {
-                    user_id: supUser ? supUser.user_id : null,
-                    name: document.getElementById('sup-name').value,
-                    email: document.getElementById('sup-email').value,
-                    subject: document.getElementById('sup-subject').value,
-                    message: document.getElementById('sup-message').value
-                };
-                
-                await api.sendSupportMessage(data);
-                alert('Success! Your inquiry has been secured. We will notify you once a representative replies.');
-                e.target.reset();
-                if(supUser) loadTickets();
-            } catch (err) {
-                alert('Secure Sending Failed: ' + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = originalText;
-            }
-        });
+                try {
+                    btn.disabled = true;
+                    btn.textContent = 'Enrypting & Sending...';
+                    
+                    const data = {
+                        user_id: supUser ? supUser.user_id : null,
+                        name: document.getElementById('sup-name').value,
+                        email: document.getElementById('sup-email').value,
+                        subject: document.getElementById('sup-subject').value,
+                        message: document.getElementById('sup-message').value
+                    };
+                    
+                    await api.sendSupportMessage(data);
+                    alert('Success! Your inquiry has been secured. We will notify you once a representative replies.');
+                    e.target.reset();
+                    if(supUser) loadTickets();
+                } catch (err) {
+                    alert('Secure Sending Failed: ' + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            });
+        }
     </script>
 
     <style>
