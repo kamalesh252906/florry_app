@@ -37,24 +37,23 @@ async function handleUnifiedLogin(event) {
             window.location.href = './landing.html';
 
         } else if (role === 'admin') {
-            try {
-                // Try Admin Login first
-                response = await api.loginAdmin(email, password);
-                auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
-                alert('✓ Shop Partner Login Successful');
-                window.location.href = './admin_dashboard.html';
-            } catch (adminError) {
-                // If Admin login fails, try Super Admin login
-                try {
-                    response = await api.superAdminLogin(email, password);
-                    auth.saveUser({ ...response.super_admin, access_token: response.access_token }, 'super_admin');
-                    alert('✓ Super Admin Access Granted');
-                    window.location.href = './super_admin_dashboard.html';
-                } catch (superError) {
-                    // If both fail, throw the original error (or a generic one)
-                    throw new Error(adminError.message || "Invalid credentials");
-                }
-            }
+            response = await api.loginAdmin(email, password);
+            auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
+            alert('✓ Shop Partner Login Successful');
+            window.location.href = './admin_dashboard.html';
+
+        } else if (role === 'super_admin') {
+            response = await api.superAdminLogin(email, password);
+            // Backend returns {message, role, access_token}. 
+            const superAdminData = {
+                id: 'superadmin',
+                email: email,
+                role: 'superadmin',
+                access_token: response.access_token
+            };
+            auth.saveUser(superAdminData, 'super_admin');
+            alert('✓ Super Admin Access Granted');
+            window.location.href = './super_admin_dashboard.html';
         }
 
     } catch (error) {
@@ -199,59 +198,54 @@ function getLocation(event) {
 // Attach Event Listeners when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Check if we are on Login Page
-    const loginForm = document.querySelector('form[onsubmit*="handleUnifiedLogin"]'); // Or find by ID if I change HTML
-    // Actually, I removed onsubmit from JS, so I will now rely on form ID or just form presence
+    const currentPath = window.location.pathname;
 
-    // I should modify HTML to just have specific IDs
-    // Login Form: id="auth-login-form"
-    // Signup Form: id="auth-signup-form"
+    // Login Form Handler
+    const loginForm = document.getElementById('login-form');
+    if (loginForm && (currentPath.includes('login.html') || currentPath.includes('admin_login.html'))) {
+        loginForm.addEventListener('submit', handleUnifiedLogin);
 
-    const loginFormEl = document.querySelector('form');
-    if (loginFormEl && window.location.pathname.includes('login.html')) {
-        loginFormEl.addEventListener('submit', handleUnifiedLogin);
-        // Expose selectRole globally isn't good.
-        // Instead, add listeners to role options
+        // Setup Role Selector interactions
         document.querySelectorAll('.role-option').forEach(el => {
             el.addEventListener('click', (e) => {
                 const input = el.querySelector('input');
-                selectRole(e, input.value);
+                if (input) selectRole(e, input.value);
             });
         });
     }
 
-    const signupFormEl = document.querySelector('form');
-    if (signupFormEl && window.location.pathname.includes('signup.html')) {
-        signupFormEl.addEventListener('submit', handleUnifiedSignup);
+    // Signup Form Handler
+    const signupForm = document.getElementById('signup-form');
+    if (signupForm && (currentPath.includes('signup.html') || currentPath.includes('admin_signup.html'))) {
+        signupForm.addEventListener('submit', handleUnifiedSignup);
+
         document.querySelectorAll('.role-option').forEach(el => {
             el.addEventListener('click', (e) => {
                 const input = el.querySelector('input');
-                selectRole(e, input.value);
+                if (input) selectRole(e, input.value);
             });
         });
 
-        // Location Btn
+        // Location Detection Button
         const locBtn = document.getElementById('location-btn');
-        if (locBtn) {
-            locBtn.addEventListener('click', getLocation);
-        }
+        if (locBtn) locBtn.addEventListener('click', getLocation);
 
-        // Init Image Uploaders
+        // Initialize Specialized Media Uploaders
         if (document.getElementById('shop-image-dropzone')) {
             new ImageUploader('shop-image-dropzone', null, 'shop-image-input');
             new ImageUploader('aadhaar-image-dropzone', null, 'aadhaar-image-input');
 
             document.getElementById('shop-image-dropzone').addEventListener('imageUploaded', (e) => {
                 document.getElementById('shop-image-url').value = e.detail.url;
-                e.target.innerHTML = '<span style="color:green; font-weight:bold">✓ Photo Ready</span>';
-                e.target.style.borderColor = 'green';
+                e.target.innerHTML = '<span style="color:#10b981; font-weight:700">✓ Photo Verified</span>';
+                e.target.style.borderColor = '#10b981';
                 e.target.style.background = '#f0fdf4';
             });
 
             document.getElementById('aadhaar-image-dropzone').addEventListener('imageUploaded', (e) => {
                 document.getElementById('aadhaar-image-url').value = e.detail.url;
-                e.target.innerHTML = '<span style="color:green; font-weight:bold">✓ ID Ready</span>';
-                e.target.style.borderColor = 'green';
+                e.target.innerHTML = '<span style="color:#10b981; font-weight:700">✓ Identity Sync Ready</span>';
+                e.target.style.borderColor = '#10b981';
                 e.target.style.background = '#f0fdf4';
             });
         }
