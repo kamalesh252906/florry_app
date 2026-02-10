@@ -7,15 +7,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/style.css" />
+    <link rel="stylesheet" href="../styles/payment.css" />
 </head>
 <body>
   <!-- Header -->
   <header class="header">
     <div class="header-container">
-      <div class="logo" onclick="window.location.href='./landing.html'">
-        <span class="logo-icon">🌸</span>
-        <span class="logo-text">Florry</span>
+      <div class="logo logo-premium">
+        <span class="logo-icon-premium">🌸</span>
+        <span class="logo-text logo-text-premium">Florry</span>
       </div>
       <h2 class="header-title">Checkout</h2>
     </div>
@@ -38,7 +39,7 @@
             </div>
             <div class="form-group-full">
                 <textarea class="payment-input" placeholder="Complete Address" id="delivery-address" rows="3" required></textarea>
-                <button type="button" onclick="detectLocation()" style="margin-top:10px; background:none; border:none; color:var(--primary); cursor:pointer; font-weight:700; display:flex; align-items:center; gap:5px;">
+                <button type="button" id="btn-detect-location" class="detect-location-btn">
                   Auto-detect Location
                 </button>
             </div>
@@ -62,8 +63,6 @@
                 <p>Pay with cash when your blooms reach you.</p>
               </div>
             </label>
-
-
           </div>
         </div>
       </div>
@@ -91,16 +90,16 @@
             </div>
           </div>
 
-          <button class="place-order-btn-premium" onclick="placeOrder()">
+          <button class="place-order-btn-premium" id="btn-place-order">
             Place Your Order 🌸
           </button>
           
-          <p style="text-align:center; color:var(--gray); font-size:0.8rem; margin-top:20px;">
+          <p class="terms-text">
             By placing this order, you agree to our Terms of Service.
           </p>
         </div>
         
-        <button class="icon-btn" onclick="window.location.href='./cart.html'" style="margin-top:20px; width:100%; border:1px solid var(--border); background:white; color:var(--dark); border-radius:15px; padding:15px; cursor:pointer;">
+        <button class="return-cart-btn" id="btn-return-cart">
           ← Return to Cart
         </button>
       </aside>

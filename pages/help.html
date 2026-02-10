@@ -8,66 +8,49 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style.css">
-    <style>
-        .faq-item {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid #f1f3f5;
-        }
-        .faq-item h3 {
-            color: var(--primary);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-    </style>
 </head>
 <body>
     <header class="header">
         <div class="header-container">
-            <div class="logo" onclick="window.location.href='./landing.html'">
-                <span class="logo-icon">🌸</span>
-                <span class="logo-text">Florry</span>
+            <div class="logo logo-premium">
+                <span class="logo-icon-premium">🌸</span>
+                <span class="logo-text logo-text-premium">Florry</span>
             </div>
             <div class="header-actions">
-                 <button class="icon-btn" onclick="window.location.href='./cart.html'">
+                 <button class="icon-btn" title="Basket">
                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
                     <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
                  </button>
-                 <button class="icon-btn" onclick="toggleMenu()">☰</button>
+                 <button class="icon-btn menu-toggle-btn">☰</button>
             </div>
         </div>
     </header>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>Menu</h3>
-            <button class="close-btn" onclick="toggleMenu()">✕</button>
+            <button class="close-btn">✕</button>
         </div>
         <nav class="sidebar-nav">
             <a href="./landing.html">Home</a>
             <a href="./orders.html">Your Orders</a>
             <a href="./support.html">Support</a>
             <a href="./help.html" class="active">Help</a>
-            <a href="./about.html">About Us</a>
+            <a href="./about.html">Our Story</a>
         </nav>
     </div>
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay"></div>
 
-    <section class="hero" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); min-height: 200px; display: flex; align-items: center;">
+    <section class="hero hero-gradient flex-center">
         <div class="container">
             <h1>How can we help?</h1>
             <p>Find answers to common questions about Florry</p>
         </div>
     </section>
 
-    <div class="container" style="padding: 60px 20px; max-width: 800px;">
+    <div class="container p-60 max-w-800">
         <div class="faq-list">
             <div class="faq-item">
                 <h3>How fast is delivery?</h3>

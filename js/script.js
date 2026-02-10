@@ -78,9 +78,8 @@ async function fetchShops(lat = null, lng = null) {
             return;
         }
 
-        // Create HTML for each shop card
         shopGrid.innerHTML = shops.map(shop => `
-           <div class="product-card shop-card fade-in" onclick="selectShop(this, ${shop.admin_id}, '${shop.shop_name}')">
+           <div class="product-card shop-card fade-in" data-id="${shop.admin_id}" data-name="${shop.shop_name}">
                 ${shop.shop_image_url
                 ? `<img src="${shop.shop_image_url}" class="product-image" alt="${shop.shop_name}">`
                 : `<div class="shop-icon" style="height:260px; display:flex; align-items:center; justify-content:center; background:#f8faf9; font-size:4rem;">🏪</div>`
@@ -96,6 +95,14 @@ async function fetchShops(lat = null, lng = null) {
                 </div>
            </div>
         `).join('');
+
+        // Event Delegation for Shops
+        shopGrid.onclick = (e) => {
+            const card = e.target.closest('.shop-card');
+            if (card) {
+                selectShop(card, card.dataset.id, card.dataset.name);
+            }
+        };
 
     } catch (e) {
         console.error(e);
@@ -180,7 +187,6 @@ export async function loadProducts(category = 'all') {
             return;
         }
 
-        // Generate HTML
         grid.innerHTML = filteredFlowers.map(flower => `
             <div class="product-card fade-in">
                 <img src="${flower.image_url || 'https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'}" 
@@ -197,8 +203,10 @@ export async function loadProducts(category = 'all') {
                     
                     <div class="product-footer">
                         <span class="product-price">₹${flower.price}</span>
-                        <!-- PASS 'this' TO FUNCTION -->
-                        <button class="add-to-cart-btn" onclick="addToCart(this, ${flower.flower_id}, '${flower.name}', ${flower.price})">
+                        <button class="add-to-cart-btn" 
+                                data-id="${flower.flower_id}" 
+                                data-name="${flower.name}" 
+                                data-price="${flower.price}">
                             Add to Cart
                         </button>
                     </div>
@@ -206,17 +214,25 @@ export async function loadProducts(category = 'all') {
             </div>
         `).join('');
 
+        // Event Delegation for Products
+        grid.onclick = (e) => {
+            const btn = e.target.closest('.add-to-cart-btn');
+            if (btn) {
+                addToCart(btn, btn.dataset.id, btn.dataset.name, btn.dataset.price);
+            }
+        };
+
     } catch (error) {
         console.error('Error loading flowers:', error);
         grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 40px; color: red;">Failed to load flowers. Please try again.</p>';
     }
 }
 
-export function filterFlowers(category) {
+export function filterFlowers(category, btnElement) {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    if (event) event.target.classList.add('active');
+    if (btnElement) btnElement.classList.add('active');
     loadProducts(category);
 }
 
@@ -405,6 +421,20 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchInput) {
         searchInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') handleSearch();
+        });
+    }
+
+    // Event Listeners
+    const backBtn = document.getElementById('btn-back-to-shops');
+    if (backBtn) backBtn.addEventListener('click', backToShops);
+
+    const filterGroup = document.getElementById('filter-group');
+    if (filterGroup) {
+        filterGroup.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (btn) {
+                filterFlowers(btn.dataset.category, btn);
+            }
         });
     }
 

@@ -9,145 +9,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/utilities.css">
-    <style>
-        .admin-layout {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            min-height: 100vh;
-        }
-        .admin-sidebar {
-            background: #1e5128;
-            color: white;
-            padding: 30px 20px;
-        }
-        .admin-main {
-            background: #f8faf9;
-            padding: 40px;
-        }
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 14px 20px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-        }
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-        .stat-card-admin {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
+    <link rel="stylesheet" href="../styles/admin.css">
 
-        /* Responsive Admin Dashboard */
-        @media (max-width: 1024px) {
-            .admin-layout {
-                grid-template-columns: 1fr;
-            }
-            .admin-sidebar {
-                padding: 20px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .admin-sidebar .logo {
-                margin-bottom: 20px !important;
-            }
-            .admin-sidebar nav {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-            }
-            .nav-item {
-                margin-bottom: 0;
-                padding: 10px 15px;
-            }
-            .admin-main {
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .admin-stats {
-                grid-template-columns: 1fr !important;
-            }
-            header {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-            .admin-grid {
-                grid-template-columns: 1fr !important;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="admin-layout">
         <aside class="admin-sidebar">
-            <div class="logo" style="margin-bottom: 50px; display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">🌸</span>
-                <span class="logo-text" style="font-size: 1.6rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(45deg, #fff, rgba(255,255,255,0.6)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Florry Partner</span>
+            <div class="logo">
+                <span class="logo-icon">🌸</span>
+                <span class="logo-text">Florry Partner</span>
             </div>
             <nav>
                 <a href="#orders" class="nav-item active">
-                    <span style="font-size: 1.2rem;"></span> Orders
+                    <span class="stat-icon-small"></span> Orders
                 </a>
                 <a href="#products" class="nav-item">
-                    <span style="font-size: 1.2rem;">🌸</span> Products
+                    <span class="stat-icon-small">🌸</span> Products
                 </a>
-                <a href="#settings" class="nav-item" onclick="openShopModal()">
-                    <span style="font-size: 1.2rem;">⚙️</span> Shop Settings
+                <a href="#settings" class="nav-item" id="nav-settings">
+                    <span class="stat-icon-small">⚙️</span> Shop Settings
                 </a>
-                <div style="margin-top: 40px; padding: 0 20px; opacity: 0.1;">
+                <div class="admin-nav-divider">
                     <hr>
                 </div>
-                <a href="#" class="nav-item" onclick="auth.logout()" style="color: #ff8a8a; margin-top: 20px;">
+                <a href="#" class="nav-item admin-sign-out" id="admin-logout-btn">
                  Sign Out
                 </a>
             </nav>
         </aside>
 
         <main class="admin-main">
-            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
-                <div class="fade-in">
-                    <h1 id="shop-welcome-msg" style="font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; color: var(--primary); margin-bottom: 5px;">Welcome Back!</h1>
-                    <p style="color: var(--gray); font-size: 1.1rem; font-weight: 500;">Your Shop is looking great today.</p>
+            <header class="admin-header">
+                <div class="fade-in admin-welcome-msg">
+                    <h1 id="shop-welcome-msg">Welcome Back!</h1>
+                    <p>Your Shop is looking great today.</p>
                 </div>
-                <div style="display: flex; gap: 15px;" class="fade-in">
-                    <button class="add-to-cart-btn" onclick="openModal()" style="border-radius: 12px; padding: 15px 30px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">+ List New Bloom</button>
+                <div class="fade-in admin-header-actions">
+                    <button class="add-to-cart-btn btn-add-bloom" id="btn-add-flower">+ List New Bloom</button>
                 </div>
             </header>
             <section id="orders">
-                <h2 style="margin-bottom: 25px;">Recent Orders</h2>
-                <div class="admin-grid" id="admin-orders-grid" style="margin-bottom: 40px;">
+                <h2 class="admin-section-title">Recent Orders</h2>
+                <div class="admin-grid admin-orders-grid-container" id="admin-orders-grid">
                     <!-- Orders loaded here -->
                 </div>
             </section>
 
             <section id="products">
-                <h2 style="margin-bottom: 25px;">Your Products</h2>
+                <h2 class="admin-section-title">Your Products</h2>
                 <div class="admin-grid" id="admin-grid">
                     <!-- Products loaded here -->
                 </div>
@@ -159,7 +68,7 @@
     <div class="modal" id="flower-modal">
         <div class="modal-content">
             <h2 id="modal-title">Add Flower</h2>
-            <form id="flower-form" onsubmit="handleSaveFlower(event)">
+            <form id="flower-form">
                 <input type="hidden" id="flower-id">
                 
                 <div class="form-group">
@@ -191,10 +100,10 @@
                 
                 <div class="form-group">
                     <label>Flower Image</label>
-                    <div class="drop-zone" id="flower-image-dropzone" style="padding: 15px; border-width: 1px;">
-                        <p style="font-size: 0.9em;">Drag & drop image or click</p>
+                    <div class="drop-zone drop-zone-small" id="flower-image-dropzone">
+                        <p class="drop-zone-text-small">Drag & drop image or click</p>
                     </div>
-                    <input type="file" id="flower-image-input" accept="image/*" style="display: none;">
+                    <input type="file" id="flower-image-input" accept="image/*" class="d-none">
                     <input type="hidden" id="flower-image-url">
                 </div>
                 
@@ -204,7 +113,7 @@
                 </div>
                 
                 <div class="modal-actions">
-                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="cancel-btn" id="close-flower-modal">Cancel</button>
                     <button type="submit" class="save-btn">Save Flower</button>
                 </div>
             </form>
@@ -215,7 +124,7 @@
     <div class="modal" id="shop-modal">
         <div class="modal-content">
             <h2> Shop Settings</h2>
-            <form id="shop-form" onsubmit="handleSaveShopSettings(event)">
+            <form id="shop-form">
                 <div class="form-group">
                     <label>Shop Name</label>
                     <input type="text" id="shop-name-input" required>
@@ -223,15 +132,15 @@
                 
                 <div class="form-group">
                     <label>Shop Photo</label>
-                    <div class="drop-zone" id="shop-image-dropzone" style="padding: 15px; border-width: 1px;">
-                        <p style="font-size: 0.9em;">Drag & drop shop photo or click</p>
+                    <div class="drop-zone drop-zone-small" id="shop-image-dropzone">
+                        <p class="drop-zone-text-small">Drag & drop shop photo or click</p>
                     </div>
-                    <input type="file" id="shop-image-input-file" accept="image/*" style="display: none;">
+                    <input type="file" id="shop-image-input-file" accept="image/*" class="d-none">
                     <input type="hidden" id="shop-settings-image-url">
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="cancel-btn" onclick="closeShopModal()">Cancel</button>
+                    <button type="button" class="cancel-btn" id="close-shop-modal">Cancel</button>
                     <button type="submit" class="save-btn">Save Changes</button>
                 </div>
             </form>

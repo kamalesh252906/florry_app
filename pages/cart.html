@@ -18,13 +18,12 @@
     <div class="header-container">
 
         <!-- Logo -->
-        <div class="logo" onclick="window.location.href='./landing.html'" style="cursor: pointer; display: flex; align-items: center;">
-            <span style="font-size: 2rem; margin-right: 10px;">🌸</span>
-            <span class="logo-text" style="background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; font-size: 1.8rem; font-family: 'Outfit';">Florry</span>
+        <div class="logo logo-premium">
+            <span class="logo-text logo-text-premium font-outfit">Florry</span>
         </div>
         <!-- Actions -->
         <div class="header-actions">
-            <button class="icon-btn active" style="position: relative;">
+            <button class="icon-btn active relative">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                     <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -32,7 +31,7 @@
                 </svg>
                 <span class="cart-badge" id="cart-count">0</span>
             </button>
-            <button class="icon-btn" onclick="toggleMenu()" style="font-size: 1.5rem;">☰</button>
+            <button class="icon-btn icon-xl menu-toggle-btn">☰</button>
         </div>
 
     </div>
@@ -42,7 +41,7 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <h3>Explore</h3>
-        <button class="close-btn" onclick="toggleMenu()">✕</button>
+        <button class="close-btn">✕</button>
     </div>
 
     <nav class="sidebar-nav">
@@ -51,12 +50,12 @@
         <a href="./support.html">Get Support</a>
         <a href="./help.html">FAQ</a>
         <a href="./about.html">Our Story</a>
-        <hr style="margin: 10px 0; opacity: 0.1;">
-        <a href="#" onclick="auth.logout()" style="color: #FF6B6B;">Logout</a>
+        <hr class="mv-10 opacity-1">
+        <a href="#" class="sidebar-logout">Logout</a>
     </nav>
 </div>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div class="overlay" id="overlay"></div>
 
 <section class="cart-section">
     <div class="container">
@@ -90,14 +89,12 @@
                 </div>
 
                 <button
-                    class="checkout-btn"
-                    onclick="window.location.href='./payment.html'">
+                    class="checkout-btn">
                     Proceed to Checkout
                 </button>
 
                 <button
-                    class="continue-btn"
-                    onclick="window.location.href='./landing.html'">
+                    class="continue-btn">
                     Continue Shopping
                 </button>
             </div>

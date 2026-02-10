@@ -26,13 +26,13 @@
             </div>
 
             <div class="features">
-                <div class="feature animate-in" style="animation-delay: 0.2s;">
+                <div class="feature animate-in delay-200">
                     <div>
                         <h3>Artisan Selection</h3>
                         <p>Hand-picked by neighborhood masters</p>
                     </div>
                 </div>
-                <div class="feature animate-in" style="animation-delay: 0.3s;">
+                <div class="feature animate-in delay-300">
                     <div>
                         <h3>15 Minute Delivery</h3>
                         <p>Fresh from shop to your doorstep</p>
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="stats animate-in" style="animation-delay: 0.5s;">
+            <div class="stats animate-in delay-500">
                 <div class="stat">
                     <h2>50k+</h2>
                     <p>Moments Shared</p>
@@ -54,7 +54,7 @@
 
         <!-- Right Section -->
         <div class="right-section">
-            <div class="welcome-box animate-in" style="animation-delay: 0.6s;">
+            <div class="welcome-box animate-in delay-600">
                 <div class="welcome-emoji"></div>
                 <h2>Join the Bloom</h2>
                 <p>Select your journey to continue</p>
@@ -63,15 +63,15 @@
                 <div class="user-type-section">
                     <h3>Welcome</h3>
                     <div class="button-group">
-                        <button class="auth-btn" onclick="window.location.href='./pages/login.html'">Login</button>
-                        <button class="auth-btn" style="background: white; color: var(--primary); border: 2px solid var(--primary);" onclick="window.location.href='./pages/signup.html'">Sign Up</button>
+                        <button class="auth-btn" id="btn-login-home">Login</button>
+                        <button class="auth-btn btn-outline-white" id="btn-signup-home">Sign Up</button>
                     </div>
                 </div>
 
                 <!-- Browse as Guest -->
                 <div class="guest-section">
                     <p>Just want to look around?</p>
-                    <button class="guest-btn" onclick="window.location.href='./pages/landing.html'">Browse Gallery 🌸</button>
+                    <button class="guest-btn" id="btn-browse-home">Browse Gallery 🌸</button>
                 </div>
             </div>
         </div>
@@ -81,5 +81,7 @@
     <script type="module" src="./js/config.js"></script>
     <script type="module" src="./js/api.js"></script>
     <script type="module" src="./js/auth.js"></script>
+    <script type="module" src="./js/home.js"></script>
 </body>
+
 </html>

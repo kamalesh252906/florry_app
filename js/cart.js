@@ -30,7 +30,7 @@ export async function loadCartItems() {
                     <div class="empty-cart-icon">🛒</div>
                     <h2>Your cart is empty</h2>
                     <p>Looks like you haven't added anything yet.</p>
-                    <button class="shop-now-btn" onclick="window.location.href='./landing.html'">
+                    <button class="shop-now-btn">
                         Start Shopping
                     </button>
                 </div>
@@ -60,19 +60,19 @@ export async function loadCartItems() {
                 <div class="item-details">
                     <div class="item-name-row">
                         <h3>${flower.name}</h3>
-                        <button class="remove-btn" onclick="removeFromCart(${id})">✕</button>
+                        <button class="remove-btn" data-id="${id}">✕</button>
                     </div>
                     <p class="item-price-unit">₹${price} / unit</p>
                     <div class="item-action-row">
                         <div class="quantity-controls">
                             <!-- Decrease Quantity Button -->
-                            <button class="qty-btn minus" onclick="updateQuantity(${id}, ${item.quantity - 1})">−</button>
+                            <button class="qty-btn minus" data-id="${id}">−</button>
                             
                             <!-- Quantity Number -->
                             <span class="qty-val">${item.quantity}</span>
                             
                             <!-- Increase Quantity Button -->
-                            <button class="qty-btn plus" onclick="updateQuantity(${id}, ${item.quantity + 1})">+</button>
+                            <button class="qty-btn plus" data-id="${id}">+</button>
                         </div>
                         <p class="item-subtotal">₹${(price * item.quantity).toFixed(2)}</p>
                     </div>
@@ -205,4 +205,34 @@ window.updateCartCount = updateCartCount;
 // Run this when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     loadCartItems();
+
+    // Event Delegation for dynamically added cart items
+    const cartContainer = document.getElementById('cart-items');
+    if (cartContainer) {
+        cartContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+
+            const id = btn.dataset.id;
+            if (btn.classList.contains('remove-btn')) {
+                removeFromCart(id);
+            } else if (btn.classList.contains('minus')) {
+                const currentQty = parseInt(btn.nextElementSibling.textContent);
+                updateQuantity(id, currentQty - 1);
+            } else if (btn.classList.contains('plus')) {
+                const currentQty = parseInt(btn.previousElementSibling.textContent);
+                updateQuantity(id, currentQty + 1);
+            } else if (btn.classList.contains('shop-now-btn')) {
+                window.location.href = './landing.html';
+            }
+        });
+    }
+
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            window.location.href = './payment.html';
+        });
+    }
 });
+

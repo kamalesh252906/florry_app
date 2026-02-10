@@ -10,13 +10,13 @@
     <!-- Header -->
     <header class="header">
         <div class="header-container">
-            <div class="logo" onclick="window.location.href='./landing.html'" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
-                <span style="font-size: 2.2rem; transform: rotate(-5deg); transition: transform 0.3s;" onmouseover="this.style.transform='rotate(5deg)'" onmouseout="this.style.transform='rotate(-5deg)'">🌸</span>
-                <span class="logo-text" style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Florry</span>
+            <div class="logo logo-premium">
+                <span class="logo-icon-premium">🌸</span>
+                <span class="logo-text logo-text-premium">Florry</span>
             </div>
             
             <div class="header-actions">
-                <button class="icon-btn" onclick="window.location.href='./cart.html'" title="Your Basket">
+                <button class="icon-btn" title="Your Basket">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -24,7 +24,7 @@
                     </svg>
                     <span class="cart-badge" id="cart-count">0</span>
                 </button>
-                <button class="icon-btn" onclick="toggleMenu()" title="Menu">☰</button>
+                <button class="icon-btn menu-toggle-btn" title="Menu">☰</button>
             </div>
         </div>
     </header>
@@ -33,18 +33,18 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>Explore Florry</h3>
-            <button class="close-btn" onclick="toggleMenu()">✕</button>
+            <button class="close-btn">✕</button>
         </div>
         <nav class="sidebar-nav">
             <a href="./landing.html">Home</a>
             <a href="./orders.html" class="active">My Orders</a>
             <a href="./support.html">Support</a>
             <a href="./help.html">FAQ</a>
-            <hr style="margin: 10px 20px; opacity: 0.1;">
-            <a href="#" onclick="auth.logout()" style="color: #FF6B6B;">Logout</a>
+            <hr class="sidebar-divider">
+            <a href="#" class="sidebar-logout">Logout</a>
         </nav>
     </div>
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay"></div>
 
     <!-- Orders Section -->
     <section class="orders-section">
@@ -58,10 +58,10 @@
                 <!-- Orders will be loaded here -->
             </div>
 
-            <div class="no-orders" id="no-orders" style="display:none; text-align: center; padding: 100px 0;">
-                <h2 style="font-size: 2rem; margin-bottom: 10px;">No Orders Found</h2>
-                <p style="color: gray; margin-bottom: 35px;">Looks like you haven't started your floral journey yet.</p>
-                <button class="shop-btn" onclick="window.location.href='./landing.html'" style="padding: 18px 40px; background: var(--primary); color: white; border: none; border-radius: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+            <div class="no-orders empty-state-section hidden" id="no-orders">
+                <h2 class="empty-state-title">No Orders Found</h2>
+                <p class="empty-state-text">Looks like you haven't started your floral journey yet.</p>
+                <button class="shop-btn btn-primary">
                     Explre Our Boutiques 🌸
                 </button>
             </div>

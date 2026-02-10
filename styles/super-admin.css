@@ -1,0 +1,401 @@
+/* Super Admin Dashboard Styles */
+:root {
+    --super-dark: #0f172a;
+    --super-accent: #38bdf8;
+    --super-bg: #f1f5f9;
+}
+
+.super-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.super-sidebar {
+    background: var(--super-dark);
+    color: white;
+    padding: 40px 25px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.super-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 50px;
+}
+
+.super-nav {
+    flex: 1;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--super-accent);
+}
+
+/* Main Content */
+.super-main {
+    padding: 60px;
+    overflow-y: auto;
+}
+
+.super-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.super-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--super-dark);
+}
+
+.super-header-subtitle {
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.stat-card {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.stat-icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.approval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.approval-card {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s ease;
+}
+
+.approval-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.card-top h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.info-group {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.info-label {
+    color: #64748b;
+    font-weight: 600;
+    width: 80px;
+    display: inline-block;
+}
+
+.info-value {
+    color: var(--super-dark);
+    font-weight: 600;
+}
+
+.aadhaar-link-box {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.aadhaar-link-box:hover {
+    background: #f1f5f9;
+    border-color: var(--super-accent);
+}
+
+.btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.action-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-action {
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-approve {
+    background: #22c55e;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: #16a34a;
+    box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+}
+
+.btn-reject {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-reject:hover {
+    background: #dc2626;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    padding: 60px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    text-align: center;
+    color: #64748b;
+    border: 2px dashed #cbd5e1;
+}
+
+/* Responsive Fixes */
+@media (max-width: 1024px) {
+    .super-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .super-sidebar {
+        padding: 20px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .super-logo {
+        margin-bottom: 0;
+        font-size: 1.4rem;
+    }
+
+    .super-nav {
+        display: flex;
+        gap: 5px;
+    }
+
+    .nav-link {
+        margin-bottom: 0;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .super-main {
+        padding: 30px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .super-sidebar {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .super-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .approval-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .super-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+}
+
+/* Specific UI elements from inline styles */
+.super-exit-link {
+    color: #fca5a5;
+}
+
+.super-user-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+}
+
+.super-user-info {
+    text-align: right;
+}
+
+.super-user-name {
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.super-user-status {
+    font-size: 0.75rem;
+    color: #10b981;
+}
+
+.super-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.super-section-badge {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+    padding: 5px 12px;
+    background: white;
+    border-radius: 20px;
+}
+
+.super-refresh-btn {
+    background: none;
+    border: none;
+    font-weight: 800;
+    color: var(--super-accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.super-refresh-btn:hover {
+    color: var(--super-dark);
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+
+.mb-25 {
+    margin-bottom: 25px;
+}
+
+.stat-icon-small {
+    font-size: 1.2rem;
+}
+
+/* Stat Icon Color Themes */
+.icon-blue {
+    background: #e0f2fe;
+    color: #0ea5e9;
+}
+
+.icon-green {
+    background: #f0fdf4;
+    color: #22c55e;
+}
+
+.icon-red {
+    background: #fef2f2;
+    color: #ef4444;
+}

@@ -56,7 +56,8 @@ export function detectLocation() {
         return;
     }
 
-    const btn = document.querySelector('button[onclick="detectLocation()"]');
+    const btn = document.getElementById('btn-detect-location');
+    if (!btn) return;
     const originalText = btn.textContent;
     btn.textContent = 'Locating...';
     btn.disabled = true;
@@ -101,18 +102,27 @@ export function detectLocation() {
 export async function placeOrder() {
     if (!auth.requireAuth()) return;
 
-    const name = document.getElementById('delivery-name').value.trim();
-    const phone = document.getElementById('delivery-phone').value.trim();
-    const address = document.getElementById('delivery-address').value.trim();
-    const city = document.getElementById('delivery-city').value.trim();
-    const pincode = document.getElementById('delivery-pincode').value.trim();
+    const nameField = document.getElementById('delivery-name');
+    const phoneField = document.getElementById('delivery-phone');
+    const addressField = document.getElementById('delivery-address');
+    const cityField = document.getElementById('delivery-city');
+    const pincodeField = document.getElementById('delivery-pincode');
+
+    if (!nameField || !phoneField || !addressField || !cityField || !pincodeField) return;
+
+    const name = nameField.value.trim();
+    const phone = phoneField.value.trim();
+    const address = addressField.value.trim();
+    const city = cityField.value.trim();
+    const pincode = pincodeField.value.trim();
 
     if (!name || !phone || !address || !city || !pincode) {
         alert('Please fill in all delivery details');
         return;
     }
 
-    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const paymentMethodInput = document.querySelector('input[name="payment"]:checked');
+    const paymentMethod = paymentMethodInput ? paymentMethodInput.value : 'cod';
 
     try {
         const cartItems = await api.getCart();
@@ -155,9 +165,17 @@ export async function placeOrder() {
     }
 }
 
-window.detectLocation = detectLocation;
-window.placeOrder = placeOrder;
-
 document.addEventListener('DOMContentLoaded', function () {
     loadOrderSummary();
+
+    const detectBtn = document.getElementById('btn-detect-location');
+    if (detectBtn) detectBtn.addEventListener('click', detectLocation);
+
+    const placeBtn = document.getElementById('btn-place-order');
+    if (placeBtn) placeBtn.addEventListener('click', placeOrder);
+
+    const backBtn = document.getElementById('btn-return-cart');
+    if (backBtn) backBtn.addEventListener('click', () => {
+        window.location.href = './cart.html';
+    });
 });

@@ -12,7 +12,7 @@
 <body>
     <div class="auth-container">
         <!-- Brand Section -->
-        <div class="auth-left" style="background: linear-gradient(rgba(30, 81, 40, 0.85), rgba(30, 81, 40, 0.95)), url('https://images.unsplash.com/photo-1519337265831-281ec6cc8514?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
+        <div class="auth-left auth-left-admin">
             <div class="back-link">
                 <a href="../index.html">← Back to Home</a>
             </div>
@@ -20,7 +20,7 @@
                 <h1>Partner with <span>Florry</span></h1>
                 <p>Grow your floral business with our global reach and lightning-fast delivery network.</p>
             </div>
-            <div class="auth-footer-info" style="font-size: 0.8rem; opacity: 0.6;">
+            <div class="auth-footer-info">
                 &copy; 2024 Florry Partner Network. All rights reserved.
             </div>
         </div>
@@ -31,7 +31,7 @@
                 <h2>Create Store Account</h2>
                 <p class="subtitle">Join our community of elite floral artists</p>
 
-                <form onsubmit="handleAdminSignup(event)">
+                <form id="admin-signup-form">
                     <div class="input-row">
                         <div class="input-group">
                             <label>Owner Name <span class="required">*</span></label>
@@ -57,41 +57,41 @@
                     
                     <div class="input-group">
                         <label>Store Front Display <span class="required">*</span></label>
-                        <div class="drop-zone" id="shop-image-dropzone" style="height: 120px; border: 2px dashed var(--border); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer; transition: all 0.3s;">
-                            <p style="font-size: 0.85rem; color: var(--gray); font-weight: 600;">Click or drag shop photo</p>
+                        <div class="drop-zone" id="shop-image-dropzone">
+                            <p>Click or drag shop photo</p>
                         </div>
-                        <input type="file" id="shop-image-input" accept="image/*" style="display: none;">
+                        <input type="file" id="shop-image-input" class="d-none" accept="image/*">
                         <input type="hidden" id="shop-image-url">
                     </div>
 
-                    <div class="input-row" style="grid-template-columns: 1.4fr 1fr;">
+                    <div class="input-row grid-partner-id">
                         <div class="input-group">
                             <label>National ID / Aadhaar <span class="required">*</span></label>
                             <input type="text" id="aadhaar-number" placeholder="Enter ID number" required>
                         </div>
                         <div class="input-group">
                             <label>ID Document <span class="required">*</span></label>
-                            <div class="drop-zone" id="aadhaar-image-dropzone" style="height: 120px; border: 2px dashed var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer;">
+                            <div class="drop-zone" id="aadhaar-image-dropzone">
                             </div>
-                            <input type="file" id="aadhaar-image-input" accept="image/*" style="display: none;">
+                            <input type="file" id="aadhaar-image-input" class="d-none" accept="image/*">
                             <input type="hidden" id="aadhaar-image-url">
                         </div>
                     </div>
                     
-                    <div class="input-group" style="background: rgba(30, 81, 40, 0.03); padding: 25px; border-radius: 24px; border: 1px solid rgba(226, 232, 240, 0.8);">
-                         <label style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                             <span style="font-size: 1.2rem;">📍</span> Digital Store Location
+                    <div class="input-group location-capture-group">
+                         <label class="location-label">
+                             <span>📍</span> Digital Store Location
                          </label>
-                         <div class="input-row" style="margin-bottom: 15px;">
-                             <input type="text" id="latitude" placeholder="Latitude" readonly style="background: white;">
-                             <input type="text" id="longitude" placeholder="Longitude" readonly style="background: white;">
+                         <div class="input-row mb-15">
+                             <input type="text" id="latitude" placeholder="Latitude" readonly class="bg-white">
+                             <input type="text" id="longitude" placeholder="Longitude" readonly class="bg-white">
                          </div>
-                         <button type="button" onclick="getLocation()" style="width: 100%; padding: 15px; background: white; border: 2px solid var(--primary); color: var(--primary); border-radius: 14px; cursor: pointer; font-weight: 800; transition: all 0.3s; font-size: 0.9rem;">
+                         <button type="button" id="btn-get-location" class="gps-btn">
                              Capture GPS Coordinates
                          </button>
                     </div>
 
-                    <div class="input-group" style="margin-top: 25px;">
+                    <div class="input-group mt-25">
                         <label>Security Password <span class="required">*</span></label>
                         <input type="password" id="signup-password" placeholder="Min 10 characters" required>
                     </div>
@@ -123,22 +123,26 @@
             document.getElementById('shop-image-dropzone').addEventListener('imageUploaded', (e) => {
                 document.getElementById('shop-image-url').value = e.detail.url;
                 const dz = document.getElementById('shop-image-dropzone');
-                dz.style.borderColor = 'var(--primary)';
-                dz.style.background = '#f0fdf4';
-                dz.innerHTML = `<div style="color: var(--primary); font-weight: 800;">✓ Photo Ready</div>`;
+                dz.classList.add('active');
+                dz.innerHTML = `<div class="drop-zone-success">✓ Photo Ready</div>`;
             });
 
             document.getElementById('aadhaar-image-dropzone').addEventListener('imageUploaded', (e) => {
                 document.getElementById('aadhaar-image-url').value = e.detail.url;
                 const dz = document.getElementById('aadhaar-image-dropzone');
-                dz.style.borderColor = 'var(--primary)';
-                dz.style.background = '#f0fdf4';
-                dz.innerHTML = `<div style="color: var(--primary); font-weight: 800;">✓ Document Secured</div>`;
+                dz.classList.add('active');
+                dz.innerHTML = `<div class="drop-zone-success">✓ Document Secured</div>`;
             });
+
+            const locationBtn = document.getElementById('btn-get-location');
+            if (locationBtn) locationBtn.addEventListener('click', getLocation);
+
+            const signupForm = document.getElementById('admin-signup-form');
+            if (signupForm) signupForm.addEventListener('submit', handleAdminSignup);
         });
 
-        function getLocation() {
-            const btn = event.target;
+        function getLocation(e) {
+            const btn = e.target;
             const originalText = btn.textContent;
             btn.textContent = '🛰️ Syncing Coordinates...';
             
@@ -148,8 +152,7 @@
                         document.getElementById('latitude').value = pos.coords.latitude.toFixed(6);
                         document.getElementById('longitude').value = pos.coords.longitude.toFixed(6);
                         btn.textContent = '✓ GPS Synced';
-                        btn.style.background = 'var(--primary)';
-                        btn.style.color = 'white';
+                        btn.classList.add('synced');
                     },
                     (err) => {
                         alert("Could not fetch location: " + err.message);

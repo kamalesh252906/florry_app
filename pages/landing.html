@@ -14,8 +14,8 @@
     <!-- Header -->
     <header class="header">
         <div class="header-container">
-            <div class="logo" onclick="window.location.href='./landing.html'" style="cursor: pointer; display: flex; align-items: center; gap: 12px;">
-                <span class="logo-text" style="font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Florry</span>
+            <div class="logo logo-premium">
+                <span class="logo-text logo-text-premium">Florry</span>
             </div>
             
             <!-- Search -->
@@ -33,7 +33,7 @@
             </div>
             
             <div class="header-actions">
-                <button class="icon-btn" onclick="window.location.href='./cart.html'" title="Your Basket">
+                <button class="icon-btn" title="Your Basket">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -41,7 +41,7 @@
                     </svg>
                     <span class="cart-badge" id="cart-count">0</span>
                 </button>
-                <button class="icon-btn" onclick="toggleMenu()" title="Menu">☰</button>
+                <button class="icon-btn menu-toggle-btn" title="Menu">☰</button>
             </div>
         </div>
     </header>
@@ -50,7 +50,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>Explore Florry</h3>
-            <button class="close-btn" onclick="toggleMenu()">✕</button>
+            <button class="close-btn">✕</button>
         </div>
         <nav class="sidebar-nav">
             <a href="./landing.html">Home</a>
@@ -58,11 +58,11 @@
             <a href="./support.html">Support</a>
             <a href="./help.html">FAQ</a>
             <a href="./about.html">Our Story</a>
-            <hr style="margin: 10px 20px; opacity: 0.1;">
-            <a href="#" onclick="auth.logout()" style="color: #FF6B6B;">Logout</a>
+            <hr class="sidebar-divider">
+            <a href="#" class="sidebar-logout">Logout</a>
         </nav>
     </div>
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay"></div>
 
     <!-- Hero Section -->
     <section class="hero-premium">
@@ -105,22 +105,22 @@
     </section>
 
     <!-- Filter Section -->
-    <section class="filters-premium" id="filters-section" style="display:none">
+    <section class="filters-premium hidden" id="filters-section">
         <div class="container">
-            <button class="back-btn" onclick="backToShops()">← Change Boutique</button>
-            <div class="filter-group">
-                <button class="filter-btn active" onclick="filterFlowers('all')">All Blooms</button>
-                <button class="filter-btn" onclick="filterFlowers('flowers')">Fresh Flowers</button>
-                <button class="filter-btn" onclick="filterFlowers('decorations')">Decorations</button>
-                <button class="filter-btn" onclick="filterFlowers('garlands')">Garlands</button>
-                <button class="filter-btn" onclick="filterFlowers('tied_flowers')">Tied Art</button>
-                <button class="filter-btn" onclick="filterFlowers('ready_made')">Ready-made</button>
+            <button class="back-btn" id="btn-back-to-shops">← Change Boutique</button>
+            <div class="filter-group" id="filter-group">
+                <button class="filter-btn active" data-category="all">All Blooms</button>
+                <button class="filter-btn" data-category="flowers">Fresh Flowers</button>
+                <button class="filter-btn" data-category="decorations">Decorations</button>
+                <button class="filter-btn" data-category="garlands">Garlands</button>
+                <button class="filter-btn" data-category="tied_flowers">Tied Art</button>
+                <button class="filter-btn" data-category="ready_made">Ready-made</button>
             </div>
         </div>
     </section>
 
     <!-- Products Grid -->
-    <section class="products" id="main-products-section" style="display:none; padding-top: 40px;">
+    <section class="products hidden pt-40" id="main-products-section">
         <div class="container fade-in">
             <div class="section-title">
                 <h2 id="current-shop-name">The Collection</h2>

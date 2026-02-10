@@ -34,7 +34,30 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('shop-settings-image-url').value = e.detail.url;
         });
     }
+
+    // Event Listeners for Dashboard Actions
+    const navSettings = document.getElementById('nav-settings');
+    if (navSettings) navSettings.addEventListener('click', (e) => { e.preventDefault(); openShopModal(); });
+
+    const logoutBtn = document.getElementById('admin-logout-btn');
+    if (logoutBtn) logoutBtn.addEventListener('click', (e) => { e.preventDefault(); import('./auth.js').then(m => m.auth.logout()); });
+
+    const addFlowerBtn = document.getElementById('btn-add-flower');
+    if (addFlowerBtn) addFlowerBtn.addEventListener('click', () => openModal());
+
+    const closeFlowerBtn = document.getElementById('close-flower-modal');
+    if (closeFlowerBtn) closeFlowerBtn.addEventListener('click', () => closeModal());
+
+    const flowerForm = document.getElementById('flower-form');
+    if (flowerForm) flowerForm.addEventListener('submit', handleSaveFlower);
+
+    const closeShopBtn = document.getElementById('close-shop-modal');
+    if (closeShopBtn) closeShopBtn.addEventListener('click', () => closeShopModal());
+
+    const shopForm = document.getElementById('shop-form');
+    if (shopForm) shopForm.addEventListener('submit', handleSaveShopSettings);
 });
+
 
 export async function loadAdminOrders() {
     const grid = document.getElementById('admin-orders-grid');
@@ -101,21 +124,32 @@ export async function loadAdminOrders() {
                     
                     <div class="admin-actions" style="display: flex; gap: 8px;">
                         ${order.order_status === 'created' || order.order_status === 'pending' || !order.order_status ?
-                `<button class="edit-btn" style="background:#27ae60; color:white; flex: 1;" onclick="shopAcceptOrder(${order.order_id})"> Accept Order</button>` : ''
+                `<button class="edit-btn accept-btn" style="background:#27ae60; color:white; flex: 1;" data-id="${order.order_id}"> Accept Order</button>` : ''
             }
                         ${order.order_status === 'accepted' ?
-                `<button class="edit-btn" style="background:#3498db; color:white; flex: 1;" onclick="shopOutForDelivery(${order.order_id})"> Mark Out for Delivery</button>` : ''
+                `<button class="edit-btn delivery-btn" style="background:#3498db; color:white; flex: 1;" data-id="${order.order_id}"> Mark Out for Delivery</button>` : ''
             }
                         ${order.order_status === 'out_for_delivery' ?
-                `<button class="edit-btn" style="background:#f39c12; color:white; flex: 1;" onclick="shopCompleteOrder(${order.order_id})"> Mark Completed</button>` : ''
+                `<button class="edit-btn complete-btn" style="background:#f39c12; color:white; flex: 1;" data-id="${order.order_id}"> Mark Completed</button>` : ''
             }
                         ${order.order_status === 'completed' ?
-                `<button class="edit-btn" style="background:#e74c3c; color:white; flex: 1;" onclick="deleteAdminOrder(${order.order_id})"> Delete Order Record</button>` : ''
+                `<button class="edit-btn delete-order-btn" style="background:#e74c3c; color:white; flex: 1;" data-id="${order.order_id}"> Delete Order Record</button>` : ''
             }
                     </div>
                 </div>
             </div>
         `).join('');
+
+        // Event Delegation for orders
+        grid.onclick = (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const id = parseInt(btn.dataset.id);
+            if (btn.classList.contains('accept-btn')) shopAcceptOrder(id);
+            else if (btn.classList.contains('delivery-btn')) shopOutForDelivery(id);
+            else if (btn.classList.contains('complete-btn')) shopCompleteOrder(id);
+            else if (btn.classList.contains('delete-order-btn')) deleteAdminOrder(id);
+        };
 
     } catch (e) {
         console.error(e);
@@ -184,7 +218,9 @@ export async function loadAdminProducts() {
             return;
         }
 
-        grid.innerHTML = flowers.map(flower => `
+        let flowersList = flowers;
+
+        grid.innerHTML = flowers.map((flower, index) => `
             <div class="admin-card">
                 <img src="${flower.image_url || 'https://via.placeholder.com/400'}" alt="${flower.name}">
                 <div class="admin-card-body">
@@ -192,12 +228,23 @@ export async function loadAdminProducts() {
                     <p class="price">₹${flower.price}</p>
                     <p class="category" style="color: #666; font-size: 0.9em; text-transform: capitalize;">${flower.category} • ${flower.weight_grams}g</p>
                     <div class="admin-actions">
-                        <button class="edit-btn" onclick='openModal(${JSON.stringify(flower).replace(/'/g, "&#39;")})'>Edit</button>
-                        <button class="delete-btn" onclick="deleteFlower(${flower.flower_id})">Delete</button>
+                        <button class="edit-btn" data-index="${index}">Edit</button>
+                        <button class="delete-btn" data-id="${flower.flower_id}">Delete</button>
                     </div>
                 </div>
             </div>
         `).join('');
+
+        // Remove old listeners and add new one
+        grid.onclick = (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            if (btn.classList.contains('edit-btn')) {
+                openModal(flowersList[btn.dataset.index]);
+            } else if (btn.classList.contains('delete-btn')) {
+                deleteFlower(parseInt(btn.dataset.id));
+            }
+        };
     } catch (error) {
         console.error('Error loading admin products:', error);
         grid.innerHTML = '<p style="color: red">Failed to load products.</p>';

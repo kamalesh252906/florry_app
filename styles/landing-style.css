@@ -317,6 +317,29 @@ body {
     }
 }
 
+.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.delay-300 {
+    animation-delay: 0.3s;
+}
+
+.delay-500 {
+    animation-delay: 0.5s;
+}
+
+.delay-600 {
+    animation-delay: 0.6s;
+}
+
+.btn-outline-white {
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+
 .welcome-emoji {
     text-align: center;
     margin-bottom: 30px;

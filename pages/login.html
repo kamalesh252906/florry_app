@@ -69,17 +69,5 @@
     <script type="module" src="../js/api.js"></script>
     <script type="module" src="../js/auth.js"></script>
     <script type="module" src="../js/auth-ui.js"></script>
-
-    <!-- Custom Script to handle Role Selection Click for UI -->
-    <script>
-        document.querySelectorAll('.role-option').forEach(option => {
-            option.addEventListener('click', () => {
-                document.querySelectorAll('.role-option').forEach(el => el.classList.remove('active'));
-                option.classList.add('active');
-                const radio = option.querySelector('input[type="radio"]');
-                if(radio) radio.checked = true;
-            });
-        });
-    </script>
 </body>
 </html>

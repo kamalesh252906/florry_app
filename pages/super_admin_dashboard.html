@@ -8,299 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style.css">
-    <style>
-        :root {
-            --super-dark: #0f172a;
-            --super-accent: #38bdf8;
-            --super-bg: #f1f5f9;
-        }
+    <link rel="stylesheet" href="../styles/super-admin.css">
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--super-bg);
-            margin: 0;
-        }
-
-        .super-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .super-sidebar {
-            background: var(--super-dark);
-            color: white;
-            padding: 40px 25px;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .super-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 50px;
-        }
-
-        .super-nav {
-            flex: 1;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 16px 20px;
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background: rgba(255,255,255,0.1);
-            color: var(--super-accent);
-        }
-
-        /* Main Content */
-        .super-main {
-            padding: 60px;
-            overflow-y: auto;
-        }
-
-        .super-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .super-header h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: var(--super-dark);
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .stat-icon-box {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .approval-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .approval-card {
-            background: white;
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
-            transition: transform 0.3s ease;
-        }
-
-        .approval-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-        }
-
-        .card-top h3 {
-            margin: 0;
-            font-size: 1.3rem;
-            font-weight: 800;
-        }
-
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .info-group {
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-        }
-
-        .info-label {
-            color: #64748b;
-            font-weight: 600;
-            width: 80px;
-            display: inline-block;
-        }
-
-        .info-value {
-            color: var(--super-dark);
-            font-weight: 600;
-        }
-
-        .aadhaar-link-box {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 1px dashed #cbd5e1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .aadhaar-link-box:hover {
-            background: #f1f5f9;
-            border-color: var(--super-accent);
-        }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .action-btns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn-action {
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-approve {
-            background: #22c55e;
-            color: white;
-        }
-
-        .btn-approve:hover {
-            background: #16a34a;
-            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
-        }
-
-        .btn-reject {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-reject:hover {
-            background: #dc2626;
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            padding: 60px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 24px;
-            text-align: center;
-            color: #64748b;
-            border: 2px dashed #cbd5e1;
-        }
-
-        /* Responsive Fixes */
-        @media (max-width: 1024px) {
-            .super-layout {
-                grid-template-columns: 1fr;
-            }
-            .super-sidebar {
-                padding: 20px;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                position: sticky;
-                top: 0;
-                z-index: 1000;
-            }
-            .super-logo {
-                margin-bottom: 0;
-                font-size: 1.4rem;
-            }
-            .super-nav {
-                display: flex;
-                gap: 5px;
-            }
-            .nav-link {
-                margin-bottom: 0;
-                padding: 10px 15px;
-                font-size: 0.9rem;
-            }
-            .sidebar-footer {
-                display: none;
-            }
-            .super-main {
-                padding: 30px 20px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .super-sidebar {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .super-nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .approval-grid {
-                grid-template-columns: 1fr;
-            }
-            .super-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-        }
-    </style>
 </head>
 <body>
     <div class="super-layout">
@@ -316,7 +25,7 @@
             </nav>
 
             <div class="sidebar-footer">
-                <a href="#" class="nav-link" onclick="logout()" style="color: #fca5a5;">Systems Exit</a>
+                <a href="#" class="nav-link super-exit-link" id="super-logout-btn">Systems Exit</a>
             </div>
         </aside>
 
@@ -325,12 +34,12 @@
             <header class="super-header">
                 <div>
                     <h1>Central Command</h1>
-                    <p style="color: #64748b; font-weight: 500;">Monitor and manage the entire Florry ecosystem.</p>
+                    <p class="super-header-subtitle">Monitor and manage the entire Florry ecosystem.</p>
                 </div>
-                <div class="super-user" style="display: flex; align-items: center; gap: 15px; background: white; padding: 10px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.02);">
-                    <div style="text-align: right;">
-                        <div style="font-weight: 800; font-size: 0.9rem;">Kamalesh Elumalai</div>
-                        <div style="font-size: 0.75rem; color: #10b981;">Online ● Active</div>
+                <div class="super-user super-user-card">
+                    <div class="super-user-info">
+                        <div class="super-user-name">Kamalesh Elumalai</div>
+                        <div class="super-user-status">Online ● Active</div>
                     </div>
                 </div>
             </header>
@@ -338,40 +47,40 @@
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon-box" style="background: #e0f2fe; color: #0ea5e9;">
+                    <div class="stat-icon-box icon-blue">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     </div>
                     <div>
-                        <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">System Health</div>
-                        <div style="font-size: 1.5rem; font-weight: 800;">100%</div>
+                        <div class="stat-label">System Health</div>
+                        <div class="stat-value">100%</div>
                     </div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon-box" style="background: #f0fdf4; color: #22c55e;">
+                    <div class="stat-icon-box icon-green">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     </div>
                     <div>
-                        <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">Connected Nodes</div>
-                        <div id="stat-shops" style="font-size: 1.5rem; font-weight: 800;">...</div>
+                        <div class="stat-label">Connected Nodes</div>
+                        <div id="stat-shops" class="stat-value">...</div>
                     </div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon-box" style="background: #fef2f2; color: #ef4444;">
+                    <div class="stat-icon-box icon-red">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     </div>
                     <div>
-                        <div style="color: #64748b; font-size: 0.9rem; font-weight: 600;">Pending Access</div>
-                        <div id="stat-pending" style="font-size: 1.5rem; font-weight: 800;">...</div>
+                        <div class="stat-label">Pending Access</div>
+                        <div id="stat-pending" class="stat-value">...</div>
                     </div>
                 </div>
             </div>
 
             <!-- Shop Approvals -->
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
-                <h2 class="section-title" style="margin: 0;">Shop Approval Queue</h2>
-                <div style="font-size: 0.85rem; color: #64748b; font-weight: 600; padding: 5px 12px; background: white; border-radius: 20px;">
+            <div class="super-section-header">
+                <h2 class="section-title">Shop Approval Queue</h2>
+                <div class="super-section-badge">
                     Authorized Personnel Only
                 </div>
             </div>
@@ -381,9 +90,9 @@
             </div>
 
             <!-- Support Inquiries -->
-            <div style="display: flex; align-items: center; justify-content: space-between; margin: 50px 0 25px 0;">
-                <h2 class="section-title" style="margin: 0;">Support Inquiries</h2>
-                <button onclick="loadData()" style="background: none; border: none; font-weight: 800; color: var(--super-accent); cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <div class="super-section-header mt-50 mb-25">
+                <h2 class="section-title">Support Inquiries</h2>
+                <button id="super-refresh-btn" class="super-refresh-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
                     Refresh Broadcast
                 </button>
@@ -398,196 +107,6 @@
 
     <script type="module" src="../js/config.js"></script>
     <script type="module" src="../js/api.js"></script>
-    <script type="module">
-        // Simple auth check
-        if (!localStorage.getItem('florrySuperAdmin')) {
-            window.location.href = 'login.html';
-        }
-
-        function logout() {
-            localStorage.removeItem('florrySuperAdmin');
-            window.location.href = 'login.html';
-        }
-
-        async function loadData() {
-            try {
-                const [shops, supportMsgs] = await Promise.all([
-                    api.getPendingAdmins(),
-                    api.getSupportMessages()
-                ]);
-
-                renderShops(shops);
-                renderSupportMessages(supportMsgs);
-                
-                // Update small stats
-                const count = shops ? shops.length : 0;
-                document.getElementById('stat-pending').textContent = count;
-                document.getElementById('stat-shops').textContent = count; 
-
-            } catch (e) {
-                console.error(e);
-                alert("Failed to load command data");
-            }
-        }
-
-        function renderShops(shops) {
-            const container = document.getElementById('shop-approvals');
-            if (!shops || shops.length === 0) {
-                container.innerHTML = '<div class="empty-state">All shop nodes verified. No pending requests.</div>';
-                return;
-            }
-
-            container.innerHTML = shops.map(shop => `
-                <div class="approval-card">
-                    <div class="card-top">
-                        <h3 style="color: var(--super-dark);">${shop.shop_name || 'Unnamed Shop'}</h3>
-                        <span class="status-badge">${shop.status.toUpperCase()}</span>
-                    </div>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
-                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 700;">PRINCIPAL</span>
-                            <span style="font-size: 0.9rem; font-weight: 700; color: var(--super-dark);">${shop.name}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #f1f5f9;">
-                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 700;">SECURE IP</span>
-                            <span style="font-size: 0.85rem; font-weight: 700; color: var(--super-accent); font-family: monospace;">${shop.email}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 700;">COMM ID</span>
-                            <span style="font-size: 0.9rem; font-weight: 700; color: var(--super-dark);">${shop.phone || 'N/A'}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="aadhaar-link-box" onclick="window.open('${shop.aadhaar_image_url}')">
-                        <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                            <div style="background: white; padding: 8px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M15 8h2"></path><path d="M15 12h2"></path><path d="M7 16h10"></path></svg>
-                            </div>
-                            <div style="flex: 1;">
-                                <div style="font-weight: 800; font-size: 0.85rem; color: var(--super-dark);">Identity Credentials</div>
-                                <div style="font-size: 0.75rem; color: #64748b; letter-spacing: 1px;">XXXX-XXXX-${shop.aadhaar_number?.slice(-4) || 'XXXX'}</div>
-                            </div>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </div>
-                    </div>
-
-                    <div class="action-btns">
-                        <button class="btn-action btn-reject" onclick="handleAction('admin', ${shop.admin_id}, 'reject')">Deny</button>
-                        <button class="btn-action btn-approve" onclick="handleAction('admin', ${shop.admin_id}, 'approve')">Authorize</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderSupportMessages(msgs) {
-            const container = document.getElementById('support-messages');
-            if (!msgs || msgs.length === 0) {
-                container.innerHTML = '<div class="empty-state">No active support inquiries. Clean slate!</div>';
-                return;
-            }
-
-            container.innerHTML = msgs.map(msg => `
-                <div class="approval-card" style="border-left: 5px solid ${msg.status === 'open' ? 'var(--super-accent)' : '#10b981'};">
-                    <div class="card-top">
-                        <h3 style="font-size: 1.1rem; letter-spacing: -0.5px;">${msg.subject}</h3>
-                        <span class="status-badge" style="background: ${msg.status === 'open' ? '#e0f2fe' : '#f0fdf4'}; color: ${msg.status === 'open' ? '#0369a1' : '#166534'};">
-                            ${msg.status === 'open' ? 'PENDING' : 'RESOLVED'}
-                        </span>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: #f8fafc; padding: 10px 15px; border-radius: 12px;">
-                        <div style="width: 35px; height: 35px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--super-dark); box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
-                            ${msg.name.charAt(0)}
-                        </div>
-                        <div>
-                            <div style="font-weight: 700; font-size: 0.9rem; color: var(--super-dark);">${msg.name}</div>
-                            <div style="font-size: 0.75rem; color: var(--super-accent); font-weight: 600;">${msg.email}</div>
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <div style="font-size: 0.7rem; font-weight: 800; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Transmission Content</div>
-                        <p style="margin: 0; color: #334155; line-height: 1.6; font-size: 0.95rem; font-weight: 500;">${msg.message}</p>
-                    </div>
-
-                    ${msg.reply ? `
-                        <div style="margin-top: 15px; padding: 15px; background: #f0fdf4; border-radius: 14px; border: 1px solid #dcfce7; position: relative;">
-                            <div style="font-size: 0.65rem; font-weight: 900; color: #166534; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">Administrator Directive</div>
-                            <p style="margin: 0; font-size: 0.9rem; color: #064e3b; font-weight: 600; line-height: 1.5;">${msg.reply}</p>
-                        </div>
-                    ` : `
-                        <div id="reply-box-${msg.message_id}" style="margin-top: 20px;">
-                            <textarea id="reply-text-${msg.message_id}" placeholder="Enter administrator response..." style="width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 14px; font-family: inherit; font-size: 0.9rem; min-height: 100px; resize: none; margin-bottom: 12px; transition: all 0.2s;" onfocus="this.style.borderColor='var(--super-accent)'" onblur="this.style.borderColor='#f1f5f9'"></textarea>
-                            <button class="btn btn-approve" style="width: 100%; background: var(--super-dark); padding: 14px; border-radius: 12px;" onclick="submitReply(${msg.message_id})">Transmit Response</button>
-                        </div>
-                    `}
-                    
-                    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 15px;">
-                        <button style="border: none; background: #fee2e2; color: #dc2626; padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'" onclick="deleteTicket(${msg.message_id})">PURGE LOG</button>
-                        <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; font-family: monospace;">
-                            ${new Date(msg.created_at).toLocaleDateString()} | ${new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-
-        async function deleteTicket(msgId) {
-            if(!confirm("Are you sure you want to permanently delete this support ticket?")) return;
-            try {
-                await api.deleteSupportMessage(msgId);
-                alert("Ticket deleted successfully.");
-                loadData();
-            } catch (e) {
-                alert("Failed to delete: " + e.message);
-            }
-        }
-
-        async function submitReply(msgId) {
-            const text = document.getElementById(`reply-text-${msgId}`).value;
-            if(!text) return alert("Please type a response.");
-
-            try {
-                const btn = document.querySelector(`#reply-box-${msgId} .btn`);
-                btn.disabled = true;
-                btn.textContent = "Sending...";
-                
-                await api.replyToSupportMessage(msgId, text);
-                alert("Response sent successfully!");
-                loadData(); // Reload UI
-            } catch (e) {
-                alert("Failed: " + e.message);
-            }
-        }
-
-        async function handleAction(type, id, action) {
-            if(!confirm(`Proceed with ${action} for this ${type}?`)) return;
-
-            try {
-                if (type === 'admin') {
-                    if (action === 'approve') await api.approveAdmin(id);
-                    else await api.rejectAdmin(id);
-                } else {
-                    if (action === 'approve') await api.approveRider(id);
-                    else await api.rejectRider(id);
-                }
-                loadData(); // Reload
-            } catch (e) {
-                alert(e.message);
-            }
-        }
-
-        // Attach to window
-        window.logout = logout;
-        window.loadData = loadData;
-        window.deleteTicket = deleteTicket;
-        window.submitReply = submitReply;
-        window.handleAction = handleAction;
-
-        // Init
-        loadData();
-    </script>
+    <script type="module" src="../js/super-admin.js"></script>
 </body>
 </html>

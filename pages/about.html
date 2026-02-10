@@ -8,30 +8,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/about.css">
 </head>
 <body>
     <header class="header">
         <div class="header-container">
-            <div class="logo" onclick="window.location.href='./landing.html'">
-                <span class="logo-icon">🌸</span>
-                <span class="logo-text">Florry</span>
+            <div class="logo logo-premium">
+                <span class="logo-icon-premium">🌸</span>
+                <span class="logo-text logo-text-premium">Florry</span>
             </div>
             <div class="header-actions">
-                 <button class="icon-btn" onclick="window.location.href='./cart.html'">
+                 <button class="icon-btn" title="Basket">
                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <path d="M16 10a4 4 0 0 1-8 0"></path>
                     </svg>
                  </button>
-                 <button class="icon-btn" onclick="toggleMenu()">☰</button>
+                 <button class="icon-btn menu-toggle-btn">☰</button>
             </div>
         </div>
     </header>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>Menu</h3>
-            <button class="close-btn" onclick="toggleMenu()">✕</button>
+            <button class="close-btn">✕</button>
         </div>
         <nav class="sidebar-nav">
             <a href="./landing.html"> Home</a>
@@ -39,35 +40,37 @@
             <a href="./support.html"> Support</a>
             <a href="./help.html"> Help</a>
             <a href="./about.html" class="active">About Us</a>
+            <hr class="mv-10 opacity-1">
+            <a href="#" class="sidebar-logout">Logout</a>
         </nav>
     </div>
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+    <div class="overlay" id="overlay"></div>
 
-    <section class="hero" style="background: linear-gradient(rgba(30, 81, 40, 0.8), rgba(30, 81, 40, 0.9)), url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80'); background-size: cover; background-position: center;">
+    <section class="about-hero hero">
         <div class="container">
-            <h1 style="font-size: 3.5rem; margin-bottom: 20px;">Our Floral Story</h1>
-            <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto; opacity: 0.9;">Connecting you with the freshest blooms from local growers, delivered with love to your doorstep in minutes.</p>
+            <h1>Our Floral Story</h1>
+            <p>Connecting you with the freshest blooms from local growers, delivered with love to your doorstep in minutes.</p>
         </div>
     </section>
 
-    <div class="container" style="padding: 80px 20px;">
-        <div class="about-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+    <div class="container about-section">
+        <div class="about-info-grid">
             <div class="about-image">
-                <img src="https://images.unsplash.com/photo-1510385935302-7c9f230bc017?auto=format&fit=crop&q=80" alt="Team" style="width: 100%; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+                <img src="https://images.unsplash.com/photo-1510385935302-7c9f230bc017?auto=format&fit=crop&q=80" alt="Team">
             </div>
             <div class="about-text">
-                <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 25px;">Why Florry?</h2>
-                <p style="font-size: 1.1rem; line-height: 1.8; color: #555; margin-bottom: 30px;">
+                <h2>Why Florry?</h2>
+                <p>
                     Founded in 2024, Florry was born out of a simple desire: to make high-quality flowers accessible to everyone, instantly. We believe that flowers aren't just for special occasions—they're for every day. 
                 </p>
-                <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="stat-card" style="padding: 20px; background: #f8fcf9; border-radius: 20px; border: 1px solid #eefae7;">
-                        <h3 style="color: var(--primary); font-size: 2rem;">50+</h3>
-                        <p style="color: #666;">Partner Shops</p>
+                <div class="about-stats-grid">
+                    <div class="about-stat-card">
+                        <h3>50+</h3>
+                        <p>Partner Shops</p>
                     </div>
-                    <div class="stat-card" style="padding: 20px; background: #f8fcf9; border-radius: 20px; border: 1px solid #eefae7;">
-                        <h3 style="color: var(--primary); font-size: 2rem;">15m</h3>
-                        <p style="color: #666;">Avg Delivery</p>
+                    <div class="about-stat-card">
+                        <h3>15m</h3>
+                        <p>Avg Delivery</p>
                     </div>
                 </div>
             </div>
