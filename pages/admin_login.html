@@ -31,10 +31,11 @@
                 <h2>Admin Access</h2>
                 <p class="subtitle">Securely manage your shop and orders</p>
 
-                <form id="admin-login-form">
+                <form id="login-form">
+                    <input type="radio" name="role" value="admin" checked style="display:none">
                     <div class="input-group">
                         <label>Admin ID / Email Address <span class="required">*</span></label>
-                        <input type="text" id="login-email" placeholder="admin@shop.com" required>
+                        <input type="email" id="login-email" placeholder="admin@shop.com" required>
                     </div>
 
                     <div class="input-group">
@@ -57,58 +58,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/auth.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('admin-login-form');
-            if (form) {
-                form.addEventListener('submit', handleAdminLogin);
-            }
-        });
-
-        async function handleAdminLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const btn = document.getElementById('login-btn');
-            const originalText = btn.textContent;
-            
-            btn.textContent = 'Verifying Authenticity...';
-            btn.disabled = true;
-            
-            try {
-                const response = await api.loginAdmin(email, password);
-                
-                if (response.role === 'superadmin') {
-                    // Store as super admin
-                    localStorage.setItem('florrySuperAdmin', JSON.stringify(response));
-                    window.location.href = './super_admin_dashboard.html';
-                } else {
-                    // Store real admin session including token
-                    const sessionData = {
-                        ...response.admin,
-                        access_token: response.access_token
-                    };
-                    
-                    localStorage.setItem('florryAdmin', JSON.stringify(sessionData));
-                    
-                    // Also update generic user session
-                    localStorage.setItem('florryUser', JSON.stringify({
-                        ...sessionData,
-                        role: 'admin'
-                    }));
-                    
-                    window.location.href = './admin_dashboard.html';
-                }
-            } catch (error) {
-                alert('Authentication failed: ' + error.message);
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }
-        }
-    </script>
+    <script type="module" src="../js/config.js"></script>
+    <script type="module" src="../js/api.js"></script>
+    <script type="module" src="../js/auth.js"></script>
+    <script type="module" src="../js/auth-ui.js"></script>
 </body>
+
 </html>

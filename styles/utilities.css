@@ -65,9 +65,14 @@
 }
 
 /* Common Layout Utilities */
+.hidden {
+    display: none !important;
+}
+
 .d-none {
     display: none !important;
 }
+
 
 .bg-white {
     background: white !important;

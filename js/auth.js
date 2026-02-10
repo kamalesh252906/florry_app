@@ -14,9 +14,10 @@ export class AuthManager {
     // Read user data from Local Storage
     loadUser() {
         // We check for all types of users
-        const userStr = localStorage.getItem('florryUser') ||
+        const userStr = localStorage.getItem('florrySuperAdmin') ||
             localStorage.getItem('florryAdmin') ||
-            localStorage.getItem('florrySuperAdmin');
+            localStorage.getItem('florryUser');
+
 
         if (!userStr) return null;
 
@@ -60,6 +61,9 @@ export class AuthManager {
         localStorage.removeItem('florryAdmin');
         localStorage.removeItem('florrySuperAdmin');
         localStorage.removeItem('florryCart');
+        localStorage.removeItem('florryShopId');
+        localStorage.removeItem('florryShopName');
+
         this.currentUser = null;
 
         // Redirect to Home

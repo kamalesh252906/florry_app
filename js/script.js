@@ -43,21 +43,37 @@ export async function loadShops() {
 
     shopGrid.innerHTML = '<p class="loading">Locating you to find nearby shops...</p>';
 
-    // Try to get user's location
+    // Try to get user's location with a timeout
     if (navigator.geolocation) {
+        let locationFound = false;
+
+        // Set a 5-second timeout for GPS
+        const gpsTimeout = setTimeout(() => {
+            if (!locationFound) {
+                console.warn("GPS request timed out. Falling back to all shops.");
+                shopGrid.innerHTML = '<p class="loading">Location taking too long. Showing all shops...</p>';
+                fetchShops();
+            }
+        }, 5000);
+
         navigator.geolocation.getCurrentPosition(async (position) => {
+            locationFound = true;
+            clearTimeout(gpsTimeout);
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             await fetchShops(lat, lng);
         }, async (error) => {
+            locationFound = true;
+            clearTimeout(gpsTimeout);
             console.warn("Location check failed", error);
             shopGrid.innerHTML = '<p class="loading">Could not find location. Showing all shops...</p>';
             await fetchShops(); // Show all shops if location fails
-        });
+        }, { timeout: 10000 }); // Hardware timeout 10s
     } else {
         await fetchShops();
     }
 }
+
 
 // 2. Get the list of shops from the server
 async function fetchShops(lat = null, lng = null) {
