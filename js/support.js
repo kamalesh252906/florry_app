@@ -52,8 +52,9 @@ async function loadTickets() {
         const section = document.getElementById('ticket-history-section');
 
         if (tickets && tickets.length > 0 && container && section) {
-            section.style.display = 'block';
+            section.classList.remove('hidden');
             container.innerHTML = tickets.map(t => `
+
                 <div class="ticket-card">
                     <span class="status-tag ${t.status === 'open' ? 'open' : 'replied'}">
                         ${t.status}

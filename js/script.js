@@ -31,15 +31,26 @@ function hideBtnLoading(btn) {
    SHOP LOGIC (Boutiques)
 --------------------------------------------------------- */
 
+// Helper to switch views between shops and products
+function showSection(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (el) el.classList.remove('hidden');
+}
+
+function hideSection(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (el) el.classList.add('hidden');
+}
+
 // 1. Find and show shops near the user
 export async function loadShops() {
     const shopGrid = document.getElementById('shops-grid');
     if (!shopGrid) return;
 
     // Reset view to show shops list
-    document.getElementById('shops-section').style.display = 'block';
-    if (document.getElementById('filters-section')) document.getElementById('filters-section').style.display = 'none';
-    if (document.getElementById('main-products-section')) document.getElementById('main-products-section').style.display = 'none';
+    showSection('shops-section');
+    hideSection('filters-section');
+    hideSection('main-products-section');
 
     shopGrid.innerHTML = '<p class="loading">Locating you to find nearby shops...</p>';
 
@@ -73,6 +84,7 @@ export async function loadShops() {
         await fetchShops();
     }
 }
+
 
 
 // 2. Get the list of shops from the server
@@ -160,9 +172,10 @@ export function selectShop(cardElement, id, name) {
     if (shopHeading) shopHeading.textContent = (name || 'Shop') + "'s Collection";
 
     // Switch Views
-    document.getElementById('shops-section').style.display = 'none';
-    if (document.getElementById('filters-section')) document.getElementById('filters-section').style.display = 'block';
-    if (document.getElementById('main-products-section')) document.getElementById('main-products-section').style.display = 'block';
+    hideSection('shops-section');
+    showSection('filters-section');
+    showSection('main-products-section');
+
 
     // Load flowers for this shop
     loadProducts('all');

@@ -18,13 +18,14 @@ export async function loadOrders() {
         const myOrders = await api.getOrders();
 
         if (!myOrders || myOrders.length === 0) {
-            list.style.display = 'none';
-            if (noOrders) noOrders.style.display = 'block';
+            if (list) list.classList.add('hidden');
+            if (noOrders) noOrders.classList.remove('hidden');
             return;
         }
 
-        if (noOrders) noOrders.style.display = 'none';
-        list.style.display = 'block';
+        if (noOrders) noOrders.classList.add('hidden');
+        if (list) list.classList.remove('hidden');
+
 
         // Sort by date desc
         myOrders.sort((a, b) => new Date(b.ordered_at) - new Date(a.ordered_at));
