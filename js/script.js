@@ -271,6 +271,10 @@ export function filterFlowers(category, btnElement) {
 
 export async function addToCart(btnElement, flowerId, flowerName, price) {
     // Show spinner on button
+    if (!flowerId) {
+        console.error("No flower ID provided");
+        return;
+    }
     showBtnLoading(btnElement);
 
     try {
@@ -395,12 +399,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         grid.innerHTML = filtered.map(flower => `
                             <!-- Same card structure as loadProducts -->
                             <div class="product-card fade-in">
-                                <img src="${flower.image_url || 'https://via.placeholder.com/150'}" alt="${flower.name}" class="product-image">
+                                <img src="${flower.image_url || 'https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80'}" alt="${flower.name}" class="product-image">
                                 <div class="product-info">
                                     <h3 class="product-name">${flower.name}</h3>
                                     <div class="product-footer">
                                         <span class="product-price">₹${flower.price}</span>
-                                        <button class="add-to-cart-btn" onclick="addToCart(this, ${flower.flower_id}, '${flower.name}', ${flower.price})">
+                                        <button class="add-to-cart-btn" 
+                                                data-id="${flower.flower_id}" 
+                                                data-name="${flower.name}" 
+                                                data-price="${flower.price}">
                                             Add to Cart
                                         </button>
                                     </div>
@@ -424,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (filtered.length > 0) {
                         grid.innerHTML = filtered.map(shop => `
-                           <div class="product-card shop-card fade-in" onclick="selectShop(this, ${shop.admin_id}, '${shop.shop_name}')">
+                           <div class="product-card shop-card fade-in" data-id="${shop.admin_id}" data-name="${shop.shop_name}">
                                 <div class="product-info">
                                      <h3>${shop.shop_name}</h3>
                                      <button class="visit-btn">Visit Boutique</button>

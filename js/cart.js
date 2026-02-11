@@ -163,7 +163,7 @@ export async function updateQuantity(id, newQuantity) {
             // The loading logic passes appropriate ID.
             // But wait, getCart returns items with cart_id. local returns items with flower_id.
             // Let's check finding logic.
-            const item = cart.find(i => i.flower_id === id || i.cart_id === id);
+            const item = cart.find(i => i.flower_id == id || i.cart_id == id);
 
             if (item) {
                 item.quantity = newQuantity;
@@ -187,7 +187,7 @@ export async function removeFromCart(id) {
         } else {
             let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
             // Keep items that do NOT match the ID
-            cart = cart.filter(item => item.flower_id !== id && item.cart_id !== id);
+            cart = cart.filter(item => item.flower_id != id && item.cart_id != id);
             localStorage.setItem('florryCart', JSON.stringify(cart));
         }
         loadCartItems();
