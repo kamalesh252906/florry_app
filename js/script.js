@@ -278,23 +278,27 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
     showBtnLoading(btnElement);
 
     try {
-        if (auth.isLoggedIn()) {
-            const userId = auth.getUserId();
+        // Only use API if we have a genuine CUSTOMER session
+        const userData = JSON.parse(localStorage.getItem('florryUser'));
+
+        if (userData && userData.access_token) {
+            const userId = userData.user_id || userData.id;
             if (userId) {
                 // Add to server cart
                 await api.addToCart({
-                    user_id: userId,
-                    flower_id: flowerId,
+                    user_id: parseInt(userId),
+                    flower_id: parseInt(flowerId),
                     quantity: 1
                 });
-                alert(`${flowerName} added to cart!`);
+                alert(`✓ ${flowerName} added to your basket!`);
             } else {
                 auth.logout();
             }
         } else {
-            // Add to local storage cart
+            // Add to local storage cart for guests
             let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
-            const existingItem = cart.find(item => item.flower_id === flowerId);
+            // Use loose equality for comparison to handle string/number IDs
+            const existingItem = cart.find(item => item.flower_id == flowerId);
 
             if (existingItem) {
                 existingItem.quantity += 1;
@@ -308,7 +312,7 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
             }
 
             localStorage.setItem('florryCart', JSON.stringify(cart));
-            alert(`${flowerName} added to cart!`);
+            alert(`✓ ${flowerName} added to your guest basket!`);
         }
 
         // Update badge
@@ -316,7 +320,7 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
 
     } catch (error) {
         console.error('Error adding to cart:', error);
-        alert('Failed to add to cart. Please try again.');
+        alert('Failed to add to cart: ' + error.message);
     } finally {
         // Stop spinner
         hideBtnLoading(btnElement);
