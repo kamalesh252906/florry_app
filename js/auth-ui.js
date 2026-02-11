@@ -36,24 +36,31 @@ async function handleUnifiedLogin(event) {
             alert('✓ Welcome back!');
             window.location.href = './landing.html';
 
-        } else if (role === 'admin') {
-            response = await api.loginAdmin(email, password);
-            auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
-            alert('✓ Shop Partner Login Successful');
-            window.location.href = './admin_dashboard.html';
+        } else {
+            // Handle both Admin and Super Admin tags
+            if (role === 'super_admin') {
+                response = await api.superAdminLogin(email, password);
+            } else {
+                response = await api.loginAdmin(email, password);
+            }
 
-        } else if (role === 'super_admin') {
-            response = await api.superAdminLogin(email, password);
-            // Backend returns {message, role, access_token}. 
-            const superAdminData = {
-                id: 'superadmin',
-                email: email,
-                role: 'superadmin',
-                access_token: response.access_token
-            };
-            auth.saveUser(superAdminData, 'super_admin');
-            alert('✓ Super Admin Access Granted');
-            window.location.href = './super_admin_dashboard.html';
+            // Check what the server actually returned (Super Admin can log in via Admin route too)
+            if (response.role === 'superadmin') {
+                const superAdminData = {
+                    id: 'superadmin',
+                    email: email,
+                    role: 'superadmin',
+                    access_token: response.access_token
+                };
+                auth.saveUser(superAdminData, 'super_admin');
+                alert('✓ Super Admin Access Granted');
+                window.location.href = './super_admin_dashboard.html';
+            } else {
+                // Regular Shop Admin
+                auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
+                alert('✓ Shop Partner Login Successful');
+                window.location.href = './admin_dashboard.html';
+            }
         }
 
     } catch (error) {

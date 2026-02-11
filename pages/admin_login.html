@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/auth-style.css">
+    <link rel="stylesheet" href="../styles/auth.css">
 </head>
 <body>
     <div class="auth-container">
@@ -32,16 +33,7 @@
                 <p class="subtitle">Securely manage your shop and orders</p>
 
                 <form id="login-form">
-                    <div class="role-selector" style="margin-bottom: 20px; display: flex; gap: 10px;">
-                        <label class="role-option active" style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer;">
-                            <input type="radio" name="role" value="admin" checked style="display: none;">
-                            Shop Admin
-                        </label>
-                        <label class="role-option" style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; text-align: center; cursor: pointer;">
-                            <input type="radio" name="role" value="super_admin" style="display: none;">
-                            Super Admin
-                        </label>
-                    </div>
+                    <input type="radio" name="role" value="admin" checked style="display:none">
                     <div class="input-group">
                         <label>Admin ID / Email Address <span class="required">*</span></label>
                         <input type="email" id="login-email" placeholder="admin@shop.com" required>
@@ -60,7 +52,7 @@
                 </form>
 
                 <div class="switch-auth">
-                    <p>Want to partner with us? <a href="./admin_signup.html">Request Partnership Access</a></p>
+                    <p>Want to partner with us? <a href="./signup.html">Request Partnership Access</a></p>
                 </div>
             </div>
         </div>
