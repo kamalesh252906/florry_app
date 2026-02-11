@@ -130,7 +130,7 @@ class OrderItemOut(BaseModel):
         from_attributes = True
 
 class OrderCreate(BaseModel):
-    user_id: int
+    user_id: Optional[int] = None
     admin_id: Optional[int] = None
     payment_method: Optional[str] = None
     order_status: Optional[str] = None
@@ -177,7 +177,7 @@ class ReportOut(BaseModel):
         from_attributes = True
 
 class CartCreate(BaseModel):
-    user_id: int
+    user_id: Optional[int] = None
     flower_id: int
     quantity: int
 

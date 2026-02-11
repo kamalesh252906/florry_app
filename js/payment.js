@@ -139,8 +139,13 @@ export async function placeOrder() {
 
         const adminId = parseInt(localStorage.getItem('florryShopId')) || null;
 
+        // Sanitize user_id: if it's a string like "superadmin", send null so Pydantic doesn't crash.
+        // The backend will use the logged-in user from the token anyway.
+        let userId = auth.getUserId();
+        if (isNaN(userId)) userId = null;
+
         const orderData = {
-            user_id: auth.getUserId(), // Frontend still needs this for JSON structure, though backend will verify token
+            user_id: userId,
             admin_id: adminId,
             payment_method: paymentMethod === 'cod' ? 'Cash on Delivery' : 'Pay Later',
             order_status: 'created',
@@ -161,7 +166,11 @@ export async function placeOrder() {
 
     } catch (error) {
         console.error('Error placing order:', error);
-        alert('Failed to place order: ' + error.message);
+        let msg = error.message;
+        if (msg.includes('Not authenticated') || msg.includes('Valid user session required')) {
+            msg = "Only Customers can place orders. Please log in as a Customer to continue.";
+        }
+        alert('Failed to place order: ' + msg);
     }
 }
 
