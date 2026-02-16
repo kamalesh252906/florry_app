@@ -160,6 +160,13 @@ function selectRole(event, role) {
         const radio = event.currentTarget.querySelector('input');
         if (radio) radio.checked = true;
 
+        // Update Forgot Password link if it exists
+        const forgotLink = document.getElementById('forgot-password-link');
+        if (forgotLink) {
+            forgotLink.href = `./forgot_password.html?type=${role === 'admin' ? 'admin' : 'customer'}`;
+            forgotLink.textContent = 'Forgot Password?';
+        }
+
         // If signup page, toggle fields
         const shopFields = document.getElementById('shop-fields');
         if (shopFields) {
