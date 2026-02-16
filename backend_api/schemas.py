@@ -11,9 +11,9 @@ class UserCreate(BaseModel):
     address: Optional[str] = None
 
 class UserUpdate(BaseModel):
-    name: Optional[str]
-    phone: Optional[str]
-    address: Optional[str]
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
 
 class UserOut(BaseModel):
     user_id: int
@@ -47,15 +47,15 @@ class AdminCreate(BaseModel):
     longitude: Optional[Decimal] = None
 
 class AdminUpdate(BaseModel):
-    name: Optional[str]
-    phone: Optional[str]
-    shop_name: Optional[str]
-    shop_image_url: Optional[str]
-    aadhaar_number: Optional[str]
-    aadhaar_image_url: Optional[str]
-    status: Optional[str]
-    latitude: Optional[Decimal]
-    longitude: Optional[Decimal]
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    shop_name: Optional[str] = None
+    shop_image_url: Optional[str] = None
+    aadhaar_number: Optional[str] = None
+    aadhaar_image_url: Optional[str] = None
+    status: Optional[str] = None
+    latitude: Optional[Decimal] = None
+    longitude: Optional[Decimal] = None
 
 class AdminOut(BaseModel):
     admin_id: int
@@ -89,13 +89,13 @@ class FlowerCreate(BaseModel):
     weight_grams: Optional[int] = 0
 
 class FlowerUpdate(BaseModel):
-    name: Optional[str]
-    description: Optional[str]
-    price: Optional[Decimal]
-    image_url: Optional[str]
-    category: Optional[str]
-    stock_quantity: Optional[int]
-    weight_grams: Optional[int]
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[Decimal] = None
+    image_url: Optional[str] = None
+    category: Optional[str] = None
+    stock_quantity: Optional[int] = None
+    weight_grams: Optional[int] = None
 
 class FlowerOut(BaseModel):
     flower_id: int
@@ -139,9 +139,9 @@ class OrderCreate(BaseModel):
     items: List[OrderItemCreate] = []
 
 class OrderUpdate(BaseModel):
-    order_status: Optional[str]
-    delivery_time: Optional[datetime]
-    delivery_address: Optional[str]
+    order_status: Optional[str] = None
+    delivery_time: Optional[datetime] = None
+    delivery_address: Optional[str] = None
 
 class OrderOut(BaseModel):
     order_id: int

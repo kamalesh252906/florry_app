@@ -393,15 +393,22 @@ export async function handleSaveShopSettings(event) {
         const shopImage = document.getElementById('shop-settings-image-url').value;
 
         const updateData = {
+            name: admin.name || admin.shop_name, // Include owner name to satisfy backend validation
             shop_name: shopName,
             shop_image_url: shopImage
         };
 
         const updated = await api.updateAdmin(admin.admin_id, updateData);
-        localStorage.setItem('florryAdmin', JSON.stringify(updated));
+
+        // Update local storage with new details
+        const newAdminData = { ...admin, ...updated };
+        localStorage.setItem('florryAdmin', JSON.stringify(newAdminData));
 
         alert("Shop settings updated successfully!");
         closeShopModal();
+
+        // Refresh page or UI to show new data
+        location.reload();
     } catch (e) {
         alert("Failed to update: " + e.message);
     } finally {
