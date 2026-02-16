@@ -24,7 +24,7 @@
             document.body.insertAdjacentHTML('afterbegin', loaderHTML);
             startProgress();
         } else {
-            setTimeout(injectLoader, 10);
+            setTimeout(injectLoader, 10);x
         }
     };
 
