@@ -14,7 +14,6 @@
                 <div class="loader-text">Florry</div>
             </div>
         </div>
-        <div class="loader-progress" id="loader-progress"></div>
     `;
 
     // Inject styles if manually needed (though we'll link them in HTML)
@@ -22,46 +21,21 @@
     const injectLoader = () => {
         if (document.body) {
             document.body.insertAdjacentHTML('afterbegin', loaderHTML);
-            startProgress();
         } else {
             setTimeout(injectLoader, 10);
         }
     };
 
-    let progressInterval;
     const startProgress = () => {
-        const progressBar = document.getElementById('loader-progress');
-        if (!progressBar) return;
-
-        let progress = 0;
-        progressBar.style.width = '0%';
-        progressBar.style.opacity = '1';
-
-        clearInterval(progressInterval);
-        progressInterval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress > 95) {
-                progress = 95;
-                clearInterval(progressInterval);
-            }
-            if (progressBar) progressBar.style.width = progress + '%';
-        }, 150);
+        // Progress bar removed
     };
 
     const finishProgress = () => {
-        const progressBar = document.getElementById('loader-progress');
         const loader = document.getElementById('page-loader');
-
-        clearInterval(progressInterval);
-        if (progressBar) {
-            progressBar.style.width = '100%';
-
+        if (loader) {
             setTimeout(() => {
-                if (loader) loader.classList.add('hide');
-                if (progressBar) progressBar.classList.add('fade');
+                loader.classList.add('hide');
             }, 300);
-        } else if (loader) {
-            loader.classList.add('hide');
         }
     };
 
@@ -74,15 +48,8 @@
     // Show on navigation away
     window.addEventListener('beforeunload', () => {
         const loader = document.getElementById('page-loader');
-        const progressBar = document.getElementById('loader-progress');
-
         if (loader) {
             loader.classList.remove('hide');
-        }
-        if (progressBar) {
-            progressBar.classList.remove('fade');
-            progressBar.style.width = '0%';
-            progressBar.style.opacity = '1';
         }
     });
 
