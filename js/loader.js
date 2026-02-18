@@ -42,8 +42,13 @@
     // Initial injection
     injectLoader();
 
-    // Hide on load
+    // Hide on load and when restored from bfcache
     window.addEventListener('load', finishProgress);
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            finishProgress();
+        }
+    });
 
     // Show on navigation away
     window.addEventListener('beforeunload', () => {
