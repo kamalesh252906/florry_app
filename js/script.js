@@ -290,7 +290,7 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
                     flower_id: parseInt(flowerId),
                     quantity: 1
                 });
-                alert(`✓ ${flowerName} added to your basket!`);
+                florryNotify.success(`✓ ${flowerName} added to your basket!`);
             } else {
                 auth.logout();
             }
@@ -312,7 +312,7 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
             }
 
             localStorage.setItem('florryCart', JSON.stringify(cart));
-            alert(`✓ ${flowerName} added to your guest basket!`);
+            florryNotify.success(`✓ ${flowerName} added to your guest basket!`);
         }
 
         // Update badge
@@ -320,7 +320,7 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
 
     } catch (error) {
         console.error('Error adding to cart:', error);
-        alert('Failed to add to cart: ' + error.message);
+        florryNotify.error('Failed to add to cart: ' + error.message);
     } finally {
         // Stop spinner
         hideBtnLoading(btnElement);

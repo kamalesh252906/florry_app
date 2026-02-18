@@ -163,7 +163,7 @@ export async function shopAcceptOrder(orderId) {
         await api.shopAcceptOrder(orderId);
         loadAdminOrders();
     } catch (e) {
-        alert(e.message);
+        florryNotify.error(e.message);
     }
 }
 
@@ -173,7 +173,7 @@ export async function shopOutForDelivery(orderId) {
         await api.outForDelivery(orderId);
         loadAdminOrders();
     } catch (e) {
-        alert(e.message);
+        florryNotify.error(e.message);
     }
 }
 
@@ -183,7 +183,7 @@ export async function shopCompleteOrder(orderId) {
         await api.completeOrder(orderId);
         loadAdminOrders();
     } catch (e) {
-        alert(e.message);
+        florryNotify.error(e.message);
     }
 }
 
@@ -193,7 +193,7 @@ export async function deleteAdminOrder(orderId) {
         await api.deleteOrder(orderId);
         loadAdminOrders();
     } catch (e) {
-        alert("Failed to delete order: " + e.message);
+        florryNotify.error("Failed to delete order: " + e.message);
     }
 }
 
@@ -292,7 +292,7 @@ export async function handleSaveFlower(event) {
 
     const admin = JSON.parse(localStorage.getItem('florryAdmin'));
     if (!admin || !admin.admin_id) {
-        alert('Please login first');
+        florryNotify.warning('Please login first');
         return;
     }
 
@@ -300,7 +300,7 @@ export async function handleSaveFlower(event) {
     const imageUrl = document.getElementById('flower-image-url').value;
 
     if (!imageUrl) {
-        alert('Please upload a flower image');
+        florryNotify.warning('Please upload a flower image');
         return;
     }
 
@@ -323,16 +323,16 @@ export async function handleSaveFlower(event) {
     try {
         if (id) {
             await api.updateFlower(parseInt(id), flowerData);
-            alert('Flower updated successfully!');
+            florryNotify.success('Flower updated successfully!');
         } else {
             await api.createFlower(flowerData);
-            alert('Flower created successfully!');
+            florryNotify.success('Flower created successfully!');
         }
         closeModal();
         loadAdminProducts();
     } catch (error) {
         console.error('Save error:', error);
-        alert('Failed to save flower: ' + error.message);
+        florryNotify.error('Failed to save flower: ' + error.message);
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;
@@ -347,7 +347,7 @@ export async function deleteFlower(id) {
         loadAdminProducts(); // Refresh list
     } catch (error) {
         console.error('Delete error:', error);
-        alert('Failed to delete flower: ' + error.message);
+        florryNotify.error('Failed to delete flower: ' + error.message);
     }
 }
 
@@ -355,7 +355,7 @@ export async function openShopModal() {
     const modal = document.getElementById('shop-modal');
     const admin = JSON.parse(localStorage.getItem('florryAdmin'));
     if (!admin) {
-        alert("Please login first");
+        florryNotify.warning("Please login first");
         return;
     }
 
@@ -404,13 +404,13 @@ export async function handleSaveShopSettings(event) {
         const newAdminData = { ...admin, ...updated };
         localStorage.setItem('florryAdmin', JSON.stringify(newAdminData));
 
-        alert("Shop settings updated successfully!");
+        florryNotify.success("Shop settings updated successfully!");
         closeShopModal();
 
         // Refresh page or UI to show new data
         location.reload();
     } catch (e) {
-        alert("Failed to update: " + e.message);
+        florryNotify.error("Failed to update: " + e.message);
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;

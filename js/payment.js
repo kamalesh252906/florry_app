@@ -21,7 +21,7 @@ async function loadOrderSummary() {
         }
 
         if (cartItems.length === 0) {
-            alert('Your cart is empty!');
+            florryNotify.warning('Your cart is empty!');
             window.location.href = './cart.html';
             return;
         }
@@ -52,7 +52,7 @@ async function loadOrderSummary() {
 
 export function detectLocation() {
     if (!navigator.geolocation) {
-        alert('Geolocation is not supported by your browser.');
+        florryNotify.error('Geolocation is not supported by your browser.');
         return;
     }
 
@@ -84,7 +84,7 @@ export function detectLocation() {
         } catch (error) {
             console.error('Geocoding error:', error);
             document.getElementById('delivery-address').value = `Lat: ${latitude}, Long: ${longitude}`;
-            alert('Could not fetch address text, but coordinates captured.');
+            florryNotify.info('Could not fetch address text, but coordinates captured.');
             btn.textContent = '📍 Coords Captured';
         } finally {
             setTimeout(() => {
@@ -93,7 +93,7 @@ export function detectLocation() {
             }, 2000);
         }
     }, (error) => {
-        alert('Error getting location: ' + error.message);
+        florryNotify.error('Error getting location: ' + error.message);
         btn.textContent = originalText;
         btn.disabled = false;
     });
@@ -117,7 +117,7 @@ export async function placeOrder() {
     const pincode = pincodeField.value.trim();
 
     if (!name || !phone || !address || !city || !pincode) {
-        alert('Please fill in all delivery details');
+        florryNotify.warning('Please fill in all delivery details');
         return;
     }
 
@@ -128,7 +128,7 @@ export async function placeOrder() {
         const cartItems = await api.getCart();
 
         if (cartItems.length === 0) {
-            alert('Your cart is empty!');
+            florryNotify.warning('Your cart is empty!');
             return;
         }
 
@@ -161,7 +161,7 @@ export async function placeOrder() {
             await api.deleteCartItem(item.cart_id);
         }
 
-        alert(`Order placed successfully! ID: ${response.order_id}`);
+        florryNotify.success(`Order placed successfully! ID: ${response.order_id}`);
         window.location.href = './orders.html';
 
     } catch (error) {
@@ -170,7 +170,7 @@ export async function placeOrder() {
         if (msg.includes('Not authenticated') || msg.includes('Valid user session required')) {
             msg = "Only Customers can place orders. Please log in as a Customer to continue.";
         }
-        alert('Failed to place order: ' + msg);
+        florryNotify.error('Failed to place order: ' + msg);
     }
 }
 

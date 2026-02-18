@@ -78,13 +78,13 @@ export default class ImageUploader {
 
         // 1. Validate file type (must be image)
         if (!file.type.startsWith('image/')) {
-            alert('Please upload a valid image file (JPG, PNG)');
+            florryNotify.warning('Please upload a valid image file (JPG, PNG)');
             return;
         }
 
         // 2. Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert('Image size should be less than 5MB');
+            florryNotify.warning('Image size should be less than 5MB');
             return;
         }
 
@@ -114,7 +114,7 @@ export default class ImageUploader {
 
         } catch (error) {
             console.error('Processing error:', error);
-            alert('Failed to process image. Please try again.');
+            florryNotify.error('Failed to process image. Please try again.');
             this.resetDropZone();
         }
     }

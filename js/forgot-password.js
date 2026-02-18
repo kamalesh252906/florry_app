@@ -55,7 +55,7 @@ async function handleForgotPassword(event) {
         document.getElementById('form-subtitle').classList.add('hidden');
 
     } catch (error) {
-        alert('Error: ' + error.message);
+        florryNotify.error('Error: ' + error.message);
         btn.disabled = false;
         btn.textContent = 'Save New Password';
     }

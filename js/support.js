@@ -31,11 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
 
                 await api.sendSupportMessage(data);
-                alert('Success! Your inquiry has been secured. We will notify you once a representative replies.');
+                florryNotify.success('Success! Your inquiry has been secured. We will notify you once a representative replies.');
                 e.target.reset();
                 if (supUser) loadTickets();
             } catch (err) {
-                alert('Secure Sending Failed: ' + err.message);
+                florryNotify.error('Secure Sending Failed: ' + err.message);
             } finally {
                 btn.disabled = false;
                 btn.textContent = originalText;

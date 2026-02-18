@@ -24,7 +24,7 @@
             document.body.insertAdjacentHTML('afterbegin', loaderHTML);
             startProgress();
         } else {
-            setTimeout(injectLoader, 10);x
+            setTimeout(injectLoader, 10);
         }
     };
 
@@ -114,4 +114,62 @@
             startProgress();
         }
     });
+
+    // --- Toast Notifications ---
+    const notifications = {
+        show: (message, type = 'success', duration = 4000) => {
+            let container = document.getElementById('notification-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'notification-container';
+                container.className = 'notification-container';
+                document.body.appendChild(container);
+            }
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            let icon = '🔔';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            if (type === 'info') icon = 'ℹ️';
+
+            notification.innerHTML = `
+                <div class="notification-icon">${icon}</div>
+                <div class="notification-message">${message}</div>
+                <div class="notification-close">✕</div>
+            `;
+
+            container.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => notification.classList.add('show'), 10);
+
+            // Auto remove
+            const timer = setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 400);
+            }, duration);
+
+            // Manual close
+            const closeBtn = notification.querySelector('.notification-close');
+            if (closeBtn) {
+                closeBtn.onclick = () => {
+                    clearTimeout(timer);
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 400);
+                };
+            }
+        },
+        success: (msg) => notifications.show(msg, 'success'),
+        error: (msg) => notifications.show(msg, 'error'),
+        info: (msg) => notifications.show(msg, 'info'),
+        warning: (msg) => notifications.show(msg, 'warning')
+    };
+
+    // Expose to window
+    window.showNotification = notifications.show;
+    window.florryNotify = notifications;
 })();
+

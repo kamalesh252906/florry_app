@@ -27,7 +27,7 @@ async function loadData() {
 
     } catch (e) {
         console.error(e);
-        alert("Failed to load command data");
+        florryNotify.error("Failed to load command data");
     }
 }
 
@@ -147,16 +147,16 @@ async function deleteTicket(msgId) {
     if (!confirm("Are you sure you want to permanently delete this support ticket?")) return;
     try {
         await api.deleteSupportMessage(msgId);
-        alert("Ticket deleted successfully.");
+        florryNotify.success("Ticket deleted successfully.");
         loadData();
     } catch (e) {
-        alert("Failed to delete: " + e.message);
+        florryNotify.error("Failed to delete: " + e.message);
     }
 }
 
 async function submitReply(msgId) {
     const text = document.getElementById(`reply-text-${msgId}`).value;
-    if (!text) return alert("Please type a response.");
+    if (!text) return florryNotify.warning("Please type a response.");
 
     try {
         const btn = document.querySelector(`#reply-box-${msgId} .btn`);
@@ -164,10 +164,10 @@ async function submitReply(msgId) {
         btn.textContent = "Sending...";
 
         await api.replyToSupportMessage(msgId, text);
-        alert("Response sent successfully!");
+        florryNotify.success("Response sent successfully!");
         loadData(); // Reload UI
     } catch (e) {
-        alert("Failed: " + e.message);
+        florryNotify.error("Failed: " + e.message);
     }
 }
 
@@ -184,7 +184,7 @@ async function handleAction(type, id, action) {
         }
         loadData(); // Reload
     } catch (e) {
-        alert(e.message);
+        florryNotify.error(e.message);
     }
 }
 

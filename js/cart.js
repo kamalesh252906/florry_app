@@ -173,7 +173,7 @@ export async function updateQuantity(id, newQuantity) {
         // Reload the list to show changes
         loadCartItems();
     } catch (error) {
-        alert('Could not update quantity. Please try again.');
+        florryNotify.error('Could not update quantity. Please try again.');
     }
 }
 
@@ -192,7 +192,7 @@ export async function removeFromCart(id) {
         }
         loadCartItems();
     } catch (error) {
-        alert('Could not remove item. Please try again.');
+        florryNotify.error('Could not remove item. Please try again.');
     }
 }
 

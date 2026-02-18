@@ -92,3 +92,109 @@
     opacity: 0;
     transition: opacity 0.5s ease;
 }
+
+/* Toast Notifications */
+.notification-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    max-width: 400px;
+    width: calc(100% - 48px);
+}
+
+.notification {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #1a1a1a;
+    padding: 18px 24px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transform: translateX(120%);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 6px solid #1e5128;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left-color: #4e944f;
+}
+
+.notification.error {
+    border-left-color: #f43f5e;
+}
+
+.notification.info {
+    border-left-color: #0ea5e9;
+}
+
+.notification.warning {
+    border-left-color: #f59e0b;
+}
+
+.notification-icon {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: iconBounce 2s infinite;
+}
+
+@keyframes iconBounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+.notification-message {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.notification-close {
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.2s;
+    font-size: 20px;
+    padding: 4px;
+    color: #000;
+}
+
+.notification-close:hover {
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .notification-container {
+        top: 20px;
+        right: 20px;
+        left: 20px;
+        width: auto;
+    }
+
+    .notification {
+        min-width: unset;
+    }
+}

@@ -33,7 +33,7 @@ async function handleUnifiedLogin(event) {
             response = await api.loginUser(email, password);
             auth.saveUser({ ...response.user, access_token: response.access_token }, 'user');
             await auth.mergeCart();
-            alert('✓ Welcome back!');
+            florryNotify.success('✓ Welcome back!');
             window.location.href = './landing.html';
 
         } else {
@@ -53,18 +53,18 @@ async function handleUnifiedLogin(event) {
                     access_token: response.access_token
                 };
                 auth.saveUser(superAdminData, 'super_admin');
-                alert('✓ Super Admin Access Granted');
+                florryNotify.success('✓ Super Admin Access Granted');
                 window.location.href = './super_admin_dashboard.html';
             } else {
                 // Regular Shop Admin
                 auth.saveUser({ ...response.admin, access_token: response.access_token }, 'admin');
-                alert('✓ Shop Partner Login Successful');
+                florryNotify.success('✓ Shop Partner Login Successful');
                 window.location.href = './admin_dashboard.html';
             }
         }
 
     } catch (error) {
-        alert('Login failed: ' + error.message);
+        florryNotify.error('Login failed: ' + error.message);
         btn.textContent = originalText;
         btn.disabled = false;
         btn.classList.remove('btn-loading');
@@ -100,7 +100,7 @@ async function handleUnifiedSignup(event) {
                 password: password
             });
 
-            alert('✓ Account created! Please login.');
+            florryNotify.success('✓ Account created! Please login.');
             window.location.href = './login.html';
 
         } else if (role === 'admin') {
@@ -137,12 +137,12 @@ async function handleUnifiedSignup(event) {
                 longitude: parseFloat(lng)
             });
 
-            alert('✓ Partnership request submitted! Pending approval.');
+            florryNotify.success('✓ Partnership request submitted! Pending approval.');
             window.location.href = './login.html';
         }
 
     } catch (error) {
-        alert('Signup failed: ' + error.message);
+        florryNotify.error('Signup failed: ' + error.message);
         btn.textContent = originalText;
         btn.disabled = false;
         btn.classList.remove('btn-loading');
@@ -197,13 +197,13 @@ function getLocation(event) {
                 btn.textContent = '✓ Synced';
             },
             (err) => {
-                alert("Could not fetch location: " + err.message);
+                florryNotify.error("Could not fetch location: " + err.message);
                 btn.textContent = originalText;
             },
             { enableHighAccuracy: true }
         );
     } else {
-        alert("Geolocation is not supported.");
+        florryNotify.warning("Geolocation is not supported.");
         btn.textContent = originalText;
     }
 }
