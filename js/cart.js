@@ -179,7 +179,8 @@ export async function updateQuantity(id, newQuantity) {
 
 // Remove an item entirely
 export async function removeFromCart(id) {
-    if (!confirm("Are you sure you want to remove this item?")) return;
+    const confirmed = await florryNotify.confirm("Are you sure you want to remove this item?", "Remove Item");
+    if (!confirmed) return;
 
     try {
         if (auth.isLoggedIn()) {

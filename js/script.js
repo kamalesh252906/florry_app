@@ -270,6 +270,10 @@ export function filterFlowers(category, btnElement) {
 --------------------------------------------------------- */
 
 export async function addToCart(btnElement, flowerId, flowerName, price) {
+    // 1. Confirm with user
+    const confirmed = await florryNotify.confirm(`Do you want to add ${flowerName} to your basket?`, 'Add to Cart?');
+    if (!confirmed) return;
+
     // Show spinner on button
     if (!flowerId) {
         console.error("No flower ID provided");

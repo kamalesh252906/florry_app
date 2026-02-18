@@ -165,7 +165,45 @@
         success: (msg) => notifications.show(msg, 'success'),
         error: (msg) => notifications.show(msg, 'error'),
         info: (msg) => notifications.show(msg, 'info'),
-        warning: (msg) => notifications.show(msg, 'warning')
+        warning: (msg) => notifications.show(msg, 'warning'),
+        confirm: (message, title = 'Confirm Action') => {
+            return new Promise((resolve) => {
+                let overlay = document.getElementById('modal-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'modal-overlay';
+                    overlay.className = 'modal-overlay';
+                    document.body.appendChild(overlay);
+                }
+
+                overlay.innerHTML = `
+                    <div class="confirm-modal">
+                        <h3>${title}</h3>
+                        <p>${message}</p>
+                        <div class="modal-btns">
+                            <button class="modal-btn btn-cancel">Cancel</button>
+                            <button class="modal-btn btn-ok">OK</button>
+                        </div>
+                    </div>
+                `;
+
+                setTimeout(() => overlay.classList.add('show'), 10);
+
+                const cleanup = (result) => {
+                    overlay.classList.remove('show');
+                    setTimeout(() => {
+                        overlay.innerHTML = '';
+                        resolve(result);
+                    }, 300);
+                };
+
+                overlay.querySelector('.btn-ok').onclick = () => cleanup(true);
+                overlay.querySelector('.btn-cancel').onclick = () => cleanup(false);
+                overlay.onclick = (e) => {
+                    if (e.target === overlay) cleanup(false);
+                };
+            });
+        }
     };
 
     // Expose to window

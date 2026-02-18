@@ -158,7 +158,8 @@ export async function loadAdminOrders() {
 }
 
 export async function shopAcceptOrder(orderId) {
-    if (!confirm("Accept this order?")) return;
+    const confirmed = await florryNotify.confirm("Accept this order?", "Order Acceptance");
+    if (!confirmed) return;
     try {
         await api.shopAcceptOrder(orderId);
         loadAdminOrders();
@@ -168,7 +169,8 @@ export async function shopAcceptOrder(orderId) {
 }
 
 export async function shopOutForDelivery(orderId) {
-    if (!confirm("Is this order ready for delivery?")) return;
+    const confirmed = await florryNotify.confirm("Is this order ready for delivery?", "Shipping Confirmation");
+    if (!confirmed) return;
     try {
         await api.outForDelivery(orderId);
         loadAdminOrders();
@@ -178,7 +180,8 @@ export async function shopOutForDelivery(orderId) {
 }
 
 export async function shopCompleteOrder(orderId) {
-    if (!confirm("Has this order been delivered successfully?")) return;
+    const confirmed = await florryNotify.confirm("Has this order been delivered successfully?", "Completion Confirmation");
+    if (!confirmed) return;
     try {
         await api.completeOrder(orderId);
         loadAdminOrders();
@@ -188,7 +191,8 @@ export async function shopCompleteOrder(orderId) {
 }
 
 export async function deleteAdminOrder(orderId) {
-    if (!confirm("Are you sure you want to delete this order record? This action cannot be undone.")) return;
+    const confirmed = await florryNotify.confirm("Are you sure you want to delete this order record? This action cannot be undone.", "Delete Order");
+    if (!confirmed) return;
     try {
         await api.deleteOrder(orderId);
         loadAdminOrders();
@@ -340,7 +344,8 @@ export async function handleSaveFlower(event) {
 }
 
 export async function deleteFlower(id) {
-    if (!confirm('Are you sure you want to delete this flower?')) return;
+    const confirmed = await florryNotify.confirm('Are you sure you want to delete this flower?', 'Delete Flower');
+    if (!confirmed) return;
 
     try {
         await api.deleteFlower(id);

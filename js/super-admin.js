@@ -144,7 +144,8 @@ function renderSupportMessages(msgs) {
 
 
 async function deleteTicket(msgId) {
-    if (!confirm("Are you sure you want to permanently delete this support ticket?")) return;
+    const confirmed = await florryNotify.confirm("Are you sure you want to permanently delete this support ticket?", "Confirm Deletion");
+    if (!confirmed) return;
     try {
         await api.deleteSupportMessage(msgId);
         florryNotify.success("Ticket deleted successfully.");
@@ -172,7 +173,8 @@ async function submitReply(msgId) {
 }
 
 async function handleAction(type, id, action) {
-    if (!confirm(`Proceed with ${action} for this ${type}?`)) return;
+    const confirmed = await florryNotify.confirm(`Proceed with ${action} for this ${type}?`, "Authorize Action");
+    if (!confirmed) return;
 
     try {
         if (type === 'admin') {
