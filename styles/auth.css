@@ -55,7 +55,7 @@
 
 /* Auth Page Specific Backgrounds */
 .auth-bg-login {
-    background: linear-gradient(rgba(30, 81, 40, 0.8), rgba(30, 81, 40, 0.9)), url('https://images.unsplash.com/photo-1596073413225-300fa13ec6f1?auto=format&fit=crop&q=80');
+    background: linear-gradient(rgba(30, 81, 40, 0.8), rgba(30, 81, 40, 0.9)), url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80');
     background-size: cover;
     background-position: center;
 }
