@@ -84,4 +84,36 @@
   .about-hero h1 {
     font-size: 2.5rem;
   }
+
+  .about-info-grid.reverse {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+
+.fresh-promise {
+  background: #f8faf9;
+  padding: 100px 0;
+}
+
+.about-info-grid.reverse .about-image {
+  order: 2;
+}
+
+.about-info-grid.reverse .about-text {
+  order: 1;
+}
+
+@media (min-width: 769px) {
+  .about-info-grid.reverse {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about-info-grid.reverse .about-image {
+    order: 2;
+  }
+
+  .about-info-grid.reverse .about-text {
+    order: 1;
+  }
 }
