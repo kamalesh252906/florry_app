@@ -283,7 +283,10 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
 
     try {
         // Only use API if we have a genuine CUSTOMER session
-        const userData = JSON.parse(localStorage.getItem('florryUser'));
+        let userData = null;
+        try {
+            userData = JSON.parse(localStorage.getItem('florryUser'));
+        } catch (e) { console.warn("Corrupt user data in storage", e); }
 
         if (userData && userData.access_token) {
             const userId = userData.user_id || userData.id;
@@ -300,7 +303,10 @@ export async function addToCart(btnElement, flowerId, flowerName, price) {
             }
         } else {
             // Add to local storage cart for guests
-            let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            } catch (e) { cart = []; }
             // Use loose equality for comparison to handle string/number IDs
             const existingItem = cart.find(item => item.flower_id == flowerId);
 
@@ -343,7 +349,10 @@ async function updateCartCount() {
             const items = await api.getCart();
             totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
         } else {
-            const cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            } catch (e) { cart = []; }
             totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         }
 

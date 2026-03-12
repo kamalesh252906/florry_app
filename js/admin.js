@@ -4,7 +4,11 @@ import ImageUploader from './image-uploader.js';
 let flowerImageUploader, shopImageUploader;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const admin = JSON.parse(localStorage.getItem('florryAdmin'));
+    let admin = null;
+    try {
+        admin = JSON.parse(localStorage.getItem('florryAdmin'));
+    } catch (e) { admin = null; }
+    
     if (!admin || !admin.admin_id) {
         window.location.href = './login.html'; // Changed to unified login
         return;
@@ -65,7 +69,11 @@ export async function loadAdminOrders() {
     grid.innerHTML = '<p>Loading orders...</p>';
 
     try {
-        const admin = JSON.parse(localStorage.getItem('florryAdmin'));
+        let admin = null;
+        try {
+            admin = JSON.parse(localStorage.getItem('florryAdmin'));
+        } catch (e) { admin = null; }
+        
         if (!admin || !admin.admin_id) {
             grid.innerHTML = '<p>Please login first</p>';
             return;
@@ -207,7 +215,11 @@ export async function loadAdminProducts() {
     grid.innerHTML = '<p>Loading...</p>';
 
     try {
-        const admin = JSON.parse(localStorage.getItem('florryAdmin'));
+        let admin = null;
+        try {
+            admin = JSON.parse(localStorage.getItem('florryAdmin'));
+        } catch (e) { admin = null; }
+        
         if (!admin || !admin.admin_id) {
             grid.innerHTML = '<p>Please login first</p>';
             return;
@@ -294,7 +306,11 @@ export function closeModal() {
 export async function handleSaveFlower(event) {
     event.preventDefault();
 
-    const admin = JSON.parse(localStorage.getItem('florryAdmin'));
+    let admin = null;
+    try {
+        admin = JSON.parse(localStorage.getItem('florryAdmin'));
+    } catch (e) { admin = null; }
+    
     if (!admin || !admin.admin_id) {
         florryNotify.warning('Please login first');
         return;
@@ -358,7 +374,11 @@ export async function deleteFlower(id) {
 
 export async function openShopModal() {
     const modal = document.getElementById('shop-modal');
-    const admin = JSON.parse(localStorage.getItem('florryAdmin'));
+    let admin = null;
+    try {
+        admin = JSON.parse(localStorage.getItem('florryAdmin'));
+    } catch (e) { admin = null; }
+    
     if (!admin) {
         florryNotify.warning("Please login first");
         return;
@@ -393,7 +413,11 @@ export async function handleSaveShopSettings(event) {
     btn.disabled = true;
 
     try {
-        const admin = JSON.parse(localStorage.getItem('florryAdmin'));
+        let admin = null;
+        try {
+            admin = JSON.parse(localStorage.getItem('florryAdmin'));
+        } catch (e) { admin = null; }
+        
         const shopName = document.getElementById('shop-name-input').value;
         const shopImage = document.getElementById('shop-settings-image-url').value;
 

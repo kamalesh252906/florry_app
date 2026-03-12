@@ -19,8 +19,12 @@ export async function loadCartItems() {
             myCart = await api.getCart();
         } else {
             // Get cart from the browser storage (Local Storage)
-            // JSON.parse converts the text back into a list
-            myCart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            try {
+                myCart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            } catch (e) {
+                console.warn("Cart data corrupted", e);
+                myCart = [];
+            }
         }
 
         // If cart is empty
@@ -128,7 +132,10 @@ export async function updateCartCount() {
             // Add up quantities of all items
             totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
         } else {
-            const cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            } catch (e) { cart = []; }
             totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         }
 
@@ -158,7 +165,10 @@ export async function updateQuantity(id, newQuantity) {
             await api.updateCartQuantity(id, newQuantity);
         } else {
             // Update in local storage
-            let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            } catch (e) { cart = []; }
             // If logged in we use cart_id (id), if local we use flower_id. 
             // The loading logic passes appropriate ID.
             // But wait, getCart returns items with cart_id. local returns items with flower_id.
@@ -186,7 +196,10 @@ export async function removeFromCart(id) {
         if (auth.isLoggedIn()) {
             await api.deleteCartItem(id);
         } else {
-            let cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('florryCart')) || [];
+            } catch (e) { cart = []; }
             // Keep items that do NOT match the ID
             cart = cart.filter(item => item.flower_id != id && item.cart_id != id);
             localStorage.setItem('florryCart', JSON.stringify(cart));

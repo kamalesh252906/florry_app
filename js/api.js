@@ -12,9 +12,20 @@ export class ApiService {
         // Get token from storage based on context
         const isAdminPage = window.location.pathname.includes('admin') || window.location.pathname.includes('super_admin');
 
-        const adminData = JSON.parse(localStorage.getItem('florryAdmin'));
-        const userData = JSON.parse(localStorage.getItem('florryUser'));
-        const superAdminData = JSON.parse(localStorage.getItem('florrySuperAdmin'));
+        // Helper for safe JSON parsing
+        const safeParse = (key) => {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : null;
+            } catch (e) {
+                console.warn(`[API] Storage key "${key}" is corrupted, ignoring.`, e);
+                return null;
+            }
+        };
+
+        const adminData = safeParse('florryAdmin');
+        const userData = safeParse('florryUser');
+        const superAdminData = safeParse('florrySuperAdmin');
 
         let token;
         if (window.location.pathname.includes('super_admin')) {

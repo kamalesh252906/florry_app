@@ -72,7 +72,10 @@ export class AuthManager {
 
     // Sync local cart with server cart after login
     async mergeCart() {
-        const localCart = JSON.parse(localStorage.getItem('florryCart')) || [];
+        let localCart = [];
+        try {
+            localCart = JSON.parse(localStorage.getItem('florryCart')) || [];
+        } catch (e) { localCart = []; }
         if (localCart.length === 0) return;
 
         const userId = this.getUserId();
